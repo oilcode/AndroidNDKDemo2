@@ -1,0 +1,10 @@
+
+uniform sampler2D       g_Texture;
+
+varying mediump vec2    outTexCoord;
+
+void main()
+{
+	gl_FragColor = texture2D(g_Texture, outTexCoord);;
+}
+

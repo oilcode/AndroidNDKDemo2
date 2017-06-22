@@ -1,0 +1,18 @@
+
+attribute highp vec3    myVertex;
+attribute mediump vec2  myUV;
+
+uniform highp mat4      g_matWorld;
+uniform highp mat4      g_matProjectView;
+
+varying mediump vec2    outTexCoord;
+
+void main()
+{
+    highp vec4 worldVertex = vec4(myVertex, 1);
+    worldVertex = g_matWorld * worldVertex;
+    gl_Position = g_matProjectView * worldVertex;
+
+    outTexCoord = myUV;
+}
+
