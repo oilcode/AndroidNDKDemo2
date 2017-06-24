@@ -33,7 +33,7 @@ void GLCamera::ReleaseD3DCamera()
 }
 //-----------------------------------------------------------------------
 GLCamera::GLCamera()
-:m_CameraMode(CameraMode_Focus)
+:m_CameraMode(CameraMode_Free)
 ,m_nMouseRightKeyDown(0)
 ,m_nLastCursorPosX(0)
 ,m_nLastCursorPosY(0)
@@ -57,10 +57,10 @@ bool GLCamera::InitD3DCamera()
 	GLManager::Get()->GetResolution(&nWidth, &nHeight);
 	const float width = (float)nWidth;
 	const float height = (float)nHeight;
-	SetFrustum(width, height, 1.0f, 1000000.0f);
+	SetFrustum(width/height, 1.0f, 1.0f, 1000000.0f);
 	//
-	SetPosition(0.0f, 0.0f, 3.0f);
-	SetPitchYaw(-1.0f, 0.0f);
+	SetPosition(-20.0f, -20.0f, -20.0f);
+	SetPitchYaw(-0.7f, 0.7f);
 	return true;
 }
 //-----------------------------------------------------------------------

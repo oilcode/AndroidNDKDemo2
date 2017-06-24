@@ -40,7 +40,6 @@ private:
     int m_nIndexCount;
     GLuint m_uiTextureID;
     SoMathMatrix4 m_kMatWorld;
-    SoMathMatrix4 m_kMatProjectView;
 };
 //--------------------------------------------------------------------------------------------------
 #endif //_GLModelCube_h_

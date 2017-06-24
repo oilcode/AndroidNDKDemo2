@@ -9,7 +9,6 @@ struct GLShaderStandardParam
     const float* pVertexArray;
     const unsigned short* pIndexArray;
     SoMathMatrix4* pMatWorld;
-    SoMathMatrix4* pMatProjectView;
     int nSizeofVertexStruct;
     int nIndexCount;
     GLuint uiTextureID;

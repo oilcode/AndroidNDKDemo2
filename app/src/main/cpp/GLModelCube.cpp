@@ -2,7 +2,6 @@
 #include "GLModelCube.h"
 #include "GLShaderManager.h"
 #include "GLTextureManager.h"
-#include "GLManager.h"
 //--------------------------------------------------------------------------------------------------
 GLModelCube::GLModelCube()
 :m_pShader(0)
@@ -36,7 +35,6 @@ void GLModelCube::ModelCubeRender()
     kParam.pVertexArray = (float*)m_pVertexArray;
     kParam.pIndexArray = m_pIndexArray;
     kParam.pMatWorld = &m_kMatWorld;
-    kParam.pMatProjectView = &m_kMatProjectView;
     kParam.nSizeofVertexStruct = sizeof(stVertexType);
     kParam.nIndexCount = m_nIndexCount;
     kParam.uiTextureID = m_uiTextureID;
@@ -48,24 +46,8 @@ bool GLModelCube::InitModelCube()
     m_pShader = GLShaderManager::Get()->GetShader(GLShader_Standard);
     CreateVertexArray(10.0f, 10.0f, 10.0f);
     CreateIndexArray();
-    m_uiTextureID = GLTextureManager::GetInstance()->LoadTextureFile("pic1.png");
+    m_uiTextureID = GLTextureManager::GetInstance()->LoadTextureFile("pic4.png");
     m_kMatWorld.MakeIdentity();
-    m_kMatProjectView.MakeIdentity();
-
-    SoMathFloat3 kEyePos(-20.0f, -15.0f, -15.0f);
-    SoMathFloat3 kEyeLookAt(0.0f, 0.0f, 40.0f);
-    SoMathFloat3 kUp(0.0f, 0.0f, 1.0f);
-    SoMathMatrix4 matView;
-    matView.MakeLookAt(kEyePos, kEyeLookAt, kUp);
-
-    int nWidth = 0;
-    int nHeight = 0;
-    GLManager::Get()->GetResolution(&nWidth, &nHeight);
-    float fRate = (float)nWidth / (float)nHeight;
-    SoMathMatrix4 matProject;
-    matProject.MakePerspective(fRate, 1.0f, 1.0f, 10000.0f);
-
-    m_kMatProjectView = matProject * matView;
     return true;
 }
 //--------------------------------------------------------------------------------------------------

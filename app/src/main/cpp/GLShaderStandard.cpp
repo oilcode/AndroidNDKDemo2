@@ -1,6 +1,7 @@
 //--------------------------------------------------------------------------------------------------
 #include "GLShaderStandard.h"
 #include "SoFileHelp.h"
+#include "GLCamera.h"
 //--------------------------------------------------------------------------------------------------
 GLShaderStandard::GLShaderStandard()
 :m_uiProgramID(0)
@@ -62,6 +63,7 @@ void GLShaderStandard::ProcessRender(void* pParam) const
     }
 
     GLShaderStandardParam* pStandardParam = (GLShaderStandardParam*)pParam;
+    const SoMathMatrix4& kMatProjView = GLCamera::Get()->GetMatProjView();
 
     glUseProgram(m_uiProgramID);
 
@@ -71,7 +73,7 @@ void GLShaderStandard::ProcessRender(void* pParam) const
     glEnableVertexAttribArray(m_uiUVID);
 
     glUniformMatrix4fv(m_uiMatWorldID, 1, GL_FALSE, (float*)(pStandardParam->pMatWorld->m));
-    glUniformMatrix4fv(m_uiMatProjectViewID, 1, GL_FALSE, (float*)(pStandardParam->pMatProjectView->m));
+    glUniformMatrix4fv(m_uiMatProjectViewID, 1, GL_FALSE, (float*)(kMatProjView.m));
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, pStandardParam->uiTextureID);

@@ -4,6 +4,7 @@
 #include "GLManager.h"
 #include "GLTextureManager.h"
 #include "GLShaderManager.h"
+#include "GLCamera.h"
 #include "GLModelCube.h"
 //--------------------------------------------------------------------------------------------------
 GLModelCube* g_pModelCube = 0;
@@ -14,8 +15,6 @@ bool GLLogicFlowHelpCreateBase()
 {
     SoIDEOutputLogInfo("GLLogicFlowHelpCreateBase : begin");
     GLManager::CreateGLManager();
-    GLTextureManager::CreateTextureManager();
-    GLShaderManager::CreateShaderManager();
     SoIDEOutputLogInfo("GLLogicFlowHelpCreateBase : end");
     return true;
 }
@@ -23,6 +22,9 @@ bool GLLogicFlowHelpCreateBase()
 bool GLLogicFlowHelpCreateOther()
 {
     SoIDEOutputLogInfo("GLLogicFlowHelpCreateOther : begin");
+    GLTextureManager::CreateTextureManager();
+    GLShaderManager::CreateShaderManager();
+    GLCamera::CreateD3DCamera();
     g_pModelCube = new GLModelCube;
 
     /*
@@ -55,6 +57,7 @@ void GLLogicFlowHelpRelease()
         g_pModelCube = 0;
     }
 
+    GLCamera::ReleaseD3DCamera();
     GLShaderManager::ReleaseShaderManager();
     GLTextureManager::ReleaseTextureManager();
     GLManager::ReleaseGLManager();
@@ -82,7 +85,10 @@ void GLLogicFlowHelpResolutionChanged(int width, int height)
 //--------------------------------------------------------------------------------------------------
 void GLLogicFlowHelpUpdate()
 {
-
+    if (GLCamera::Get())
+    {
+        GLCamera::Get()->UpdateViewMatrix();
+    }
 }
 //--------------------------------------------------------------------------------------------------
 void GLLogicFlowHelpRender()
@@ -114,6 +120,12 @@ void GLLogicFlowHelpTouchMove(float fx, float fy)
         //{
         //    g_pModelRect->SetPosDelta(fDeltaX, fDeltaY);
         //}
+        int nWidth = 0;
+        int nHeight = 0;
+        GLManager::Get()->GetResolution(&nWidth, &nHeight);
+        const float width = (float)nWidth;
+        const float height = (float)nHeight;
+        GLCamera::Get()->SetDeltaPitchYaw(-fDeltaY/height, -fDeltaX/width);
     }
 }
 //--------------------------------------------------------------------------------------------------
