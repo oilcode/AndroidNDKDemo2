@@ -125,7 +125,7 @@ void GLLogicFlowHelpTouchMove(float fx, float fy)
         GLManager::Get()->GetResolution(&nWidth, &nHeight);
         const float width = (float)nWidth;
         const float height = (float)nHeight;
-        GLCamera::Get()->SetDeltaPitchYaw(-fDeltaY/height, -fDeltaX/width);
+        GLCamera::Get()->SetDeltaPitchYaw(fDeltaY/height, fDeltaX/width);
     }
 }
 //--------------------------------------------------------------------------------------------------

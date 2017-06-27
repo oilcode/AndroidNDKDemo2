@@ -49,8 +49,8 @@ bool GLManager::InitGLManager()
     glEnable(GL_CULL_FACE);
     //设置成剔除背面。
     glCullFace(GL_BACK);
-    //把顺时针方向设置成正面；逆时针方向的绕序被认为是背面，不进行绘制。
-    glFrontFace(GL_CW);
+    //把逆时针方向设置成正面；顺时针方向的绕序被认为是背面，不进行绘制。
+    glFrontFace(GL_CCW);
 
     //开启2D纹理。这句代码在opengles1.0版本中是需要的，在2.0版本中已经不需要调用了。
     //glEnable(GL_TEXTURE_2D);

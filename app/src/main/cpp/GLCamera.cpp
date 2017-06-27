@@ -60,7 +60,7 @@ bool GLCamera::InitD3DCamera()
 	SetFrustum(width/height, 1.0f, 1.0f, 1000000.0f);
 	//
 	SetPosition(-20.0f, -20.0f, -20.0f);
-	SetPitchYaw(-0.7f, 0.7f);
+	SetPitchYaw(0.7f, -0.7f);
 	return true;
 }
 //-----------------------------------------------------------------------

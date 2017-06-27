@@ -154,41 +154,41 @@ void SoMathMatrix4::MakeTranslation(float x, float y, float z)
 	m[0][0] = 1.0f;
 	m[0][1] = 0.0f;
 	m[0][2] = 0.0f;
-	m[0][3] = x;
+	m[0][3] = 0.0f;
 
 	m[1][0] = 0.0f;
 	m[1][1] = 1.0f;
 	m[1][2] = 0.0f;
-	m[1][3] = y;
+	m[1][3] = 0.0f;
 
 	m[2][0] = 0.0f;
 	m[2][1] = 0.0f;
 	m[2][2] = 1.0f;
-	m[2][3] = z;
+	m[2][3] = 0.0f;
 
-	m[3][0] = 0.0f;
-	m[3][1] = 0.0f;
-	m[3][2] = 0.0f;
+	m[3][0] = x;
+	m[3][1] = y;
+	m[3][2] = z;
 	m[3][3] = 1.0f;
 #else
 	m[0][0] = 1.0f;
 	m[1][0] = 0.0f;
 	m[2][0] = 0.0f;
-	m[3][0] = x;
+	m[3][0] = 0.0f;
 
 	m[0][1] = 0.0f;
 	m[1][1] = 1.0f;
 	m[2][1] = 0.0f;
-	m[3][1] = y;
+	m[3][1] = 0.0f;
 
 	m[0][2] = 0.0f;
 	m[1][2] = 0.0f;
 	m[2][2] = 1.0f;
-	m[3][2] = z;
+	m[3][2] = 0.0f;
 
-	m[0][3] = 0.0f;
-	m[1][3] = 0.0f;
-	m[2][3] = 0.0f;
+	m[0][3] = x;
+	m[1][3] = y;
+	m[2][3] = z;
 	m[3][3] = 1.0f;
 #endif
 }
@@ -249,11 +249,11 @@ void SoMathMatrix4::MakeXRotate(float fRadian)
 
 	m[0][1] = 0.0f;
 	m[1][1] = cosValue;
-	m[2][1] = sinValue;
+	m[2][1] = -sinValue;
 	m[3][1] = 0.0f;
 
 	m[0][2] = 0.0f;
-	m[1][2] = -sinValue;
+	m[1][2] = sinValue;
 	m[2][2] = cosValue;
 	m[3][2] = 0.0f;
 
@@ -292,7 +292,7 @@ void SoMathMatrix4::MakeYRotate(float fRadian)
 #else
 	m[0][0] = cosValue;
 	m[1][0] = 0.0f;
-	m[2][0] = -sinValue;
+	m[2][0] = sinValue;
 	m[3][0] = 0.0f;
 
 	m[0][1] = 0.0f;
@@ -300,7 +300,7 @@ void SoMathMatrix4::MakeYRotate(float fRadian)
 	m[2][1] = 0.0f;
 	m[3][1] = 0.0f;
 
-	m[0][2] = sinValue;
+	m[0][2] = -sinValue;
 	m[1][2] = 0.0f;
 	m[2][2] = cosValue;
 	m[3][2] = 0.0f;
@@ -339,11 +339,11 @@ void SoMathMatrix4::MakeZRotate(float fRadian)
 	m[3][3] = 1.0f;
 #else
 	m[0][0] = cosValue;
-	m[1][0] = sinValue;
+	m[1][0] = -sinValue;
 	m[2][0] = 0.0f;
 	m[3][0] = 0.0f;
 
-	m[0][1] = -sinValue;
+	m[0][1] = sinValue;
 	m[1][1] = cosValue;
 	m[2][1] = 0.0f;
 	m[3][1] = 0.0f;
@@ -378,17 +378,17 @@ void SoMathMatrix4::MakeAxisRotate(float fRadian, float fAxisX, float fAxisY, fl
 
 #ifdef SoMath_Matrix_RowMajor_DirectX
 	m[0][0] = x2*omcs+cs;
-	m[0][1] = xym-zsin;
-	m[0][2] = xzm+ysin;
+	m[0][1] = xym+zsin;
+	m[0][2] = xzm-ysin;
 	m[0][3] = 0.0f;
 
-	m[1][0] = xym+zsin;
+	m[1][0] = xym-zsin;
 	m[1][1] = y2*omcs+cs;
-	m[1][2] = yzm-xsin;
+	m[1][2] = yzm+xsin;
 	m[1][3] = 0.0f;
 
-	m[2][0] = xzm-ysin;
-	m[2][1] = yzm+xsin;
+	m[2][0] = xzm+ysin;
+	m[2][1] = yzm-xsin;
 	m[2][2] = z2*omcs+cs;
 	m[2][3] = 0.0f;
 

@@ -36,6 +36,8 @@ void GLModelCube::ModelCubeRender()
     kParam.pIndexArray = m_pIndexArray;
     kParam.pMatWorld = &m_kMatWorld;
     kParam.nSizeofVertexStruct = sizeof(stVertexType);
+    kParam.nVertexOffset = 0;
+    kParam.nUVOffset = 10;
     kParam.nIndexCount = m_nIndexCount;
     kParam.uiTextureID = m_uiTextureID;
     m_pShader->ProcessRender(&kParam);
@@ -53,8 +55,10 @@ bool GLModelCube::InitModelCube()
 //--------------------------------------------------------------------------------------------------
 void GLModelCube::ClearModelCube()
 {
+    m_pShader = 0;
     ReleaseVertexArray();
     ReleaseIndexArray();
+    m_uiTextureID = 0;
 }
 //--------------------------------------------------------------------------------------------------
 bool GLModelCube::CreateVertexArray(float fWidth, float fHeight, float fDepth)
@@ -274,11 +278,11 @@ bool GLModelCube::CreateIndexArray()
     {
         unsigned short nIndex = i * 6;
         pIndexArray[nIndex+0] = i*4+0;
-        pIndexArray[nIndex+1] = i*4+1;
+        pIndexArray[nIndex+1] = i*4+3;
         pIndexArray[nIndex+2] = i*4+2;
         pIndexArray[nIndex+3] = i*4+0;
         pIndexArray[nIndex+4] = i*4+2;
-        pIndexArray[nIndex+5] = i*4+3;
+        pIndexArray[nIndex+5] = i*4+1;
     }
 
     m_pIndexArray = pIndexArray;

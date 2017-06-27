@@ -67,9 +67,9 @@ void GLShaderStandard::ProcessRender(void* pParam) const
 
     glUseProgram(m_uiProgramID);
 
-    glVertexAttribPointer(m_uiVertexID, 3, GL_FLOAT, GL_FALSE, pStandardParam->nSizeofVertexStruct, pStandardParam->pVertexArray);
+    glVertexAttribPointer(m_uiVertexID, 3, GL_FLOAT, GL_FALSE, pStandardParam->nSizeofVertexStruct, pStandardParam->pVertexArray+pStandardParam->nVertexOffset);
     glEnableVertexAttribArray(m_uiVertexID);
-    glVertexAttribPointer(m_uiUVID, 2, GL_FLOAT, GL_FALSE, pStandardParam->nSizeofVertexStruct, pStandardParam->pVertexArray+10);
+    glVertexAttribPointer(m_uiUVID, 2, GL_FLOAT, GL_FALSE, pStandardParam->nSizeofVertexStruct, pStandardParam->pVertexArray+pStandardParam->nUVOffset);
     glEnableVertexAttribArray(m_uiUVID);
 
     glUniformMatrix4fv(m_uiMatWorldID, 1, GL_FALSE, (float*)(pStandardParam->pMatWorld->m));

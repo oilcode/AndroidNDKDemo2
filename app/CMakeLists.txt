@@ -24,6 +24,7 @@ add_library( # Sets the name of the library.
 			 src/main/cpp/AnFileInternal.cpp
 
              # mycode
+             src/main/cpp/GLBaseInclude.cpp
              src/main/cpp/GLCamera.cpp
              src/main/cpp/GLCameraBase.cpp
              src/main/cpp/GLLogicFlowHelp.cpp
@@ -76,10 +77,6 @@ add_library( png
              src/main/thirdparty/02_png/pngwutil.c
             )
 
-add_library( simplemath
-             STATIC
-             src/main/thirdparty/03_simplemath/vecmath.cpp
-            )
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -104,7 +101,6 @@ target_link_libraries( # Specifies the target library.
                        # 这里奇怪的参数，是让PNG这个库直接拷贝到NativeLib里面。
                        "-Wl,--whole-archive"
                        png
-                       simplemath
                        "-Wl,--no-whole-archive"
 
 
