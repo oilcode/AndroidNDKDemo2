@@ -28,7 +28,10 @@ public:
 	void MakeEulerRotate(float fXRadian, float fYRadian, float fZRadian);
 	void MakeEulerRotateXZ(float fXRadian, float fZRadian);
 
-	void MakePerspective(float width, float height, float nearPlane, float farPlane);
+	void MakePerspectiveOpenGL(float viewWidth, float viewHeight, float nearPlane, float farPlane);
+	//--fovTopDownAngle Top-down field-of-view angle in radians.
+	//--aspectRatio Aspect ratio of view-space X:Y.
+	void MakePerspectiveFovOpenGL(float fovTopDownAngle, float aspectRatio, float nearPlane, float farPlane);
 	void MakeOrtho2D(float left, float top, float right, float bottom);
 	void MakeLookTo(const SoMathFloat3& kEyePos, const SoMathFloat3& kForward, const SoMathFloat3& kRight, const SoMathFloat3& kUp);
 	void MakeLookAt(const SoMathFloat3& kEyePos, const SoMathFloat3& kLookAt, const SoMathFloat3& kUp);

@@ -53,6 +53,9 @@ union SoMath_SqrtUnionParam
 #define SoMath_Sqrt SoMath_Sqrt2
 #define SoMath_InvSqrt SoMath_InvSqrt2
 //----------------------------------------------------------------
+//#define SoMath_Matrix_LeftHand_DirectX
+#define SoMath_Matrix_RightHand_OpenGL
+//----------------------------------------------------------------
 //#define SoMath_Matrix_RowMajor_DirectX
 #define SoMath_Matrix_ColumnMajor_OpenGL
 //----------------------------------------------------------------

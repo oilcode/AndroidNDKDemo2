@@ -2,7 +2,7 @@
 #ifndef _SoIDEOutputLog_h_
 #define _SoIDEOutputLog_h_
 //--------------------------------------------------------------------------------------------------
-#include "SoPlatformDefine.h"
+#include "SoCodeBaseInclude.h"
 #include "AnIDEOutputLog.h"
 //--------------------------------------------------------------------------------------------------
 #if (SoTargetPlatform == SoPlatform_Windows)

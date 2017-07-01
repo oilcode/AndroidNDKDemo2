@@ -57,7 +57,7 @@ bool GLCamera::InitD3DCamera()
 	GLManager::Get()->GetResolution(&nWidth, &nHeight);
 	const float width = (float)nWidth;
 	const float height = (float)nHeight;
-	SetFrustum(width/height, 1.0f, 1.0f, 1000000.0f);
+	SetFrustumFov(SoMath_PI*0.25f, width/height, 1.0f, 1000000.0f);
 	//
 	SetPosition(-20.0f, -20.0f, -20.0f);
 	SetPitchYaw(0.7f, -0.7f);

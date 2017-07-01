@@ -29,6 +29,7 @@ public:
 	SoMathFloat4 operator - (const SoMathFloat4& kOther);
 	SoMathFloat4 operator * (float fScale);
 	SoMathFloat4 operator / (float fScale);
+	SoMathFloat4 operator - () const;
 
 	void Reset();
     SoMathFloat3 GetFloat3();
@@ -115,6 +116,11 @@ inline SoMathFloat4 SoMathFloat4::operator / (float fScale)
 	{
 		return SoMathFloat4(x/fScale, y/fScale, z/fScale, w/fScale);
 	}
+}
+//----------------------------------------------------------------
+inline SoMathFloat4 SoMathFloat4::operator - () const
+{
+	return SoMathFloat4(-x, -y, -z, -w);
 }
 //----------------------------------------------------------------
 inline void SoMathFloat4::Reset()

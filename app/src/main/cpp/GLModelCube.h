@@ -5,6 +5,7 @@
 #include "GLBaseInclude.h"
 //--------------------------------------------------------------------------------------------------
 class GLShaderBase;
+class GLTexture;
 //--------------------------------------------------------------------------------------------------
 class GLModelCube
 {
@@ -14,6 +15,7 @@ public:
 
     void ModelCubeUpdate();
     void ModelCubeRender();
+    void SetDeltaPitchYaw(float fDeltaPitch, float fDeltaYaw);
 
 private:
     struct stVertexType
@@ -36,10 +38,12 @@ private:
     const GLShaderBase* m_pShader;
     stVertexType* m_pVertexArray;
     unsigned short* m_pIndexArray;
+    GLTexture* m_pTexture;
     int m_nVertexCount;
     int m_nIndexCount;
-    GLuint m_uiTextureID;
     SoMathMatrix4 m_kMatWorld;
+    float m_fPitch;
+    float m_fYaw;
 };
 //--------------------------------------------------------------------------------------------------
 #endif //_GLModelCube_h_

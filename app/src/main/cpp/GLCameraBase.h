@@ -20,7 +20,7 @@ public:
 	void SetDeltaYaw(float deltaYaw);
 	void SetDeltaPitchYaw(float deltaPitch, float deltaYaw);
 
-	void SetFrustum(float fWidth, float fHeight, float fNearZ, float fFarZ);
+	void SetFrustumFov(float fovTopDownAngle, float aspectRatio, float nearPlane, float farPlane);
 
 	void UpdateViewMatrix();
 

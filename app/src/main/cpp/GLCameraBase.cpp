@@ -85,9 +85,9 @@ void GLCameraBase::SetDeltaPitchYaw(float deltaPitch, float deltaYaw)
 	}
 }
 //-----------------------------------------------------------------------
-void GLCameraBase::SetFrustum(float fWidth, float fHeight, float fNearZ, float fFarZ)
+void GLCameraBase::SetFrustumFov(float fovTopDownAngle, float aspectRatio, float nearPlane, float farPlane)
 {
-    m_matProjection.MakePerspective(fWidth, fHeight, fNearZ, fFarZ);
+    m_matProjection.MakePerspectiveFovOpenGL(fovTopDownAngle, aspectRatio, nearPlane, farPlane);
 }
 //-----------------------------------------------------------------------
 void GLCameraBase::UpdateViewMatrix()

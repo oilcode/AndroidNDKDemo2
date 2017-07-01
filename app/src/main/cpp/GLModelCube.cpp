@@ -7,9 +7,11 @@ GLModelCube::GLModelCube()
 :m_pShader(0)
 ,m_pVertexArray(0)
 ,m_pIndexArray(0)
+,m_pTexture(0)
 ,m_nVertexCount(0)
 ,m_nIndexCount(0)
-,m_uiTextureID(0)
+,m_fPitch(0.0f)
+,m_fYaw(0.0f)
 {
     InitModelCube();
 }
@@ -26,7 +28,7 @@ void GLModelCube::ModelCubeUpdate()
 //--------------------------------------------------------------------------------------------------
 void GLModelCube::ModelCubeRender()
 {
-    if (m_pShader == 0)
+    if (m_pShader == 0 || m_pTexture == 0)
     {
         return;
     }
@@ -39,8 +41,34 @@ void GLModelCube::ModelCubeRender()
     kParam.nVertexOffset = 0;
     kParam.nUVOffset = 10;
     kParam.nIndexCount = m_nIndexCount;
-    kParam.uiTextureID = m_uiTextureID;
+    kParam.uiTextureID = m_pTexture->GetGLResourceID();
     m_pShader->ProcessRender(&kParam);
+}
+//-----------------------------------------------------------------------
+void GLModelCube::SetDeltaPitchYaw(float deltaPitch, float deltaYaw)
+{
+    static float s_fPosX = 0.0f;
+    static float s_fPosY = 0.0f;
+
+    if (SoMath_IsFloatZero(deltaPitch) == false || SoMath_IsFloatZero(deltaYaw) == false)
+    {
+        m_fPitch += deltaPitch;
+        m_fYaw += deltaYaw;
+
+        SoMathMatrix4 kRotatePitch;
+        kRotatePitch.MakeXRotate(m_fPitch);
+        SoMathMatrix4 kRotateYaw;
+        kRotateYaw.MakeZRotate(m_fYaw);
+
+        m_kMatWorld.MakeIdentity();
+        m_kMatWorld *= kRotatePitch;
+        m_kMatWorld *= kRotateYaw;
+
+        s_fPosX += deltaPitch;
+        s_fPosY += deltaYaw;
+        kRotatePitch.MakeTranslation(s_fPosX, s_fPosY, 0.0f);
+        m_kMatWorld *= kRotatePitch;
+    }
 }
 //--------------------------------------------------------------------------------------------------
 bool GLModelCube::InitModelCube()
@@ -48,7 +76,8 @@ bool GLModelCube::InitModelCube()
     m_pShader = GLShaderManager::Get()->GetShader(GLShader_Standard);
     CreateVertexArray(10.0f, 10.0f, 10.0f);
     CreateIndexArray();
-    m_uiTextureID = GLTextureManager::GetInstance()->LoadTextureFile("pic4.png");
+    m_pTexture = GLTextureManager::Get()->CreateModelTextureFromFile("pic2.png");
+    m_pTexture->TextureAddRef();
     m_kMatWorld.MakeIdentity();
     return true;
 }
@@ -58,7 +87,11 @@ void GLModelCube::ClearModelCube()
     m_pShader = 0;
     ReleaseVertexArray();
     ReleaseIndexArray();
-    m_uiTextureID = 0;
+    if (m_pTexture)
+    {
+        m_pTexture->TextureRemoveRef();
+        m_pTexture = 0;
+    }
 }
 //--------------------------------------------------------------------------------------------------
 bool GLModelCube::CreateVertexArray(float fWidth, float fHeight, float fDepth)

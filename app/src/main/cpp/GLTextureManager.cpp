@@ -1,6 +1,5 @@
 //------------------------------------------------------------
 #include "GLTextureManager.h"
-#include "SoImageHelp.h"
 //------------------------------------------------------------
 GLTextureManager* GLTextureManager::ms_pInstance = 0;
 //------------------------------------------------------------
@@ -44,21 +43,145 @@ GLTextureManager::~GLTextureManager()
 //------------------------------------------------------------
 bool GLTextureManager::InitTextureManager()
 {
+    if (m_kUITextureArray.InitArray(sizeof(GLTexture*), 10, 10) == false)
+    {
+        return false;
+    }
+    if (m_kModelTextureArray.InitArray(sizeof(GLTexture*), 10, 10) == false)
+    {
+        return false;
+    }
     return true;
 }
 //------------------------------------------------------------
 void GLTextureManager::ClearTextureManager()
 {
-
+    const int nUITexCount = m_kUITextureArray.GetCapacity();
+    GLTexture* pTexture = NULL;
+    for (int i = 0; i < nUITexCount; ++i)
+    {
+        pTexture = GetUITextureByID(i);
+        if (pTexture)
+        {
+            pTexture->ClearTexture();
+            delete pTexture;
+        }
+    }
+    m_kUITextureArray.ClearArray();
+    m_kUITexName2ID.clear();
+    //---------------
+    const int nModelTexCount = m_kModelTextureArray.GetCapacity();
+    pTexture = NULL;
+    for (int i = 0; i < nModelTexCount; ++i)
+    {
+        pTexture = GetModelTextureByID(i);
+        if (pTexture)
+        {
+            pTexture->ClearTexture();
+            delete pTexture;
+        }
+    }
+    m_kModelTextureArray.ClearArray();
+    m_kModelTexName2ID.clear();
 }
 //------------------------------------------------------------
-int GLTextureManager::LoadTextureFile(const char* pszFileName)
+GLTexture* GLTextureManager::CreateUITextureFromFile(const char* pszFileName)
 {
-	int theTextureID = 0;
-	if (pszFileName == 0 || pszFileName[0] == 0)
-	{
-		return theTextureID;
-	}
+    GLTexture* pTexture = NULL;
+    if (pszFileName == 0 || pszFileName[0] == 0)
+    {
+        return pTexture;
+    }
+
+    int nTexWidth = 0;
+    int nTexHeight = 0;
+    GLuint uiResourceID = LoadGLTexResource(pszFileName, false, &nTexWidth, &nTexHeight);
+    if (uiResourceID == 0)
+    {
+        return pTexture;
+    }
+
+    pTexture = SoNew GLTexture;
+    const int nTextureID = m_kUITextureArray.FillAt(-1, &pTexture);
+
+    std::pair<mapName2TextureID::iterator, bool> insertResult = m_kUITexName2ID.insert(std::make_pair(std::string(pszFileName), nTextureID));
+    if (insertResult.second == false)
+    {
+        glDeleteTextures(1, &uiResourceID);
+        m_kUITextureArray.ClearAt(nTextureID);
+        SoDelete pTexture;
+        pTexture = NULL;
+        return pTexture;
+    }
+
+    const char* fileName = insertResult.first->first.c_str();
+    pTexture->InitTexture(nTextureID, uiResourceID, fileName, nTexWidth, nTexHeight);
+    return pTexture;
+}
+//------------------------------------------------------------
+GLTexture* GLTextureManager::CreateModelTextureFromFile(const char* pszFileName)
+{
+    GLTexture* pTexture = NULL;
+    if (pszFileName == 0 || pszFileName[0] == 0)
+    {
+        return pTexture;
+    }
+
+    int nTexWidth = 0;
+    int nTexHeight = 0;
+    GLuint uiResourceID = LoadGLTexResource(pszFileName, true, &nTexWidth, &nTexHeight);
+    if (uiResourceID == 0)
+    {
+        return pTexture;
+    }
+
+    pTexture = SoNew GLTexture;
+    const int nTextureID = m_kModelTextureArray.FillAt(-1, &pTexture);
+
+    std::pair<mapName2TextureID::iterator, bool> insertResult = m_kModelTexName2ID.insert(std::make_pair(std::string(pszFileName), nTextureID));
+    if (insertResult.second == false)
+    {
+        glDeleteTextures(1, &uiResourceID);
+        m_kModelTextureArray.ClearAt(nTextureID);
+        SoDelete pTexture;
+        pTexture = NULL;
+        return pTexture;
+    }
+
+    const char* fileName = insertResult.first->first.c_str();
+    pTexture->InitTexture(nTextureID, uiResourceID, fileName, nTexWidth, nTexHeight);
+    return pTexture;
+}
+//------------------------------------------------------------
+GLTexture* GLTextureManager::GetUITextureByID(int nTextureID)
+{
+    void* pElement = m_kUITextureArray.GetAt(nTextureID);
+    if (pElement)
+    {
+        return (*((GLTexture**)pElement));
+    }
+    else
+    {
+        return NULL;
+    }
+}
+//------------------------------------------------------------
+GLTexture* GLTextureManager::GetModelTextureByID(int nTextureID)
+{
+    void* pElement = m_kModelTextureArray.GetAt(nTextureID);
+    if (pElement)
+    {
+        return (*((GLTexture**)pElement));
+    }
+    else
+    {
+        return NULL;
+    }
+}
+//------------------------------------------------------------
+GLuint GLTextureManager::LoadGLTexResource(const char* pszFileName, bool bGenerateMipMap, int* pWidth, int* pHeight)
+{
+    GLuint theTextureID = 0;
 
 	SoImageFileInfo kFileInfo;
 	if (SoImageHelp::LoadImageFile(pszFileName, &kFileInfo) == false)
@@ -94,31 +217,52 @@ int GLTextureManager::LoadTextureFile(const char* pszFileName)
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 	//申请一个贴图纹理序号ID
-	GLuint _TextureID;
-	glGenTextures(1, &_TextureID);
-	//绑定_TextureID，后面的操作都是针对_TextureID贴图
-	glBindTexture(GL_TEXTURE_2D, _TextureID);
-	//多级分辨率的纹理图像的级数。0表示只有一种分辨率。
-	const GLint MipmapLevel = 0;
-	const GLsizei Width = (GLsizei)kFileInfo.nWidth;
-	const GLsizei Height = (GLsizei)kFileInfo.nHeight;
-	//纹理边界宽度，通常设置为0。
-	const GLint Border = 0;
-	//图像数据
-	const GLvoid* Pixels = (GLvoid*)kFileInfo.pData;
-	glTexImage2D(GL_TEXTURE_2D, MipmapLevel, ColorComponent, Width, Height, Border, Format, GL_UNSIGNED_BYTE, Pixels);
+	glGenTextures(1, &theTextureID);
+	//绑定 theTextureID ，后面的操作都是针对 theTextureID 贴图
+	glBindTexture(GL_TEXTURE_2D, theTextureID);
 
-	//当目标区域小于贴图的原始尺寸时，使用线性过滤方式
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	//当目标区域大于贴图的原始尺寸时，使用线性过滤方式
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	//
-	theTextureID = (int)_TextureID;
-	//删除临时数据缓存
-	free(kFileInfo.pData);
-	kFileInfo.pData = 0;
+    //Mipmap层级。值为0表示分辨率最大的那一层级。
+    //该参数的含义是，把像素数据填充成目标纹理的哪个Mipmap层级。
+    //一般情况下，这里的像素数据就是原图片的像素数据，也就是第0层级。
+    const GLint MipmapLevel = 0;
+    const GLsizei Width = (GLsizei)kFileInfo.nWidth;
+    const GLsizei Height = (GLsizei)kFileInfo.nHeight;
+    //纹理边界宽度，通常设置为0。
+    const GLint Border = 0;
+    //图像数据
+    const GLvoid* Pixels = (GLvoid*)kFileInfo.pData;
+    glTexImage2D(GL_TEXTURE_2D, MipmapLevel, ColorComponent, Width, Height, Border, Format, GL_UNSIGNED_BYTE, Pixels);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    if (bGenerateMipMap)
+    {
+        //当目标区域小于贴图的原始尺寸时，使用三线性过滤方式
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        //当目标区域大于贴图的原始尺寸时，使用三线性过滤方式
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        //为当前绑定的纹理生成mipmap。
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        //当目标区域小于贴图的原始尺寸时，使用线性过滤方式
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        //当目标区域大于贴图的原始尺寸时，使用线性过滤方式
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    }
+
+    if (pWidth)
+    {
+        *pWidth = kFileInfo.nWidth;
+    }
+    if (pHeight)
+    {
+        *pHeight = kFileInfo.nHeight;
+    }
+
 	return theTextureID;
 }
 //------------------------------------------------------------
+

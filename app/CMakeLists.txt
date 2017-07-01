@@ -33,6 +33,7 @@ add_library( # Sets the name of the library.
              src/main/cpp/GLShaderBase.cpp
              src/main/cpp/GLShaderManager.cpp
              src/main/cpp/GLShaderStandard.cpp
+             src/main/cpp/GLTexture.cpp
              src/main/cpp/GLTextureManager.cpp
 
              # SoBase
@@ -40,6 +41,7 @@ add_library( # Sets the name of the library.
              src/main/cpp/SoArrayUID.cpp
              src/main/cpp/SoFile.cpp
 			 src/main/cpp/SoFileHelp.cpp
+			 src/main/cpp/SoImageDefine.cpp
 			 src/main/cpp/SoImageHelp.cpp
 			 src/main/cpp/SoImagePNG.cpp
 			 src/main/cpp/SoMath.cpp

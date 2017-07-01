@@ -28,7 +28,7 @@ enum SoImageColorType
 //图片信息
 struct SoImageFileInfo
 {
-	unsigned char* pData; //存储图片文件中的图像数据。本内存块由SoImageHelp负责创建，由外界负责删除。
+	unsigned char* pData; //存储图片文件中的图像数据。本内存块由SoImageHelp负责创建，由本结构体负责删除。
     int nDataSize;
 	int nWidth; //图片宽度
 	int nHeight; //图片高度
@@ -36,16 +36,8 @@ struct SoImageFileInfo
 	SoImageBitDepthType theBitDepth; //色彩位深，目前只支持32位色
 	SoImageColorType theColorType; //颜色类型，目前只支持RGBA颜色
 
-	SoImageFileInfo()
-	:pData(0)
-    ,nDataSize(0)
-    ,nWidth(0)
-	,nHeight(0)
-	,theFileType(SoImageFile_Invalid)
-	,theBitDepth(SoImageBitDepth_Invalid)
-	,theColorType(SoImageColor_Invalid)
-	{
-	}
+	SoImageFileInfo();
+	~SoImageFileInfo();
 };
 //------------------------------------------------------------
 #endif //_SoImageDefine_h_

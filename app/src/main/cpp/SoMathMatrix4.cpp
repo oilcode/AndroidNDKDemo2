@@ -51,6 +51,7 @@ void SoMathMatrix4::MakeTranspose()
 //----------------------------------------------------------------
 void SoMathMatrix4::MakeInverse()
 {
+    /*
 	SoMathMatrix4 kResult;
 	float det_1 = 0.0f;
 	float pos = 0.0f;
@@ -146,11 +147,11 @@ void SoMathMatrix4::MakeInverse()
 	kResult.m[3][3] = 1.0f;
 
 	*this = kResult;
+    */
 }
 //----------------------------------------------------------------
 void SoMathMatrix4::MakeTranslation(float x, float y, float z)
 {
-#ifdef SoMath_Matrix_RowMajor_DirectX
 	m[0][0] = 1.0f;
 	m[0][1] = 0.0f;
 	m[0][2] = 0.0f;
@@ -170,27 +171,6 @@ void SoMathMatrix4::MakeTranslation(float x, float y, float z)
 	m[3][1] = y;
 	m[3][2] = z;
 	m[3][3] = 1.0f;
-#else
-	m[0][0] = 1.0f;
-	m[1][0] = 0.0f;
-	m[2][0] = 0.0f;
-	m[3][0] = 0.0f;
-
-	m[0][1] = 0.0f;
-	m[1][1] = 1.0f;
-	m[2][1] = 0.0f;
-	m[3][1] = 0.0f;
-
-	m[0][2] = 0.0f;
-	m[1][2] = 0.0f;
-	m[2][2] = 1.0f;
-	m[3][2] = 0.0f;
-
-	m[0][3] = x;
-	m[1][3] = y;
-	m[2][3] = z;
-	m[3][3] = 1.0f;
-#endif
 }
 //----------------------------------------------------------------
 void SoMathMatrix4::MakeScale(float x, float y, float z)
@@ -218,205 +198,116 @@ void SoMathMatrix4::MakeScale(float x, float y, float z)
 //----------------------------------------------------------------
 void SoMathMatrix4::MakeXRotate(float fRadian)
 {
-	float sinValue = sin(fRadian);
-	float cosValue = cos(fRadian);
-	//
-#ifdef SoMath_Matrix_RowMajor_DirectX
-	m[0][0] = 1.0f;
-	m[0][1] = 0.0f;
-	m[0][2] = 0.0f;
-	m[0][3] = 0.0f;
+    float sinValue = sin(fRadian);
+    float cosValue = cos(fRadian);
 
-	m[1][0] = 0.0f;
-	m[1][1] = cosValue;
-	m[1][2] = sinValue;
-	m[1][3] = 0.0f;
+    m[0][0] = 1.0f;
+    m[0][1] = 0.0f;
+    m[0][2] = 0.0f;
+    m[0][3] = 0.0f;
 
-	m[2][0] = 0.0f;
-	m[2][1] = -sinValue;
-	m[2][2] = cosValue;
-	m[2][3] = 0.0f;
+    m[1][0] = 0.0f;
+    m[1][1] = cosValue;
+    m[1][2] = sinValue;
+    m[1][3] = 0.0f;
 
-	m[3][0] = 0.0f;
-	m[3][1] = 0.0f;
-	m[3][2] = 0.0f;
-	m[3][3] = 1.0f;
-#else
-	m[0][0] = 1.0f;
-	m[1][0] = 0.0f;
-	m[2][0] = 0.0f;
-	m[3][0] = 0.0f;
+    m[2][0] = 0.0f;
+    m[2][1] = -sinValue;
+    m[2][2] = cosValue;
+    m[2][3] = 0.0f;
 
-	m[0][1] = 0.0f;
-	m[1][1] = cosValue;
-	m[2][1] = -sinValue;
-	m[3][1] = 0.0f;
-
-	m[0][2] = 0.0f;
-	m[1][2] = sinValue;
-	m[2][2] = cosValue;
-	m[3][2] = 0.0f;
-
-	m[0][3] = 0.0f;
-	m[1][3] = 0.0f;
-	m[2][3] = 0.0f;
-	m[3][3] = 1.0f;
-#endif
+    m[3][0] = 0.0f;
+    m[3][1] = 0.0f;
+    m[3][2] = 0.0f;
+    m[3][3] = 1.0f;
 }
 //----------------------------------------------------------------
 void SoMathMatrix4::MakeYRotate(float fRadian)
 {
-	float sinValue = sin(fRadian);
-	float cosValue = cos(fRadian);
-	//
-#ifdef SoMath_Matrix_RowMajor_DirectX
-	m[0][0] = cosValue;
-	m[0][1] = 0.0f;
-	m[0][2] = -sinValue;
-	m[0][3] = 0.0f;
+    float sinValue = sin(fRadian);
+    float cosValue = cos(fRadian);
 
-	m[1][0] = 0.0f;
-	m[1][1] = 1.0f;
-	m[1][2] = 0.0f;
-	m[1][3] = 0.0f;
+    m[0][0] = cosValue;
+    m[0][1] = 0.0f;
+    m[0][2] = -sinValue;
+    m[0][3] = 0.0f;
 
-	m[2][0] = sinValue;
-	m[2][1] = 0.0f;
-	m[2][2] = cosValue;
-	m[2][3] = 0.0f;
+    m[1][0] = 0.0f;
+    m[1][1] = 1.0f;
+    m[1][2] = 0.0f;
+    m[1][3] = 0.0f;
 
-	m[3][0] = 0.0f;
-	m[3][1] = 0.0f;
-	m[3][2] = 0.0f;
-	m[3][3] = 1.0f;
-#else
-	m[0][0] = cosValue;
-	m[1][0] = 0.0f;
-	m[2][0] = sinValue;
-	m[3][0] = 0.0f;
+    m[2][0] = sinValue;
+    m[2][1] = 0.0f;
+    m[2][2] = cosValue;
+    m[2][3] = 0.0f;
 
-	m[0][1] = 0.0f;
-	m[1][1] = 1.0f;
-	m[2][1] = 0.0f;
-	m[3][1] = 0.0f;
-
-	m[0][2] = -sinValue;
-	m[1][2] = 0.0f;
-	m[2][2] = cosValue;
-	m[3][2] = 0.0f;
-
-	m[0][3] = 0.0f;
-	m[1][3] = 0.0f;
-	m[2][3] = 0.0f;
-	m[3][3] = 1.0f;
-#endif
+    m[3][0] = 0.0f;
+    m[3][1] = 0.0f;
+    m[3][2] = 0.0f;
+    m[3][3] = 1.0f;
 }
 //----------------------------------------------------------------
 void SoMathMatrix4::MakeZRotate(float fRadian)
 {
-	float sinValue = sin(fRadian);
-	float cosValue = cos(fRadian);
-	//
-#ifdef SoMath_Matrix_RowMajor_DirectX
-	m[0][0] = cosValue;
-	m[0][1] = sinValue;
-	m[0][2] = 0.0f;
-	m[0][3] = 0.0f;
+    float sinValue = sin(fRadian);
+    float cosValue = cos(fRadian);
 
-	m[1][0] = -sinValue;
-	m[1][1] = cosValue;
-	m[1][2] = 0.0f;
-	m[1][3] = 0.0f;
+    m[0][0] = cosValue;
+    m[0][1] = sinValue;
+    m[0][2] = 0.0f;
+    m[0][3] = 0.0f;
 
-	m[2][0] = 0.0f;
-	m[2][1] = 0.0f;
-	m[2][2] = 1.0f;
-	m[2][3] = 0.0f;
+    m[1][0] = -sinValue;
+    m[1][1] = cosValue;
+    m[1][2] = 0.0f;
+    m[1][3] = 0.0f;
 
-	m[3][0] = 0.0f;
-	m[3][1] = 0.0f;
-	m[3][2] = 0.0f;
-	m[3][3] = 1.0f;
-#else
-	m[0][0] = cosValue;
-	m[1][0] = -sinValue;
-	m[2][0] = 0.0f;
-	m[3][0] = 0.0f;
+    m[2][0] = 0.0f;
+    m[2][1] = 0.0f;
+    m[2][2] = 1.0f;
+    m[2][3] = 0.0f;
 
-	m[0][1] = sinValue;
-	m[1][1] = cosValue;
-	m[2][1] = 0.0f;
-	m[3][1] = 0.0f;
-
-	m[0][2] = 0.0f;
-	m[1][2] = 0.0f;
-	m[2][2] = 1.0f;
-	m[3][2] = 0.0f;
-
-	m[0][3] = 0.0f;
-	m[1][3] = 0.0f;
-	m[2][3] = 0.0f;
-	m[3][3] = 1.0f;
-#endif
+    m[3][0] = 0.0f;
+    m[3][1] = 0.0f;
+    m[3][2] = 0.0f;
+    m[3][3] = 1.0f;
 }
 //----------------------------------------------------------------
 void SoMathMatrix4::MakeAxisRotate(float fRadian, float fAxisX, float fAxisY, float fAxisZ)
 {
-	float sn = sin(fRadian);
-	float cs = cos(fRadian);
-	float omcs = 1.0f-cs;
+    float sn = sin(fRadian);
+    float cs = cos(fRadian);
+    float omcs = 1.0f-cs;
+    float x2 = fAxisX*fAxisX;
+    float y2 = fAxisY*fAxisY;
+    float z2 = fAxisZ*fAxisZ;
+    float xym = fAxisX*fAxisY*omcs;
+    float xzm = fAxisX*fAxisZ*omcs;
+    float yzm = fAxisY*fAxisZ*omcs;
+    float xsin = fAxisX*sn;
+    float ysin = fAxisY*sn;
+    float zsin = fAxisZ*sn;
 
-	float x2 = fAxisX*fAxisX;
-	float y2 = fAxisY*fAxisY;
-	float z2 = fAxisZ*fAxisZ;
-	float xym = fAxisX*fAxisY*omcs;
-	float xzm = fAxisX*fAxisZ*omcs;
-	float yzm = fAxisY*fAxisZ*omcs;
-	float xsin = fAxisX*sn;
-	float ysin = fAxisY*sn;
-	float zsin = fAxisZ*sn;
+    m[0][0] = x2*omcs+cs;
+    m[0][1] = xym+zsin;
+    m[0][2] = xzm-ysin;
+    m[0][3] = 0.0f;
 
-#ifdef SoMath_Matrix_RowMajor_DirectX
-	m[0][0] = x2*omcs+cs;
-	m[0][1] = xym+zsin;
-	m[0][2] = xzm-ysin;
-	m[0][3] = 0.0f;
+    m[1][0] = xym-zsin;
+    m[1][1] = y2*omcs+cs;
+    m[1][2] = yzm+xsin;
+    m[1][3] = 0.0f;
 
-	m[1][0] = xym-zsin;
-	m[1][1] = y2*omcs+cs;
-	m[1][2] = yzm+xsin;
-	m[1][3] = 0.0f;
+    m[2][0] = xzm+ysin;
+    m[2][1] = yzm-xsin;
+    m[2][2] = z2*omcs+cs;
+    m[2][3] = 0.0f;
 
-	m[2][0] = xzm+ysin;
-	m[2][1] = yzm-xsin;
-	m[2][2] = z2*omcs+cs;
-	m[2][3] = 0.0f;
-
-	m[3][0] = 0.0f;
-	m[3][1] = 0.0f;
-	m[3][2] = 0.0f;
-	m[3][3] = 1.0f;
-#else
-	m[0][0] = x2*omcs+cs;
-	m[1][0] = xym-zsin;
-	m[2][0] = xzm+ysin;
-	m[3][0] = 0.0f;
-
-	m[0][1] = xym+zsin;
-	m[1][1] = y2*omcs+cs;
-	m[2][1] = yzm-xsin;
-	m[3][1] = 0.0f;
-
-	m[0][2] = xzm-ysin;
-	m[1][2] = yzm+xsin;
-	m[2][2] = z2*omcs+cs;
-	m[3][2] = 0.0f;
-
-	m[0][3] = 0.0f;
-	m[1][3] = 0.0f;
-	m[2][3] = 0.0f;
-	m[3][3] = 1.0f;
-#endif
+    m[3][0] = 0.0f;
+    m[3][1] = 0.0f;
+    m[3][2] = 0.0f;
+    m[3][3] = 1.0f;
 }
 //----------------------------------------------------------------
 void SoMathMatrix4::MakeEulerRotate(float fXRadian, float fYRadian, float fZRadian)
@@ -436,21 +327,18 @@ void SoMathMatrix4::MakeEulerRotateXZ(float fXRadian, float fZRadian)
 	*this = kX * kZ;
 }
 //----------------------------------------------------------------
-void SoMathMatrix4::MakePerspective(float width, float height, float nearPlane, float farPlane)
+void SoMathMatrix4::MakePerspectiveOpenGL(float viewWidth, float viewHeight, float nearPlane, float farPlane)
 {
-#ifdef SoMath_Matrix_RowMajor_DirectX
-
-#else
 	float n2 = 2.0f * nearPlane;
 	float rcpnmf = 1.0f / (nearPlane - farPlane);
 
-	m[0][0] = n2 / width;
+	m[0][0] = n2 / viewWidth;
 	m[1][0] = 0.0f;
 	m[2][0] = 0.0f;
 	m[3][0] = 0.0f;
 
 	m[0][1] = 0.0f;
-	m[1][1] = n2 / height;
+	m[1][1] = n2 / viewHeight;
 	m[2][1] = 0.0f;
 	m[3][1] = 0.0f;
 
@@ -463,11 +351,18 @@ void SoMathMatrix4::MakePerspective(float width, float height, float nearPlane, 
 	m[1][3] = 0.0f;
 	m[2][3] = -1.0f;
 	m[3][3] = 0.0f;
-#endif
+}
+//----------------------------------------------------------------
+void SoMathMatrix4::MakePerspectiveFovOpenGL(float fovTopDownAngle, float aspectRatio, float nearPlane, float farPlane)
+{
+	float fViewHeight = 2.0f * nearPlane * tan(fovTopDownAngle * 0.5f);
+	float fViewWidth = fViewHeight * aspectRatio;
+	MakePerspectiveOpenGL(fViewWidth, fViewHeight, nearPlane, farPlane);
 }
 //----------------------------------------------------------------
 void SoMathMatrix4::MakeOrtho2D(float left, float top, float right, float bottom)
 {
+    /*
 #ifdef SoMath_Matrix_RowMajor_DirectX
 
 #else
@@ -497,53 +392,37 @@ void SoMathMatrix4::MakeOrtho2D(float left, float top, float right, float bottom
 	m[3][2] = -(zFar + zNear) * inv_z;
 	m[3][3] = 1.0f;
 #endif
+     */
 }
 //----------------------------------------------------------------
 void SoMathMatrix4::MakeLookTo(const SoMathFloat3& kEyePos, const SoMathFloat3& kForward, const SoMathFloat3& kRight, const SoMathFloat3& kUp)
 {
-#ifdef SoMath_Matrix_RowMajor_DirectX
-	m[0][0] = kRight.x;
-	m[0][1] = kRight.y;
-	m[0][2] = kRight.z;
+    m[0][0] = kRight.x;
+    m[1][0] = kRight.y;
+    m[2][0] = kRight.z;
 
-	m[1][0] = kUp.x;
-	m[1][1] = kUp.y;
-	m[1][2] = kUp.z;
+    m[0][1] = kUp.x;
+    m[1][1] = kUp.y;
+    m[2][1] = kUp.z;
 
-	m[2][0] = -kForward.x;
-	m[2][1] = -kForward.y;
-	m[2][2] = -kForward.z;
-
-	m[3][0] = 0.0f;
-	m[3][1] = 0.0f;
-	m[3][2] = 0.0f;
-
-	m[0][3] = -(kEyePos.x * m[0][0] + kEyePos.y * m[0][1] + kEyePos.z * m[0][2]);
-	m[1][3] = -(kEyePos.x * m[1][0] + kEyePos.y * m[1][1] + kEyePos.z * m[1][2]);
-	m[2][3] = -(kEyePos.x * m[2][0] + kEyePos.y * m[2][1] + kEyePos.z * m[2][2]);
-	m[3][3] = 1.0f;
+#ifdef SoMath_Matrix_LeftHand_DirectX
+    m[0][2] = kForward.x;
+	m[1][2] = kForward.y;
+	m[2][2] = kForward.z;
 #else
-	m[0][0] = kRight.x;
-	m[1][0] = kRight.y;
-	m[2][0] = kRight.z;
+    m[0][2] = -kForward.x;
+    m[1][2] = -kForward.y;
+    m[2][2] = -kForward.z;
+#endif
 
-	m[0][1] = kUp.x;
-	m[1][1] = kUp.y;
-	m[2][1] = kUp.z;
-
-	m[0][2] = -kForward.x;
-	m[1][2] = -kForward.y;
-	m[2][2] = -kForward.z;
-
-	m[0][3] = 0.0f;
-	m[1][3] = 0.0f;
-	m[2][3] = 0.0f;
+    m[0][3] = 0.0f;
+    m[1][3] = 0.0f;
+    m[2][3] = 0.0f;
 
     m[3][0] = -(kEyePos.x * m[0][0] + kEyePos.y * m[1][0] + kEyePos.z * m[2][0]);
     m[3][1] = -(kEyePos.x * m[0][1] + kEyePos.y * m[1][1] + kEyePos.z * m[2][1]);
     m[3][2] = -(kEyePos.x * m[0][2] + kEyePos.y * m[1][2] + kEyePos.z * m[2][2]);
     m[3][3] = 1.0f;
-#endif
 }
 //----------------------------------------------------------------
 void SoMathMatrix4::MakeLookAt(const SoMathFloat3& kEyePos, const SoMathFloat3& kLookAt, const SoMathFloat3& kUp)
@@ -551,30 +430,9 @@ void SoMathMatrix4::MakeLookAt(const SoMathFloat3& kEyePos, const SoMathFloat3& 
 	SoMathFloat3 kForward = kLookAt - kEyePos;
 	kForward.Unitize();
 	SoMathFloat3 kRight = kForward.Cross(kUp);
+    kRight.Unitize();
 	SoMathFloat3 kUp2 = kRight.Cross(kForward);
 
-#ifdef SoMath_Matrix_RowMajor_DirectX
-    m[0][0] = kRight.x;
-	m[0][1] = kRight.y;
-	m[0][2] = kRight.z;
-
-	m[1][0] = kUp2.x;
-	m[1][1] = kUp2.y;
-	m[1][2] = kUp2.z;
-
-	m[2][0] = -kForward.x;
-	m[2][1] = -kForward.y;
-	m[2][2] = -kForward.z;
-
-	m[3][0] = 0.0f;
-	m[3][1] = 0.0f;
-	m[3][2] = 0.0f;
-
-	m[0][3] = -(kEyePos.x * m[0][0] + kEyePos.y * m[0][1] + kEyePos.z * m[0][2]);
-	m[1][3] = -(kEyePos.x * m[1][0] + kEyePos.y * m[1][1] + kEyePos.z * m[1][2]);
-	m[2][3] = -(kEyePos.x * m[2][0] + kEyePos.y * m[2][1] + kEyePos.z * m[2][2]);
-	m[3][3] = 1.0f;
-#else
 	m[0][0] = kRight.x;
 	m[1][0] = kRight.y;
 	m[2][0] = kRight.z;
@@ -583,9 +441,15 @@ void SoMathMatrix4::MakeLookAt(const SoMathFloat3& kEyePos, const SoMathFloat3& 
 	m[1][1] = kUp2.y;
 	m[2][1] = kUp2.z;
 
-	m[0][2] = -kForward.x;
-	m[1][2] = -kForward.y;
-	m[2][2] = -kForward.z;
+#ifdef SoMath_Matrix_LeftHand_DirectX
+    m[0][2] = kForward.x;
+	m[1][2] = kForward.y;
+	m[2][2] = kForward.z;
+#else
+    m[0][2] = -kForward.x;
+    m[1][2] = -kForward.y;
+    m[2][2] = -kForward.z;
+#endif
 
 	m[0][3] = 0.0f;
 	m[1][3] = 0.0f;
@@ -595,7 +459,6 @@ void SoMathMatrix4::MakeLookAt(const SoMathFloat3& kEyePos, const SoMathFloat3& 
 	m[3][1] = -(kEyePos.x * m[0][1] + kEyePos.y * m[1][1] + kEyePos.z * m[2][1]);
 	m[3][2] = -(kEyePos.x * m[0][2] + kEyePos.y * m[1][2] + kEyePos.z * m[2][2]);
 	m[3][3] = 1.0f;
-#endif
 }
 //----------------------------------------------------------------
 void SoMathMatrix4::operator = (const SoMathMatrix4& kOther)
@@ -623,36 +486,20 @@ void SoMathMatrix4::operator = (const SoMathMatrix4& kOther)
 //----------------------------------------------------------------
 SoMathFloat4 SoMathMatrix4::operator * (const SoMathFloat4& kVector) const
 {
-#ifdef SoMath_Matrix_RowMajor_DirectX
-	float x = m[0][0] * kVector.x + m[0][1] * kVector.y + m[0][2] * kVector.z + m[0][3] * kVector.w;
-	float y = m[1][0] * kVector.x + m[1][1] * kVector.y + m[1][2] * kVector.z + m[1][3] * kVector.w;
-	float z = m[2][0] * kVector.x + m[2][1] * kVector.y + m[2][2] * kVector.z + m[2][3] * kVector.w;
-	float w = m[3][0] * kVector.x + m[3][1] * kVector.y + m[3][2] * kVector.z + m[3][3] * kVector.w;
-	return SoMathFloat4(x, y, z, w);
-#else
     float x = m[0][0] * kVector.x + m[1][0] * kVector.y + m[2][0] * kVector.z + m[3][0] * kVector.w;
     float y = m[0][1] * kVector.x + m[1][1] * kVector.y + m[2][1] * kVector.z + m[3][1] * kVector.w;
     float z = m[0][2] * kVector.x + m[1][2] * kVector.y + m[2][2] * kVector.z + m[3][2] * kVector.w;
     float w = m[0][3] * kVector.x + m[1][3] * kVector.y + m[2][3] * kVector.z + m[3][3] * kVector.w;
     return SoMathFloat4(x, y, z, w);
-#endif
 }
 //----------------------------------------------------------------
 SoMathFloat4 operator * (const SoMathFloat4& kVector, const SoMathMatrix4& kMatrix)
 {
-#ifdef SoMath_Matrix_RowMajor_DirectX
-	float x = kMatrix.m[0][0] * kVector.x + kMatrix.m[0][1] * kVector.y + kMatrix.m[0][2] * kVector.z + kMatrix.m[0][3] * kVector.w;
-	float y = kMatrix.m[1][0] * kVector.x + kMatrix.m[1][1] * kVector.y + kMatrix.m[1][2] * kVector.z + kMatrix.m[1][3] * kVector.w;
-	float z = kMatrix.m[2][0] * kVector.x + kMatrix.m[2][1] * kVector.y + kMatrix.m[2][2] * kVector.z + kMatrix.m[2][3] * kVector.w;
-	float w = kMatrix.m[3][0] * kVector.x + kMatrix.m[3][1] * kVector.y + kMatrix.m[3][2] * kVector.z + kMatrix.m[3][3] * kVector.w;
-	return SoMathFloat4(x, y, z, w);
-#else
     float x = kMatrix.m[0][0] * kVector.x + kMatrix.m[1][0] * kVector.y + kMatrix.m[2][0] * kVector.z + kMatrix.m[3][0] * kVector.w;
     float y = kMatrix.m[0][1] * kVector.x + kMatrix.m[1][1] * kVector.y + kMatrix.m[2][1] * kVector.z + kMatrix.m[3][1] * kVector.w;
     float z = kMatrix.m[0][2] * kVector.x + kMatrix.m[1][2] * kVector.y + kMatrix.m[2][2] * kVector.z + kMatrix.m[3][2] * kVector.w;
     float w = kMatrix.m[0][3] * kVector.x + kMatrix.m[1][3] * kVector.y + kMatrix.m[2][3] * kVector.z + kMatrix.m[3][3] * kVector.w;
     return SoMathFloat4(x, y, z, w);
-#endif
 }
 //----------------------------------------------------------------
 SoMathMatrix4 SoMathMatrix4::operator * (const SoMathMatrix4& kOther) const

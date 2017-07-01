@@ -2,14 +2,16 @@
 #ifndef _GLBaseInclude_h_
 #define _GLBaseInclude_h_
 //--------------------------------------------------------------------------------------------------
-#include <cstdio>
-#include <cstdlib>
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
 //--------------------------------------------------------------------------------------------------
 #include "SoCodeBaseInclude.h"
 #include "SoIDEOutputLog.h"
+#include "SoArrayUID.h"
+#include "SoArray.h"
 #include "SoMath.h"
+#include "SoFileHelp.h"
+#include "SoImageHelp.h"
 //--------------------------------------------------------------------------------------------------
 #endif //_GLBaseInclude_h_
 //--------------------------------------------------------------------------------------------------

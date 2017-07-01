@@ -1,6 +1,5 @@
 //--------------------------------------------------------------------------------------------------
 #include "GLLogicFlowHelp.h"
-#include "SoBaseInclude.h"
 #include "GLManager.h"
 #include "GLTextureManager.h"
 #include "GLShaderManager.h"
@@ -116,16 +115,18 @@ void GLLogicFlowHelpTouchMove(float fx, float fy)
 
     if (fDeltaX < -1.0f || fDeltaX > 1.0f || fDeltaY < -1.0f || fDeltaY > 1.0f)
     {
-        //if (g_pModelRect)
-        //{
-        //    g_pModelRect->SetPosDelta(fDeltaX, fDeltaY);
-        //}
         int nWidth = 0;
         int nHeight = 0;
         GLManager::Get()->GetResolution(&nWidth, &nHeight);
         const float width = (float)nWidth;
         const float height = (float)nHeight;
-        GLCamera::Get()->SetDeltaPitchYaw(fDeltaY/height, fDeltaX/width);
+
+        if (g_pModelCube)
+        {
+            g_pModelCube->SetDeltaPitchYaw(fDeltaY/height, fDeltaX/width);
+        }
+
+        //GLCamera::Get()->SetDeltaPitchYaw(fDeltaY/height, fDeltaX/width);
     }
 }
 //--------------------------------------------------------------------------------------------------

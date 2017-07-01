@@ -14,10 +14,12 @@ public:
 	~SoMathMatrix3();
 
 	void MakeIdentity();
+	void MakeTranspose();
+	void MakeInverse();
+
 	void MakeXRotate(float fRadian);
 	void MakeYRotate(float fRadian);
 	void MakeZRotate(float fRadian);
-	void MakeAxisRotate(float fRadian, const SoMathFloat3& kAxis);
 	void MakeAxisRotate(float fRadian, float fAxisX, float fAxisY, float fAxisZ);
 	void MakeEulerRotate(float fXRadian, float fYRadian, float fZRadian);
 	void MakeEulerRotateXZ(float fXRadian, float fZRadian);
@@ -41,11 +43,6 @@ inline SoMathMatrix3::SoMathMatrix3()
 inline SoMathMatrix3::~SoMathMatrix3()
 {
 	//do nothing
-}
-//----------------------------------------------------------------
-inline void SoMathMatrix3::MakeAxisRotate(float fRadian, const SoMathFloat3& kAxis)
-{
-	MakeAxisRotate(fRadian, kAxis.x, kAxis.y, kAxis.z);
 }
 //----------------------------------------------------------------
 #endif //_SoMathMatrix3_h_
