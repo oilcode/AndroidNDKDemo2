@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.app.AlertDialog;
+import android.app.Dialog;
 
 public class MainActivity extends Activity
 {
@@ -16,6 +18,7 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         //
         Cpp2JavaLoadAllLib.LoadAllLib();
+        Java2CppStaticFunction.myActivity = this;
         //
         m_GLView = new MainGLSurfaceView(this);
         setContentView(m_GLView);
@@ -41,6 +44,18 @@ public class MainActivity extends Activity
 
         Cpp2JavaLibNative.AndroidAdepterOnActivityCreate();
         Log.i("Android", "MainActivity.onCreate : end");
+
+        Dialog alertDialog = new AlertDialog.Builder(this).
+                setTitle("对话框的标题").
+                setMessage("对话框的内容").
+                create();
+        alertDialog.show();
+
+        Dialog alertDialog2 = new AlertDialog.Builder(this).
+                setTitle("对话框的标题222").
+                setMessage("对话框的内容222").
+                create();
+        alertDialog2.show();
     }
 
     @Override
