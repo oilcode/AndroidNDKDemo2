@@ -3,7 +3,6 @@
 #include "GLManager.h"
 #include "GLShaderManager.h"
 #include "GLTextureManager.h"
-#include "GLInputMsgManager.h"
 //--------------------------------------------------------------------------------------------------
 GLModelCube::GLModelCube()
 :m_pShader(0)
@@ -47,9 +46,9 @@ void GLModelCube::ModelCubeRender()
     m_pShader->ProcessRender(&kParam);
 }
 //-----------------------------------------------------------------------
-void GLModelCube::ModelProcessInputMsg(stInputMsgInfo* kMsgInfo)
+void GLModelCube::ModelProcessInputMsg(AnInputMsgInfo* kMsgInfo)
 {
-    if (kMsgInfo->theType == InputMsg_TouchMove)
+    if (kMsgInfo->theType == AnInputMsg_TouchMove)
     {
         kMsgInfo->bSwallowed = true;
 

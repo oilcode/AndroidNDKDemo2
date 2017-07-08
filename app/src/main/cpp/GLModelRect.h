@@ -6,7 +6,6 @@
 //--------------------------------------------------------------------------------------------------
 class GLShaderBase;
 class GLTexture;
-struct stInputMsgInfo;
 //--------------------------------------------------------------------------------------------------
 class GLModelRect
 {
@@ -15,7 +14,7 @@ public:
     ~GLModelRect();
     void ModelRectUpdate();
     void ModelRectRender();
-    void ModelProcessInputMsg(stInputMsgInfo* kMsgInfo);
+    void ModelProcessInputMsg(AnInputMsgInfo* kMsgInfo);
 
 private:
     struct stVertexType

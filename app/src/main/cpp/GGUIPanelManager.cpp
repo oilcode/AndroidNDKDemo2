@@ -114,7 +114,7 @@ void GGUIPanelManager::RenderUIPanelManager()
 	}
 }
 //----------------------------------------------------------------
-void GGUIPanelManager::InputUIPanelManager(stInputEvent* pInputEvent)
+void GGUIPanelManager::InputUIPanelManager(AnInputMsgInfo* kMsgInfo)
 {
 	SoArray* pArray = 0;
 	int nPanelCount = 0;
@@ -147,15 +147,15 @@ void GGUIPanelManager::InputUIPanelManager(stInputEvent* pInputEvent)
 				{
 					continue;
 				}
-				pPanel->InputWindow(pInputEvent);
-				if (pInputEvent->bSwallowed == true)
+				pPanel->InputWindow2(kMsgInfo);
+				if (kMsgInfo->bSwallowed == true)
 				{
 					break;
 				}
 			}
 		}
 		//
-		if (pInputEvent->bSwallowed == true)
+		if (kMsgInfo->bSwallowed == true)
 		{
 			break;
 		}

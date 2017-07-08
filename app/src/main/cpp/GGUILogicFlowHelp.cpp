@@ -72,3 +72,8 @@ void GGUILogicFlowHelp_Render()
 	GGUIRenderManager::Get()->RenderUIRenderManager();
 }
 //----------------------------------------------------------------
+void GGUILogicFlowHelp_DispatchInputMsg(AnInputMsgInfo* kMsgInfo)
+{
+    GGUIPanelManager::Get()->InputUIPanelManager(kMsgInfo);
+}
+//----------------------------------------------------------------

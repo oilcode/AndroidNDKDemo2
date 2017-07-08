@@ -3,7 +3,6 @@
 #include "GLManager.h"
 #include "GLTextureManager.h"
 #include "GLShaderManager.h"
-#include "GLInputMsgManager.h"
 //--------------------------------------------------------------------------------------------------
 GLModelRect::GLModelRect()
 {
@@ -74,9 +73,9 @@ void GLModelRect::ModelRectRender()
     m_pShader->ProcessRender(&kParam);
 }
 //-----------------------------------------------------------------------
-void GLModelRect::ModelProcessInputMsg(stInputMsgInfo* kMsgInfo)
+void GLModelRect::ModelProcessInputMsg(AnInputMsgInfo* kMsgInfo)
 {
-    if (kMsgInfo->theType == InputMsg_TouchMove)
+    if (kMsgInfo->theType == AnInputMsg_TouchMove)
     {
         kMsgInfo->bSwallowed = true;
 

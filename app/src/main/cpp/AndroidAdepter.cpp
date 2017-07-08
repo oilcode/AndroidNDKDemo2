@@ -3,6 +3,7 @@
 #include "AnFileAsset.h"
 #include "AnFileInternal.h"
 #include "AnFileExternal.h"
+#include "AnInputMsgDispatch.h"
 #include "GLLogicFlowHelp.h"
 #include "GGUILogicFlowHelp.h"
 //--------------------------------------------------------------------------------------------------
@@ -23,17 +24,17 @@ void AndroidAdepter::onActivityResume()
 //--------------------------------------------------------------------------------------------------
 void AndroidAdepter::onViewTouchDown(float fx, float fy)
 {
-	GLLogicFlowHelpTouchDown(fx, fy);
+	AnInputMsgDispatch::DispatchInputMsg(AnInputMsg_TouchDown, fx, fy);
 }
 //--------------------------------------------------------------------------------------------------
 void AndroidAdepter::onViewTouchMove(float fx, float fy)
 {
-	GLLogicFlowHelpTouchMove(fx, fy);
+    AnInputMsgDispatch::DispatchInputMsg(AnInputMsg_TouchMove, fx, fy);
 }
 //--------------------------------------------------------------------------------------------------
 void AndroidAdepter::onViewTouchUp(float fx, float fy)
 {
-	GLLogicFlowHelpTouchUp(fx, fy);
+    AnInputMsgDispatch::DispatchInputMsg(AnInputMsg_TouchUp, fx, fy);
 }
 //--------------------------------------------------------------------------------------------------
 void AndroidAdepter::onRenderSurfaceCreated()

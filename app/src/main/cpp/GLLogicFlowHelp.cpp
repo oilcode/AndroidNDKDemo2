@@ -1,7 +1,6 @@
 //--------------------------------------------------------------------------------------------------
 #include "GLLogicFlowHelp.h"
 #include "GLManager.h"
-#include "GLInputMsgManager.h"
 #include "GLTextureManager.h"
 #include "GLShaderManager.h"
 #include "GLCamera.h"
@@ -23,7 +22,6 @@ bool GLLogicFlowHelpCreateBase()
 bool GLLogicFlowHelpCreateOther()
 {
     SoIDEOutputLogInfo("GLLogicFlowHelpCreateOther : begin");
-    GLInputMsgManager::CreateInputMsgManager();
     GLTextureManager::CreateTextureManager();
     GLShaderManager::CreateShaderManager();
     GLCamera::CreateCamera();
@@ -73,7 +71,6 @@ void GLLogicFlowHelpRelease()
     GLCamera::ReleaseCamera();
     GLShaderManager::ReleaseShaderManager();
     GLTextureManager::ReleaseTextureManager();
-    GLInputMsgManager::ReleaseInputMsgManager();
     GLManager::ReleaseGLManager();
     SoIDEOutputLogInfo("GLLogicFlowHelpRelease : end");
 }
@@ -88,13 +85,6 @@ void GLLogicFlowHelpResume()
 {
     SoIDEOutputLogInfo("GLLogicFlowHelpResume : begin");
     SoIDEOutputLogInfo("GLLogicFlowHelpResume : end");
-}
-//--------------------------------------------------------------------------------------------------
-void GLLogicFlowHelpResolutionChanged(int width, int height)
-{
-    SoIDEOutputLogInfo("GLLogicFlowHelpResolutionChanged : begin width[%d] height[%d]", width, height);
-    GLManager::Get()->SetResolution(width, height);
-    SoIDEOutputLogInfo("GLLogicFlowHelpResolutionChanged : end");
 }
 //--------------------------------------------------------------------------------------------------
 void GLLogicFlowHelpUpdate()
@@ -124,18 +114,32 @@ void GLLogicFlowHelpRender()
     GLManager::Get()->EndRender();
 }
 //--------------------------------------------------------------------------------------------------
-void GLLogicFlowHelpTouchDown(float fx, float fy)
+void GLLogicFlowHelpResolutionChanged(int width, int height)
 {
-    GLInputMsgManager::Get()->ReceiveInputMsg(InputMsg_TouchDown, fx, fy);
+    SoIDEOutputLogInfo("GLLogicFlowHelpResolutionChanged : begin width[%d] height[%d]", width, height);
+    GLManager::Get()->SetResolution(width, height);
+    SoIDEOutputLogInfo("GLLogicFlowHelpResolutionChanged : end");
 }
 //--------------------------------------------------------------------------------------------------
-void GLLogicFlowHelpTouchMove(float fx, float fy)
+void GLLogicFlowHelpDispatchInputMsg(AnInputMsgInfo* pMsgInfo)
 {
-    GLInputMsgManager::Get()->ReceiveInputMsg(InputMsg_TouchMove, fx, fy);
-}
-//--------------------------------------------------------------------------------------------------
-void GLLogicFlowHelpTouchUp(float fx, float fy)
-{
-    GLInputMsgManager::Get()->ReceiveInputMsg(InputMsg_TouchUp, fx, fy);
+    if (g_pModelCube)
+    {
+        g_pModelCube->ModelProcessInputMsg(pMsgInfo);
+        if (pMsgInfo->bSwallowed)
+        {
+            //  return;
+        }
+    }
+
+
+    if (g_pModelRect)
+    {
+        g_pModelRect->ModelProcessInputMsg(pMsgInfo);
+        if (pMsgInfo->bSwallowed)
+        {
+            return;
+        }
+    }
 }
 //--------------------------------------------------------------------------------------------------

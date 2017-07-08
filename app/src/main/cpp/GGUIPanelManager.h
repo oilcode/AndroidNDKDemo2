@@ -4,8 +4,6 @@
 //----------------------------------------------------------------
 #include "GGUIWindowPanel.h"
 //----------------------------------------------------------------
-struct stInputEvent;
-//----------------------------------------------------------------
 class GGUIPanelManager
 {
 public:
@@ -15,7 +13,7 @@ public:
 
 	void UpdateUIPanelManager(float fDeltaTime);
 	void RenderUIPanelManager();
-	void InputUIPanelManager(stInputEvent* pInputEvent);
+	void InputUIPanelManager(AnInputMsgInfo* kMsgInfo);
 	//游戏分辨率发生了变化，调整所有Panel的坐标和宽高。
 	void ResolutionChanged(float newWidth, float newHeight);
 

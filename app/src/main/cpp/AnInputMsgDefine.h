@@ -1,19 +1,27 @@
 //--------------------------------------------------------------------------------------------------
-#ifndef _GLLogicGlowHelp_h_
-#define _GLLogicGlowHelp_h_
+#ifndef _AnInputMsgDefine_h_
+#define _AnInputMsgDefine_h_
 //--------------------------------------------------------------------------------------------------
-struct AnInputMsgInfo;
+enum AnInputMsgType
+{
+    AnInputMsg_Invalid = -1,
+    AnInputMsg_TouchDown,
+    AnInputMsg_TouchMove,
+    AnInputMsg_TouchUp,
+};
 //--------------------------------------------------------------------------------------------------
-bool GLLogicFlowHelpCreateBase();
-bool GLLogicFlowHelpCreateOther();
-void GLLogicFlowHelpRelease();
-void GLLogicFlowHelpPause();
-void GLLogicFlowHelpResume();
-void GLLogicFlowHelpUpdate();
-void GLLogicFlowHelpPreRender();
-void GLLogicFlowHelpRender();
-void GLLogicFlowHelpResolutionChanged(int width, int height);
-void GLLogicFlowHelpDispatchInputMsg(AnInputMsgInfo* kMsgInfo);
+struct AnInputMsgInfo
+{
+    AnInputMsgType theType;
+    float fPosX;
+    float fPosY;
+    float fDeltaX;
+    float fDeltaY;
+    //值为true，表示本消息已经被吞噬了，排在响应队列后面的模块将不能收到本消息。
+    bool bSwallowed;
+
+    AnInputMsgInfo();
+};
 //--------------------------------------------------------------------------------------------------
-#endif //_GLLogicGlowHelp_h_
+#endif //_AnInputMsgDefine_h_
 //--------------------------------------------------------------------------------------------------

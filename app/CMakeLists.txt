@@ -23,13 +23,14 @@ add_library( # Sets the name of the library.
 			 src/main/cpp/AnFileExternal.cpp
 			 src/main/cpp/AnFileInternal.cpp
 			 src/main/cpp/AnJava2CppStaticFunction.cpp
+			 src/main/cpp/AnInputMsgDefine.cpp
+			 src/main/cpp/AnInputMsgDispatch.cpp
 
              # mycode
              src/main/cpp/GLBaseInclude.cpp
              src/main/cpp/GLCamera.cpp
              src/main/cpp/GLCameraBase.cpp
 			 src/main/cpp/GLCameraUI.cpp
-             src/main/cpp/GLInputMsgManager.cpp
              src/main/cpp/GLLogicFlowHelp.cpp
              src/main/cpp/GLManager.cpp
              src/main/cpp/GLModelCube.cpp
@@ -42,6 +43,7 @@ add_library( # Sets the name of the library.
              src/main/cpp/GLTextureManager.cpp
 
              # GGUI
+             src/main/cpp/GGUIBaseInclude.cpp
              src/main/cpp/GGUIColor.cpp
              src/main/cpp/GGUIComponentText.cpp
              src/main/cpp/GGUIErrorHandler.cpp
