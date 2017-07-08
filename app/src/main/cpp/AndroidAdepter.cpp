@@ -4,6 +4,7 @@
 #include "AnFileInternal.h"
 #include "AnFileExternal.h"
 #include "GLLogicFlowHelp.h"
+#include "GGUILogicFlowHelp.h"
 //--------------------------------------------------------------------------------------------------
 void AndroidAdepter::onActivityCreate()
 {
@@ -44,12 +45,19 @@ void AndroidAdepter::onRenderSurfaceChanged(int width, int height)
 {
     GLLogicFlowHelpResolutionChanged(width, height);
     GLLogicFlowHelpCreateOther();
+    GGUILogicFlowHelp_Create();
 }
 //--------------------------------------------------------------------------------------------------
 void AndroidAdepter::onRenderDrawFrame()
 {
 	GLLogicFlowHelpUpdate();
+    GGUILogicFlowHelp_Update(0.0f);
+    //
+    GLLogicFlowHelpPreRender();
+    GGUILogicFlowHelp_PreRender();
+    //
     GLLogicFlowHelpRender();
+    GGUILogicFlowHelp_Render();
 }
 //--------------------------------------------------------------------------------------------------
 void AndroidAdepter::setAssetManager(AAssetManager* pAssetMgr)

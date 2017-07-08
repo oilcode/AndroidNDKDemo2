@@ -99,6 +99,7 @@ GLuint GLShaderBase::CompileShader(GLenum eShaderType, const char* szSource)
             buff[nCompileInfoLen] = 0;
             glGetShaderInfoLog(uiShaderHandle, nCompileInfoLen, NULL, buff);
             SoIDEOutputLogError("%s", buff);
+            SoMessageBox("shader error", buff);
             free(buff);
             buff = 0;
         }

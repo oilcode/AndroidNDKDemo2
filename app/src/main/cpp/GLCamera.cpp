@@ -4,26 +4,26 @@
 //-----------------------------------------------------------------------
 GLCamera* GLCamera::ms_pInstance = NULL;
 //-----------------------------------------------------------------------
-bool GLCamera::CreateD3DCamera()
+bool GLCamera::CreateCamera()
 {
 	bool br = true;
 	if (ms_pInstance == NULL)
 	{
 		ms_pInstance = new GLCamera;
-		if (ms_pInstance && ms_pInstance->InitD3DCamera())
+		if (ms_pInstance && ms_pInstance->InitCamera())
 		{
 			br = true;
 		}
 		else
 		{
-			ReleaseD3DCamera();
+			ReleaseCamera();
 			br = false;
 		}
 	}
 	return false;
 }
 //-----------------------------------------------------------------------
-void GLCamera::ReleaseD3DCamera()
+void GLCamera::ReleaseCamera()
 {
 	if (ms_pInstance)
 	{
@@ -47,10 +47,10 @@ GLCamera::GLCamera()
 //-----------------------------------------------------------------------
 GLCamera::~GLCamera()
 {
-	ClearD3DCamera();
+	ClearCamera();
 }
 //-----------------------------------------------------------------------
-bool GLCamera::InitD3DCamera()
+bool GLCamera::InitCamera()
 {
 	int nWidth = 0;
 	int nHeight = 0;
@@ -59,12 +59,12 @@ bool GLCamera::InitD3DCamera()
 	const float height = (float)nHeight;
 	SetFrustumFov(SoMath_PI*0.25f, width/height, 1.0f, 1000000.0f);
 	//
-	SetPosition(-20.0f, -20.0f, -20.0f);
+	SetPosition(-70.0f, -70.0f, -70.0f);
 	SetPitchYaw(0.7f, -0.7f);
 	return true;
 }
 //-----------------------------------------------------------------------
-void GLCamera::ClearD3DCamera()
+void GLCamera::ClearCamera()
 {
 	// do nothing
 }

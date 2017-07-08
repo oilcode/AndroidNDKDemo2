@@ -2,7 +2,23 @@
 #include <jni.h>
 #include <android/asset_manager_jni.h>
 #include <android/asset_manager.h>
+#include "AnIDEOutputLog.h"
 #include "AndroidAdepter.h"
+#include "AnJava2CppStaticFunction.h"
+//--------------------------------------------------------------------------------------------------
+extern "C"
+JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved)
+{
+    AnIDEOutputLogInfo("JNI_OnLoad");
+    AnJava2CppStaticFunction::InitJava2CppStaticFunction(vm);
+    return AnJava2CppStaticFunction::GetMyJNIVersion();
+}
+//--------------------------------------------------------------------------------------------------
+extern "C"
+JNIEXPORT void JNICALL JNI_OnUnload(JavaVM* vm, void* reserved)
+{
+    AnIDEOutputLogInfo("JNI_OnUnload");
+}
 //--------------------------------------------------------------------------------------------------
 extern "C"
 JNIEXPORT void JNICALL

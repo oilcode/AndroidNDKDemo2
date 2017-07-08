@@ -360,16 +360,10 @@ void SoMathMatrix4::MakePerspectiveFovOpenGL(float fovTopDownAngle, float aspect
 	MakePerspectiveOpenGL(fViewWidth, fViewHeight, nearPlane, farPlane);
 }
 //----------------------------------------------------------------
-void SoMathMatrix4::MakeOrtho2D(float left, float top, float right, float bottom)
+void SoMathMatrix4::MakeOrtho2DOpenGL(float left, float right, float bottom, float top, float zNear, float zFar)
 {
-    /*
-#ifdef SoMath_Matrix_RowMajor_DirectX
-
-#else
-	const float zNear = -1.0f;
-	const float zFar = 1.0f;
 	const float inv_z = 1.0f / (zFar - zNear);
-	const float inv_y = 1.0f / (bottom - top);
+	const float inv_y = 1.0f / (top - bottom);
 	const float inv_x = 1.0f / (right - left);
 
 	m[0][0] = 2.0f * inv_x;
@@ -388,11 +382,9 @@ void SoMathMatrix4::MakeOrtho2D(float left, float top, float right, float bottom
 	m[2][3] = 0.0f;
 
 	m[3][0] = -(right + left) * inv_x;
-	m[3][1] = (top + bottom) * inv_y;
+	m[3][1] = -(top + bottom) * inv_y;
 	m[3][2] = -(zFar + zNear) * inv_z;
 	m[3][3] = 1.0f;
-#endif
-     */
 }
 //----------------------------------------------------------------
 void SoMathMatrix4::MakeLookTo(const SoMathFloat3& kEyePos, const SoMathFloat3& kForward, const SoMathFloat3& kRight, const SoMathFloat3& kUp)

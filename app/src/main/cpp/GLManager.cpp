@@ -47,6 +47,7 @@ bool GLManager::InitGLManager()
 {
     //开启剔除功能。
     glEnable(GL_CULL_FACE);
+    //glDisable(GL_CULL_FACE);
     //设置成剔除背面。
     glCullFace(GL_BACK);
     //把逆时针方向设置成正面；顺时针方向的绕序被认为是背面，不进行绘制。

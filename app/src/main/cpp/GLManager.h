@@ -16,6 +16,8 @@ public:
 
     void SetResolution(int newWidth, int newHeight);
     void GetResolution(int* pWidth, int* pHeight);
+    float GetResolutionWidth();
+    float GetResolutionHeight();
 
 private:
     GLManager();
@@ -32,6 +34,16 @@ private:
 inline GLManager* GLManager::Get()
 {
     return ms_pInstance;
+}
+//--------------------------------------------------------------------------------------------------
+inline float GLManager::GetResolutionWidth()
+{
+    return (float)m_nResolutionWidth;
+}
+//--------------------------------------------------------------------------------------------------
+inline float GLManager::GetResolutionHeight()
+{
+    return (float)m_nResolutionHeight;
 }
 //--------------------------------------------------------------------------------------------------
 #endif //_GLManager_h_

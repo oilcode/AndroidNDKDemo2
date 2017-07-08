@@ -1,8 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIBaseInclude.h" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIComponentText.cpp" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIComponentText.h" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIDefine.h" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIErrorHandler.cpp" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIFileGGM.h" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIImageset.h" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIImagesetManager.h" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIInputState.h" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUILogicFlowHelp.cpp" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIPanelManager.cpp" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIPanelManager.h" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIRenderHelp.cpp" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIRenderManager.cpp" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIRenderManager.h" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIUserDefine.cpp" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIUserDefine.h" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIWindowBase.cpp" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIWindowBase.h" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIWindowButton.cpp" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIWindowContainer.cpp" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIWindowContainer.h" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIWindowFactory.cpp" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIWindowListBox.cpp" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIWindowListBox.h" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIWindowScrollBar.cpp" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIWindowScrollBar.h" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/SoFile.cpp" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/SoFile.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/SoStringConvert.cpp" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/SoStringConvert.h" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/SoStringHelp.cpp" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/SoStringHelp.h" charset="GB2312" />
   </component>

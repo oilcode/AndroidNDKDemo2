@@ -3,12 +3,12 @@ package com.ggui.swoosh.fidemo;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Message;
 import android.util.Log;
-import android.app.AlertDialog;
-import android.app.Dialog;
 
 public class MainActivity extends Activity
 {
+    private MainActivityHandler m_Handler;
     private MainGLSurfaceView m_GLView;
 
     @Override
@@ -17,8 +17,10 @@ public class MainActivity extends Activity
         Log.i("Android", "MainActivity.onCreate : begin");
         super.onCreate(savedInstanceState);
         //
-        Cpp2JavaLoadAllLib.LoadAllLib();
+        m_Handler = new MainActivityHandler(this);
         Java2CppStaticFunction.myActivity = this;
+        //
+        Cpp2JavaLoadAllLib.LoadAllLib();
         //
         m_GLView = new MainGLSurfaceView(this);
         setContentView(m_GLView);
@@ -44,18 +46,6 @@ public class MainActivity extends Activity
 
         Cpp2JavaLibNative.AndroidAdepterOnActivityCreate();
         Log.i("Android", "MainActivity.onCreate : end");
-
-        Dialog alertDialog = new AlertDialog.Builder(this).
-                setTitle("对话框的标题").
-                setMessage("对话框的内容").
-                create();
-        alertDialog.show();
-
-        Dialog alertDialog2 = new AlertDialog.Builder(this).
-                setTitle("对话框的标题222").
-                setMessage("对话框的内容222").
-                create();
-        alertDialog2.show();
     }
 
     @Override
@@ -76,5 +66,13 @@ public class MainActivity extends Activity
         m_GLView.onResume();
         Cpp2JavaLibNative.AndroidAdepterOnActivityResume();
         Log.i("Android", "MainActivity.onResume : end");
+    }
+
+    public void ShowMessageBox(String title, String message)
+    {
+        Message msg = new Message();
+        msg.what = MainActivityHandler.MessageType_ShowDialog;
+        msg.obj = new MainActivityHandler.MessageParam(title, message);
+        m_Handler.sendMessage(msg);
     }
 }

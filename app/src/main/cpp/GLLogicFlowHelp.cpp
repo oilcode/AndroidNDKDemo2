@@ -1,14 +1,16 @@
 //--------------------------------------------------------------------------------------------------
 #include "GLLogicFlowHelp.h"
 #include "GLManager.h"
+#include "GLInputMsgManager.h"
 #include "GLTextureManager.h"
 #include "GLShaderManager.h"
 #include "GLCamera.h"
+#include "GLCameraUI.h"
 #include "GLModelCube.h"
+#include "GLModelRect.h"
 //--------------------------------------------------------------------------------------------------
 GLModelCube* g_pModelCube = 0;
-float g_fTouchPosX = 0.0f;
-float g_fTouchPosY = 0.0f;
+GLModelRect* g_pModelRect = 0;
 //--------------------------------------------------------------------------------------------------
 bool GLLogicFlowHelpCreateBase()
 {
@@ -21,10 +23,14 @@ bool GLLogicFlowHelpCreateBase()
 bool GLLogicFlowHelpCreateOther()
 {
     SoIDEOutputLogInfo("GLLogicFlowHelpCreateOther : begin");
+    GLInputMsgManager::CreateInputMsgManager();
     GLTextureManager::CreateTextureManager();
     GLShaderManager::CreateShaderManager();
-    GLCamera::CreateD3DCamera();
-    g_pModelCube = new GLModelCube;
+    GLCamera::CreateCamera();
+    GLCameraUI::CreateCameraUI();
+    g_pModelCube = SoNew GLModelCube;
+
+    g_pModelRect = SoNew GLModelRect;
 
     /*
     SoFile* pFileInternal = SoFileHelp::CreateFileInternal("kk1.txt", "r");
@@ -43,6 +49,8 @@ bool GLLogicFlowHelpCreateOther()
     }
     */
 
+    SoMessageBox("ttt22", "df333333");
+
     SoIDEOutputLogInfo("GLLogicFlowHelpCreateOther : end");
     return true;
 }
@@ -52,13 +60,20 @@ void GLLogicFlowHelpRelease()
     SoIDEOutputLogInfo("GLLogicFlowHelpRelease : begin");
     if (g_pModelCube)
     {
-        delete g_pModelCube;
+        SoDelete g_pModelCube;
         g_pModelCube = 0;
     }
+    if (g_pModelRect)
+    {
+        SoDelete g_pModelRect;
+        g_pModelRect = NULL;
+    }
 
-    GLCamera::ReleaseD3DCamera();
+    GLCameraUI::ReleaseCameraUI();
+    GLCamera::ReleaseCamera();
     GLShaderManager::ReleaseShaderManager();
     GLTextureManager::ReleaseTextureManager();
+    GLInputMsgManager::ReleaseInputMsgManager();
     GLManager::ReleaseGLManager();
     SoIDEOutputLogInfo("GLLogicFlowHelpRelease : end");
 }
@@ -90,6 +105,11 @@ void GLLogicFlowHelpUpdate()
     }
 }
 //--------------------------------------------------------------------------------------------------
+void GLLogicFlowHelpPreRender()
+{
+
+}
+//--------------------------------------------------------------------------------------------------
 void GLLogicFlowHelpRender()
 {
     GLManager::Get()->BeginRender();
@@ -97,41 +117,25 @@ void GLLogicFlowHelpRender()
     {
         g_pModelCube->ModelCubeRender();
     }
+    if (g_pModelRect)
+    {
+        g_pModelRect->ModelRectRender();
+    }
     GLManager::Get()->EndRender();
 }
 //--------------------------------------------------------------------------------------------------
 void GLLogicFlowHelpTouchDown(float fx, float fy)
 {
-    g_fTouchPosX = fx;
-    g_fTouchPosY = fy;
+    GLInputMsgManager::Get()->ReceiveInputMsg(InputMsg_TouchDown, fx, fy);
 }
 //--------------------------------------------------------------------------------------------------
 void GLLogicFlowHelpTouchMove(float fx, float fy)
 {
-    float fDeltaX = fx - g_fTouchPosX;
-    float fDeltaY = fy - g_fTouchPosY;
-    g_fTouchPosX = fx;
-    g_fTouchPosY = fy;
-
-    if (fDeltaX < -1.0f || fDeltaX > 1.0f || fDeltaY < -1.0f || fDeltaY > 1.0f)
-    {
-        int nWidth = 0;
-        int nHeight = 0;
-        GLManager::Get()->GetResolution(&nWidth, &nHeight);
-        const float width = (float)nWidth;
-        const float height = (float)nHeight;
-
-        if (g_pModelCube)
-        {
-            g_pModelCube->SetDeltaPitchYaw(fDeltaY/height, fDeltaX/width);
-        }
-
-        //GLCamera::Get()->SetDeltaPitchYaw(fDeltaY/height, fDeltaX/width);
-    }
+    GLInputMsgManager::Get()->ReceiveInputMsg(InputMsg_TouchMove, fx, fy);
 }
 //--------------------------------------------------------------------------------------------------
 void GLLogicFlowHelpTouchUp(float fx, float fy)
 {
-
+    GLInputMsgManager::Get()->ReceiveInputMsg(InputMsg_TouchUp, fx, fy);
 }
 //--------------------------------------------------------------------------------------------------

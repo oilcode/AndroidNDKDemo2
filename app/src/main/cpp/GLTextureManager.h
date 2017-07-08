@@ -2,6 +2,7 @@
 #ifndef _GLTextureManager_h_
 #define _GLTextureManager_h_
 //--------------------------------------------------------------------------------------------------
+#include "GLBaseInclude.h"
 #include "GLTexture.h"
 //--------------------------------------------------------------------------------------------------
 class GLTextureManager

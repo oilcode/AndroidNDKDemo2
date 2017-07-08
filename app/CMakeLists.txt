@@ -22,19 +22,54 @@ add_library( # Sets the name of the library.
 			 src/main/cpp/AnFileAsset.cpp
 			 src/main/cpp/AnFileExternal.cpp
 			 src/main/cpp/AnFileInternal.cpp
+			 src/main/cpp/AnJava2CppStaticFunction.cpp
 
              # mycode
              src/main/cpp/GLBaseInclude.cpp
              src/main/cpp/GLCamera.cpp
              src/main/cpp/GLCameraBase.cpp
+			 src/main/cpp/GLCameraUI.cpp
+             src/main/cpp/GLInputMsgManager.cpp
              src/main/cpp/GLLogicFlowHelp.cpp
              src/main/cpp/GLManager.cpp
              src/main/cpp/GLModelCube.cpp
+			 src/main/cpp/GLModelRect.cpp
              src/main/cpp/GLShaderBase.cpp
+			 src/main/cpp/GLShaderGGUI.cpp
              src/main/cpp/GLShaderManager.cpp
              src/main/cpp/GLShaderStandard.cpp
              src/main/cpp/GLTexture.cpp
              src/main/cpp/GLTextureManager.cpp
+
+             # GGUI
+             src/main/cpp/GGUIColor.cpp
+             src/main/cpp/GGUIComponentText.cpp
+             src/main/cpp/GGUIErrorHandler.cpp
+             src/main/cpp/GGUIFileGGM.cpp
+             src/main/cpp/GGUIFuncHelp.cpp
+             src/main/cpp/GGUIImageset.cpp
+             src/main/cpp/GGUIImagesetIO.cpp
+             src/main/cpp/GGUIImagesetManager.cpp
+             src/main/cpp/GGUIInputState.cpp
+             src/main/cpp/GGUILogicFlowHelp.cpp
+             src/main/cpp/GGUIPanelManager.cpp
+             src/main/cpp/GGUIPoint.cpp
+             src/main/cpp/GGUIRect.cpp
+             src/main/cpp/GGUIRenderHelp.cpp
+             src/main/cpp/GGUIRenderManager.cpp
+             src/main/cpp/GGUIRichTextDefine.cpp
+             src/main/cpp/GGUIUserDefine.cpp
+             src/main/cpp/GGUIWindowBase.cpp
+             src/main/cpp/GGUIWindowButton.cpp
+             src/main/cpp/GGUIWindowComboBox.cpp
+             src/main/cpp/GGUIWindowContainer.cpp
+             src/main/cpp/GGUIWindowFactory.cpp
+             src/main/cpp/GGUIWindowImage.cpp
+             src/main/cpp/GGUIWindowListBox.cpp
+             src/main/cpp/GGUIWindowPanel.cpp
+             src/main/cpp/GGUIWindowRichText.cpp
+             src/main/cpp/GGUIWindowScrollBar.cpp
+             src/main/cpp/GGUIWindowText.cpp
 
              # SoBase
              src/main/cpp/SoArray.cpp
@@ -53,8 +88,9 @@ add_library( # Sets the name of the library.
 			 src/main/cpp/SoMathMatrix3.cpp
 			 src/main/cpp/SoMathMatrix4.cpp
 			 src/main/cpp/SoString.cpp
-			 src/main/cpp/SoStringHelp.cpp
 			 src/main/cpp/SoTinyString.cpp
+			 src/main/cpp/SoStringHelp.cpp
+			 src/main/cpp/SoCmdLineHelp.cpp
 
             )
 

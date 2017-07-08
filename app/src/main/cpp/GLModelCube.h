@@ -6,6 +6,7 @@
 //--------------------------------------------------------------------------------------------------
 class GLShaderBase;
 class GLTexture;
+struct stInputMsgInfo;
 //--------------------------------------------------------------------------------------------------
 class GLModelCube
 {
@@ -15,6 +16,7 @@ public:
 
     void ModelCubeUpdate();
     void ModelCubeRender();
+    void ModelProcessInputMsg(stInputMsgInfo* kMsgInfo);
     void SetDeltaPitchYaw(float fDeltaPitch, float fDeltaYaw);
 
 private:

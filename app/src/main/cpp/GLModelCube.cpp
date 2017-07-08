@@ -1,7 +1,9 @@
 //--------------------------------------------------------------------------------------------------
 #include "GLModelCube.h"
+#include "GLManager.h"
 #include "GLShaderManager.h"
 #include "GLTextureManager.h"
+#include "GLInputMsgManager.h"
 //--------------------------------------------------------------------------------------------------
 GLModelCube::GLModelCube()
 :m_pShader(0)
@@ -43,6 +45,28 @@ void GLModelCube::ModelCubeRender()
     kParam.nIndexCount = m_nIndexCount;
     kParam.uiTextureID = m_pTexture->GetGLResourceID();
     m_pShader->ProcessRender(&kParam);
+}
+//-----------------------------------------------------------------------
+void GLModelCube::ModelProcessInputMsg(stInputMsgInfo* kMsgInfo)
+{
+    if (kMsgInfo->theType == InputMsg_TouchMove)
+    {
+        kMsgInfo->bSwallowed = true;
+
+        float fDeltaX = kMsgInfo->fDeltaX;
+        float fDeltaY = kMsgInfo->fDeltaY;
+        if (fDeltaX < -1.0f || fDeltaX > 1.0f || fDeltaY < -1.0f || fDeltaY > 1.0f)
+        {
+            int nWidth = 0;
+            int nHeight = 0;
+            GLManager::Get()->GetResolution(&nWidth, &nHeight);
+            const float width = (float)nWidth;
+            const float height = (float)nHeight;
+            SetDeltaPitchYaw(fDeltaY/height, fDeltaX/width);
+
+            //GLCamera::Get()->SetDeltaPitchYaw(fDeltaY/height, fDeltaX/width);
+        }
+    }
 }
 //-----------------------------------------------------------------------
 void GLModelCube::SetDeltaPitchYaw(float deltaPitch, float deltaYaw)

@@ -16,8 +16,8 @@ public:
 	};
 
 public:
-	static bool CreateD3DCamera();
-	static void ReleaseD3DCamera();
+	static bool CreateCamera();
+	static void ReleaseCamera();
 	static GLCamera* Get();
 
 	void SetCameraMode(eCameraMode newMode);
@@ -33,8 +33,8 @@ public:
 private:
 	GLCamera();
 	~GLCamera();
-	bool InitD3DCamera();
-	void ClearD3DCamera();
+	bool InitCamera();
+	void ClearCamera();
 
 private:
 	static GLCamera* ms_pInstance;

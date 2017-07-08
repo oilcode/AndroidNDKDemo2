@@ -47,6 +47,7 @@ GLShaderManager::~GLShaderManager()
 bool GLShaderManager::InitShaderManager()
 {
     m_pShaderList[GLShader_Standard] = new GLShaderStandard;
+    m_pShaderList[GLShader_GGUI] = new GLShaderGGUI;
     return true;
 }
 //--------------------------------------------------------------------------------------------------

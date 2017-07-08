@@ -12,6 +12,7 @@ void GLLogicFlowHelpTouchDown(float fx, float fy);
 void GLLogicFlowHelpTouchMove(float fx, float fy);
 void GLLogicFlowHelpTouchUp(float fx, float fy);
 void GLLogicFlowHelpUpdate();
+void GLLogicFlowHelpPreRender();
 void GLLogicFlowHelpRender();
 //--------------------------------------------------------------------------------------------------
 #endif //_GLLogicGlowHelp_h_

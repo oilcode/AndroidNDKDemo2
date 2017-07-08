@@ -9,9 +9,12 @@
 #include "SoIDEOutputLog.h"
 #include "SoArrayUID.h"
 #include "SoArray.h"
+#include "SoMessageBox.h"
 #include "SoMath.h"
 #include "SoFileHelp.h"
 #include "SoImageHelp.h"
+//--------------------------------------------------------------------------------------------------
+#include "AnJava2CppStaticFunction.h"
 //--------------------------------------------------------------------------------------------------
 #endif //_GLBaseInclude_h_
 //--------------------------------------------------------------------------------------------------
