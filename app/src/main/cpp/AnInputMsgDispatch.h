@@ -7,6 +7,8 @@
 class AnInputMsgDispatch
 {
 public:
+    static void InitInputMsgDispatch();
+    static void ClearInputMsgDispatch();
     static void DispatchInputMsg(AnInputMsgType theType, float fPosX, float fPosY);
 
 private:
@@ -16,7 +18,7 @@ private:
         float fPosX;
         float fPosY;
 
-        stInputState() : theMsgType(AnInputMsg_Invalid), fPosX(0.0f), fPosY(0.0f)
+        stInputState() : theMsgType(AnInputMsg_Max), fPosX(0.0f), fPosY(0.0f)
         {
 
         }

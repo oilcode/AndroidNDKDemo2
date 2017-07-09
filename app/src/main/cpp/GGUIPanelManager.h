@@ -13,7 +13,7 @@ public:
 
 	void UpdateUIPanelManager(float fDeltaTime);
 	void RenderUIPanelManager();
-	void InputUIPanelManager(AnInputMsgInfo* kMsgInfo);
+	void InputUIPanelManager(GGUIInputMsg* kInputMsg);
 	//游戏分辨率发生了变化，调整所有Panel的坐标和宽高。
 	void ResolutionChanged(float newWidth, float newHeight);
 

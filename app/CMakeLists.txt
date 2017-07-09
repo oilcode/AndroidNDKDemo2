@@ -17,6 +17,7 @@ add_library( # Sets the name of the library.
              SHARED
 
              # Provides a relative path to your source file(s).
+             # Android
              src/main/cpp/AnCpp2JavaLibNative.cpp
              src/main/cpp/AndroidAdepter.cpp
 			 src/main/cpp/AnFileAsset.cpp
@@ -26,7 +27,7 @@ add_library( # Sets the name of the library.
 			 src/main/cpp/AnInputMsgDefine.cpp
 			 src/main/cpp/AnInputMsgDispatch.cpp
 
-             # mycode
+             # GLcode
              src/main/cpp/GLBaseInclude.cpp
              src/main/cpp/GLCamera.cpp
              src/main/cpp/GLCameraBase.cpp
@@ -41,37 +42,6 @@ add_library( # Sets the name of the library.
              src/main/cpp/GLShaderStandard.cpp
              src/main/cpp/GLTexture.cpp
              src/main/cpp/GLTextureManager.cpp
-
-             # GGUI
-             src/main/cpp/GGUIBaseInclude.cpp
-             src/main/cpp/GGUIColor.cpp
-             src/main/cpp/GGUIComponentText.cpp
-             src/main/cpp/GGUIErrorHandler.cpp
-             src/main/cpp/GGUIFileGGM.cpp
-             src/main/cpp/GGUIFuncHelp.cpp
-             src/main/cpp/GGUIImageset.cpp
-             src/main/cpp/GGUIImagesetIO.cpp
-             src/main/cpp/GGUIImagesetManager.cpp
-             src/main/cpp/GGUIInputState.cpp
-             src/main/cpp/GGUILogicFlowHelp.cpp
-             src/main/cpp/GGUIPanelManager.cpp
-             src/main/cpp/GGUIPoint.cpp
-             src/main/cpp/GGUIRect.cpp
-             src/main/cpp/GGUIRenderHelp.cpp
-             src/main/cpp/GGUIRenderManager.cpp
-             src/main/cpp/GGUIRichTextDefine.cpp
-             src/main/cpp/GGUIUserDefine.cpp
-             src/main/cpp/GGUIWindowBase.cpp
-             src/main/cpp/GGUIWindowButton.cpp
-             src/main/cpp/GGUIWindowComboBox.cpp
-             src/main/cpp/GGUIWindowContainer.cpp
-             src/main/cpp/GGUIWindowFactory.cpp
-             src/main/cpp/GGUIWindowImage.cpp
-             src/main/cpp/GGUIWindowListBox.cpp
-             src/main/cpp/GGUIWindowPanel.cpp
-             src/main/cpp/GGUIWindowRichText.cpp
-             src/main/cpp/GGUIWindowScrollBar.cpp
-             src/main/cpp/GGUIWindowText.cpp
 
              # SoBase
              src/main/cpp/SoArray.cpp
@@ -117,6 +87,40 @@ add_library( png
              src/main/thirdparty/02_png/pngwutil.c
             )
 
+add_library( GGUI
+             STATIC
+             src/main/cpp/GGUIBaseInclude.cpp
+             src/main/cpp/GGUIColor.cpp
+             src/main/cpp/GGUIComponentText.cpp
+             src/main/cpp/GGUIErrorHandler.cpp
+             src/main/cpp/GGUIEvent.cpp
+             src/main/cpp/GGUIFileGGM.cpp
+             src/main/cpp/GGUIFuncHelp.cpp
+             src/main/cpp/GGUIImageset.cpp
+             src/main/cpp/GGUIImagesetIO.cpp
+             src/main/cpp/GGUIImagesetManager.cpp
+             src/main/cpp/GGUIInputMsg.cpp
+             src/main/cpp/GGUIInputState.cpp
+             src/main/cpp/GGUILogicFlowHelp.cpp
+             src/main/cpp/GGUIPanelManager.cpp
+             src/main/cpp/GGUIPoint.cpp
+             src/main/cpp/GGUIRect.cpp
+             src/main/cpp/GGUIRenderHelp.cpp
+             src/main/cpp/GGUIRenderManager.cpp
+             src/main/cpp/GGUIRichTextDefine.cpp
+             src/main/cpp/GGUIUserDefine.cpp
+             src/main/cpp/GGUIWindowBase.cpp
+             src/main/cpp/GGUIWindowButton.cpp
+             src/main/cpp/GGUIWindowComboBox.cpp
+             src/main/cpp/GGUIWindowContainer.cpp
+             src/main/cpp/GGUIWindowFactory.cpp
+             src/main/cpp/GGUIWindowImage.cpp
+             src/main/cpp/GGUIWindowListBox.cpp
+             src/main/cpp/GGUIWindowPanel.cpp
+             src/main/cpp/GGUIWindowRichText.cpp
+             src/main/cpp/GGUIWindowScrollBar.cpp
+             src/main/cpp/GGUIWindowText.cpp
+           )
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -141,6 +145,7 @@ target_link_libraries( # Specifies the target library.
                        # 这里奇怪的参数，是让PNG这个库直接拷贝到NativeLib里面。
                        "-Wl,--whole-archive"
                        png
+                       GGUI
                        "-Wl,--no-whole-archive"
 
 

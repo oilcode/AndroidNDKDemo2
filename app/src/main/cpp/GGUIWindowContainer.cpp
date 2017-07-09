@@ -97,7 +97,7 @@ bool GGUIWindowContainer::InputWindow(stInputEvent* pInputEvent)
 	}
 }
 //----------------------------------------------------------------
-bool GGUIWindowContainer::InputWindow2(AnInputMsgInfo* kMsgInfo)
+bool GGUIWindowContainer::InputWindow2(GGUIInputMsg* kInputMsg)
 {
 	return false;
 }

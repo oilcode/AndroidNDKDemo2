@@ -1,8 +1,8 @@
 //--------------------------------------------------------------------------------------------------
-#include "AnInputMsgDefine.h"
+#include "GGUIInputMsg.h"
 //--------------------------------------------------------------------------------------------------
-AnInputMsgInfo::AnInputMsgInfo()
-: theType(AnInputMsg_Max)
+GGUIInputMsg::GGUIInputMsg()
+: theType(GGUIInputMsg_Max)
 , fPosX(0.0f)
 , fPosY(0.0f)
 , fDeltaX(0.0f)

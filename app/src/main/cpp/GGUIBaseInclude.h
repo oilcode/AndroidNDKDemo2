@@ -1,9 +1,4 @@
 //----------------------------------------------------------------
-//1,GGUI coord
-//  (0,0) -- (x,0)
-//    |         |
-//  (0,y) -- (x,y)
-//----------------------------------------------------------------
 #ifndef _GGUIBaseInclude_h_
 #define _GGUIBaseInclude_h_
 //----------------------------------------------------------------
@@ -18,14 +13,13 @@
 #include "SoIDEOutputLog.h"
 #include "SoMessageBox.h"
 //----------------------------------------------------------------
-#include "AnInputMsgDefine.h"
-//----------------------------------------------------------------
 #include "GGUIErrorHandler.h"
 #include "GGUIUserDefine.h"
 #include "GGUIRect.h"
 #include "GGUIPoint.h"
 #include "GGUIColor.h"
 #include "GGUIFuncHelp.h"
+#include "GGUIInputMsg.h"
 #include "GGUIInputState.h"
 //----------------------------------------------------------------
 #ifndef SoLogDebug
