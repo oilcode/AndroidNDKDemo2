@@ -70,7 +70,7 @@ int GGUIImagesetManager::CreateImageset(const stImagesetParam& kParam)
 	int nImagesetID = GetImagesetIndex(kParam.kName);
 	if (nImagesetID != -1)
 	{
-		SoLogError("GGUIImagesetManager::CreateImageset : kName[%s] is already exist!", kParam.kName.GetValue());
+		GGUILogf("GGUIImagesetManager::CreateImageset : kName[%s] is already exist!", kParam.kName.GetValue());
 		return nImagesetID;
 	}
 

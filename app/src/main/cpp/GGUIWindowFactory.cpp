@@ -137,7 +137,7 @@ GGUIWindowBase* GGUIWindowFactory::CreateUIWindow(GGUIWindowType eType)
 		} break;
 		case GGUIWindow_Panel:
 		{
-			SoLogError("GGUIWindowFactory::CreateUIWindow : Can not create GGUIWindowPanel");
+			GGUILog("GGUIWindowFactory::CreateUIWindow : Can not create GGUIWindowPanel");
 		} break;
 		case GGUIWindow_Text:
 		{
@@ -161,7 +161,7 @@ GGUIWindowBase* GGUIWindowFactory::CreateUIWindow(GGUIWindowType eType)
 		} break;
 		default:
 		{
-			SoLogError("GGUIWindowFactory::CreateUIWindow : Unknown WindowType [%d]", eType);
+			GGUILogf("GGUIWindowFactory::CreateUIWindow : Unknown WindowType [%d]", eType);
 		} break;
 	}
 	if (pWindow)

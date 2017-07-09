@@ -1,12 +1,8 @@
-//--------------------------------------------------------------------
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS
-#endif //_CRT_SECURE_NO_WARNINGS
 //----------------------------------------------------------------
 #include "GGUIFileGGM.h"
 //----------------------------------------------------------------
 GGUIFileGGM::GGUIFileGGM()
-:m_pf(0)
+:m_pFile(0)
 ,m_pFileBuff(0)
 ,m_nFileSize(0)
 ,m_nReadPointer(0)
@@ -25,31 +21,14 @@ bool GGUIFileGGM::ReadFcfFile(const char* szFileName)
 	{
 		return false;
 	}
-	m_pf = fopen(szFileName, "rt");
-	if (m_pf == 0)
+	m_pFile = SoFileHelp::CreateFile(szFileName, "rt");
+	if (m_pFile == 0)
 	{
 		return false;
 	}
 	//
-	fseek(m_pf, 0, SEEK_END);
-	m_nFileSize = ftell(m_pf);
-	fseek(m_pf, 0, SEEK_SET);
-	if (m_nFileSize <= 0)
-	{
-		CloseFcfFile();
-		return false;
-	}
-	//
-	m_pFileBuff = (char*)calloc(1, m_nFileSize);
-	if (m_pFileBuff == 0)
-	{
-		CloseFcfFile();
-		return false;
-	}
-	//
-	fread(m_pFileBuff, 1, m_nFileSize, m_pf);
-	fclose(m_pf);
-	m_pf = 0;
+	m_pFileBuff = (char*)m_pFile->GetFileData();
+	m_nFileSize = m_pFile->GetFileSize();
 	m_nReadPointer = 0;
 	return true;
 }
@@ -115,16 +94,8 @@ int GGUIFileGGM::GetImageRectCount()
 //----------------------------------------------------------------
 void GGUIFileGGM::CloseFcfFile()
 {
-	if (m_pf)
-	{
-		fclose(m_pf);
-		m_pf = 0;
-	}
-	if (m_pFileBuff)
-	{
-		free(m_pFileBuff);
-		m_pFileBuff = 0;
-	}
+    SoFileHelp::DeleteFile(m_pFile);
+    m_pFileBuff = 0;
 	m_nFileSize = 0;
 	m_nReadPointer = 0;
 }

@@ -15,7 +15,12 @@ SoFile* SoFileHelp::CreateFile(const char* szFileName, const char* szOpMode)
 		return 0;
 	}
 
+#if (SoTargetPlatform == SoPlatform_Windows)
 	SoFile* pFile = new SoFile();
+#elif (SoTargetPlatform == SoPlatform_Android)
+    SoFile* pFile = new AnFileAsset();
+#endif
+
 	if (pFile)
 	{
 		if (pFile->InitFile(szFileName, szOpMode) == false)

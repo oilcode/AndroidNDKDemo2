@@ -1,7 +1,6 @@
 //------------------------------------------------------------
 #include "GGUIWindowContainer.h"
 #include "GGUIWindowFactory.h"
-#include "WinInputMsg.h"
 //------------------------------------------------------------
 GGUIWindowContainer::GGUIWindowContainer()
 {
@@ -51,7 +50,7 @@ void GGUIWindowContainer::RenderWindow()
 	}
 }
 //----------------------------------------------------------------
-bool GGUIWindowContainer::InputWindow(stInputEvent* pInputEvent)
+bool GGUIWindowContainer::InputWindow(GGUIInputMsg* pInputMsg)
 {
 	if (GetVisible() == false)
 	{
@@ -79,27 +78,22 @@ bool GGUIWindowContainer::InputWindow(stInputEvent* pInputEvent)
 		{
 			continue;
 		}
-		pChild->InputWindow(pInputEvent);
-		if (pInputEvent->bSwallowed == true)
+		pChild->InputWindow(pInputMsg);
+		if (pInputMsg->bSwallowed == true)
 		{
 			break;
 		}
 	}
 	//
-	if (pInputEvent->bSwallowed == false)
+	if (pInputMsg->bSwallowed == false)
 	{
-		return GGUIWindowBase::InputWindow(pInputEvent);
+		return GGUIWindowBase::InputWindow(pInputMsg);
 	}
 	else
 	{
 		//派生类不要再处理input。
 		return true;
 	}
-}
-//----------------------------------------------------------------
-bool GGUIWindowContainer::InputWindow2(GGUIInputMsg* kInputMsg)
-{
-	return false;
 }
 //------------------------------------------------------------
 void GGUIWindowContainer::AddChild(GGUIWindowBase* pChild)

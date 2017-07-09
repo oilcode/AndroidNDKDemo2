@@ -1,6 +1,5 @@
 //----------------------------------------------------------------
 #include "GGUIWindowButton.h"
-#include "WinInputMsg.h"
 #include "GGUIImagesetManager.h"
 #include "GGUIImageset.h"
 #include "GGUIRenderManager.h"
@@ -70,9 +69,9 @@ void GGUIWindowButton::RenderWindow()
 	GGUIRenderHelp_SimpleText(m_strText.c_str(), kAbsRect, GGUITextAlignX_Center, GGUITextAlignY_Center, g_GGUI_ButtonText_Font, g_GGUI_ButtonText_Color);
 }
 //----------------------------------------------------------------
-bool GGUIWindowButton::InputWindow(stInputEvent* pInputEvent)
+bool GGUIWindowButton::InputWindow(GGUIInputMsg* pInputMsg)
 {
-	if (GGUIWindowBase::InputWindow(pInputEvent))
+	if (GGUIWindowBase::InputWindow(pInputMsg))
 	{
 		//派生类不要再处理input。
 		return true;
@@ -83,7 +82,11 @@ bool GGUIWindowButton::InputWindow(stInputEvent* pInputEvent)
 	//2，判断按钮是否被按下；
 	bool bShouldSendEvent_ButtonClick = false;
 	const GGUIButtonState curBtnState = m_eButtonState;
+#if (SoTargetPlatform == SoPlatform_Windows)
 	if (pInputEvent->theEvent == InputEvent_MouseMove)
+#elif (SoTargetPlatform == SoPlatform_Android)
+	if (pInputMsg->theType == GGUIInputMsg_TouchMove)
+#endif
 	{
 		if (m_bCursorIsInside)
 		{
@@ -100,14 +103,22 @@ bool GGUIWindowButton::InputWindow(stInputEvent* pInputEvent)
 			}
 		}
 	}
+#if (SoTargetPlatform == SoPlatform_Windows)
 	else if (pInputEvent->theEvent == InputEvent_Down && pInputEvent->theKey == InputKey_LMouse)
+#elif (SoTargetPlatform == SoPlatform_Android)
+    else if (pInputMsg->theType == GGUIInputMsg_TouchDown)
+#endif
 	{
 		if (curBtnState == GGUIButtonState_Hover)
 		{
 			m_eButtonState = GGUIButtonState_Push;
 		}
 	}
+#if (SoTargetPlatform == SoPlatform_Windows)
 	else if (pInputEvent->theEvent == InputEvent_Up && pInputEvent->theKey == InputKey_LMouse)
+#elif (SoTargetPlatform == SoPlatform_Android)
+    else if (pInputMsg->theType == GGUIInputMsg_TouchUp)
+#endif
 	{
 		if (curBtnState == GGUIButtonState_Push)
 		{

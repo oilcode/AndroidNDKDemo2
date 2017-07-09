@@ -13,8 +13,8 @@ public:
 	//所以拖拽和单击会同时触发。
 	static int m_nWindoeID_CursorDrag;
 	//下面两个成员提供辅助作用，在拖拽逻辑中会用到。
-	static int m_nLastCursorPosX;
-	static int m_nLastCursorPosY;
+	static float m_fLastCursorPosX;
+	static float m_fLastCursorPosY;
 };
 //----------------------------------------------------------------
 #endif //_GGUIInputState_h_

@@ -37,7 +37,7 @@ void GGUIImageset::AddRect(const SoTinyString& kName, const GGUIRect& kRect)
 {
 	if (GetRectID(kName) != -1)
 	{
-		SoLogError("GGUIImageset::AddRect : kName[%s] is already exist!", kName.GetValue());
+		GGUILogf("GGUIImageset::AddRect : kName[%s] is already exist!", kName.GetValue());
 		return;
 	}
 

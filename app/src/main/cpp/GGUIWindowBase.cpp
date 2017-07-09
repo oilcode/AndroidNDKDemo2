@@ -1,7 +1,6 @@
 //----------------------------------------------------------------
 #include "GGUIWindowBase.h"
 #include "GGUIWindowFactory.h"
-#include "WinInputMsg.h"
 #include "GGUIEvent.h"
 //----------------------------------------------------------------
 GGUIWindowBase::GGUIWindowBase()
@@ -48,7 +47,7 @@ void GGUIWindowBase::RenderWindow()
 	//do nothing
 }
 //----------------------------------------------------------------
-bool GGUIWindowBase::InputWindow(stInputEvent* pInputEvent)
+bool GGUIWindowBase::InputWindow(GGUIInputMsg* pInputMsg)
 {
 	if (GetVisible() == false)
 	{
@@ -84,7 +83,7 @@ bool GGUIWindowBase::InputWindow(stInputEvent* pInputEvent)
 	}
 	else
 	{
-		bIsInside = m_kRectInAbsCoord.IsInside((float)pInputEvent->nParam1, (float)pInputEvent->nParam2);
+		bIsInside = m_kRectInAbsCoord.IsInside(pInputMsg->fPosX, pInputMsg->fPosY);
 	}
 	if (bIsInside)
 	{
@@ -97,7 +96,7 @@ bool GGUIWindowBase::InputWindow(stInputEvent* pInputEvent)
 		}
 		else
 		{
-			pInputEvent->Swallow();
+			pInputMsg->bSwallowed = true;
 		}
 	}
 	m_bCursorIsInside = bIsInside;
@@ -106,7 +105,7 @@ bool GGUIWindowBase::InputWindow(stInputEvent* pInputEvent)
 	//检测窗口拖拽逻辑。
 	if (GetDragEnable())
 	{
-		if (InputDragLogic(pInputEvent))
+		if (InputDragLogic(pInputMsg))
 		{
 			//正在拖拽中。
 			//只处理拖拽，不处理其他事件，直接退出。
@@ -198,7 +197,7 @@ void GGUIWindowBase::CalculateRectInAbsCoord()
 	m_kRectInAbsCoord.h = m_kParentRectInAbsCoord.h * m_kFullRect.fScaleH + m_kFullRect.fDeltaH;
 }
 //----------------------------------------------------------------
-bool GGUIWindowBase::InputDragLogic(stInputEvent* pInputEvent)
+bool GGUIWindowBase::InputDragLogic(GGUIInputMsg* pInputMsg)
 {
 	bool bDrag = false;
 	if (m_nID != GGUIInputState::m_nWindoeID_CursorDrag)
@@ -207,15 +206,19 @@ bool GGUIWindowBase::InputDragLogic(stInputEvent* pInputEvent)
 		if (m_bCursorIsInside && m_nID == GGUIInputState::m_nWindoeID_CursorInWindowRect)
 		{
 			//鼠标一直位于本窗口矩形范围内。
+#if (SoTargetPlatform == SoPlatform_Windows)
 			if (pInputEvent->theEvent == InputEvent_Down && pInputEvent->theKey == InputKey_LMouse)
+#elif (SoTargetPlatform == SoPlatform_Android)
+			if (pInputMsg->theType == GGUIInputMsg_TouchDown)
+#endif
 			{
 				//鼠标左键按下了，开始拖拽。
 				GGUIInputState::m_nWindoeID_CursorDrag = m_nID;
-				GGUIInputState::m_nLastCursorPosX = pInputEvent->nParam1;
-				GGUIInputState::m_nLastCursorPosY = pInputEvent->nParam2;
+				GGUIInputState::m_fLastCursorPosX = pInputMsg->fPosX;
+				GGUIInputState::m_fLastCursorPosY = pInputMsg->fPosY;
 				//注意，这里不能把bDrag设置成true，否则窗口无法响应单击事件。
 				//消息被处理了，消息被吞噬。
-				pInputEvent->Swallow();
+                pInputMsg->bSwallowed = true;
 			}
 		}
 	}
@@ -223,14 +226,18 @@ bool GGUIWindowBase::InputDragLogic(stInputEvent* pInputEvent)
 	{
 		//鼠标正在拖拽本窗口。
 		//本窗口只响应鼠标移动和鼠标左键抬起两个事件。
+#if (SoTargetPlatform == SoPlatform_Windows)
 		if (pInputEvent->theEvent == InputEvent_MouseMove)
+#elif (SoTargetPlatform == SoPlatform_Android)
+        if (pInputMsg->theType == GGUIInputMsg_TouchMove)
+#endif
 		{
 			//窗口移动。
-			int nDeltaX = pInputEvent->nParam1 - GGUIInputState::m_nLastCursorPosX;
-			int nDeltaY = pInputEvent->nParam2 - GGUIInputState::m_nLastCursorPosY;
-			MoveDelta((float)nDeltaX, (float)nDeltaY);
-			GGUIInputState::m_nLastCursorPosX = pInputEvent->nParam1;
-			GGUIInputState::m_nLastCursorPosY = pInputEvent->nParam2;
+			float fDeltaX = pInputMsg->fPosX - GGUIInputState::m_fLastCursorPosX;
+			float fDeltaY = pInputMsg->fPosY - GGUIInputState::m_fLastCursorPosY;
+			MoveDelta(fDeltaX, fDeltaY);
+			GGUIInputState::m_fLastCursorPosX = pInputMsg->fPosX;
+			GGUIInputState::m_fLastCursorPosY = pInputMsg->fPosY;
 			bDrag = true;
 			//抛出事件
 			GGUIEventParam_PosChangedByDrag kParam;
@@ -238,14 +245,18 @@ bool GGUIWindowBase::InputDragLogic(stInputEvent* pInputEvent)
 			kParam.nWindowID = m_nID;
 			m_pUIEventHandler->ProcessUIEvent(GGUIEvent_PosChangedByDrag, &kParam);
 			//消息被处理了，消息被吞噬。
-			pInputEvent->Swallow();
+            pInputMsg->bSwallowed = true;
 		}
+#if (SoTargetPlatform == SoPlatform_Windows)
 		else if (pInputEvent->theEvent == InputEvent_Up && pInputEvent->theKey == InputKey_LMouse)
+#elif (SoTargetPlatform == SoPlatform_Android)
+        else if (pInputMsg->theType == GGUIInputMsg_TouchUp)
+#endif
 		{
 			//停止拖拽。
 			GGUIInputState::m_nWindoeID_CursorDrag = -1;
 			//消息被处理了，消息被吞噬。
-			pInputEvent->Swallow();
+            pInputMsg->bSwallowed = true;
 		}
 	}
 	return bDrag;

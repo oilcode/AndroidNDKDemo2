@@ -43,6 +43,11 @@ add_library( # Sets the name of the library.
              src/main/cpp/GLTexture.cpp
              src/main/cpp/GLTextureManager.cpp
 
+             # Nwcode
+             src/main/cpp/NwBaseInclude.cpp
+             src/main/cpp/NwLogicFlowHelp.cpp
+             src/main/cpp/NwUIMain.cpp
+
              # SoBase
              src/main/cpp/SoArray.cpp
              src/main/cpp/SoArrayUID.cpp
@@ -92,7 +97,6 @@ add_library( GGUI
              src/main/cpp/GGUIBaseInclude.cpp
              src/main/cpp/GGUIColor.cpp
              src/main/cpp/GGUIComponentText.cpp
-             src/main/cpp/GGUIErrorHandler.cpp
              src/main/cpp/GGUIEvent.cpp
              src/main/cpp/GGUIFileGGM.cpp
              src/main/cpp/GGUIFuncHelp.cpp
@@ -101,6 +105,7 @@ add_library( GGUI
              src/main/cpp/GGUIImagesetManager.cpp
              src/main/cpp/GGUIInputMsg.cpp
              src/main/cpp/GGUIInputState.cpp
+             src/main/cpp/GGUILogHelp.cpp
              src/main/cpp/GGUILogicFlowHelp.cpp
              src/main/cpp/GGUIPanelManager.cpp
              src/main/cpp/GGUIPoint.cpp

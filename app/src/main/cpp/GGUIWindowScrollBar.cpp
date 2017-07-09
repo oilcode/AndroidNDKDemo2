@@ -187,7 +187,7 @@ void GGUIWindowScrollBar::SetRange(float fMin, float fMax, float fStep)
 	if (fMin >= fMax)
 	{
 		fMin = fMax - 1.0f;
-		GGUIErrorHandler::Print("GGUIWindowScrollBar::SetRange : Invalid Param; fMin[%.2f] fMax[%.2f]", fMin, fMax);
+		GGUILogf("GGUIWindowScrollBar::SetRange : Invalid Param; fMin[%.2f] fMax[%.2f]", fMin, fMax);
 	}
 	m_fRangeMinValue = fMin;
 	m_fRangeMaxValue = fMax;
@@ -201,7 +201,7 @@ void GGUIWindowScrollBar::SetRange(float fMin, float fMax, float fStep)
 	{
 		//除数不能是0
 		fPosLength = 1.0f;
-		GGUIErrorHandler::Print("GGUIWindowScrollBar::SetRange : 滚动条各个子窗口的位置大小不合理，滑块无法滑动");
+		GGUILog("GGUIWindowScrollBar::SetRange : 滚动条各个子窗口的位置大小不合理，滑块无法滑动");
 	}
 	m_fRangePosDeltaPerStep = fPosLength / (fMax - fMin) * fStep;
 	m_fRangeValueDeltaPerPixel = (fMax - fMin) / fPosLength;

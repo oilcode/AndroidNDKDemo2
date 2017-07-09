@@ -1,6 +1,5 @@
 //----------------------------------------------------------------
 #include "GGUIPanelManager.h"
-#include "WinInputMsg.h"
 //----------------------------------------------------------------
 GGUIPanelManager* GGUIPanelManager::ms_pInstance = 0;
 //----------------------------------------------------------------
@@ -147,7 +146,7 @@ void GGUIPanelManager::InputUIPanelManager(GGUIInputMsg* kInputMsg)
 				{
 					continue;
 				}
-				pPanel->InputWindow2(kInputMsg);
+				pPanel->InputWindow(kInputMsg);
 				if (kInputMsg->bSwallowed == true)
 				{
 					break;

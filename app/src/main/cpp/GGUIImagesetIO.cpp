@@ -3,13 +3,10 @@
 #include "GGUIBaseInclude.h"
 #include "GGUIFileGGM.h"
 #include "GGUIImagesetManager.h"
-#include "GGUIImageset.h"
-//#include "SoD3DTextureManager.h"
+#include "GLTextureManager.h"
 //----------------------------------------------------------------
 bool GGUIImagesetIO::Read(const char* szImagesetName)
 {
-	return false;
-	/*
 	if (szImagesetName == 0 || szImagesetName[0] == 0)
 	{
 		return false;
@@ -18,7 +15,7 @@ bool GGUIImagesetIO::Read(const char* szImagesetName)
 	{
 		return false;
 	}
-	if (SoD3DTextureManager::Get() == 0)
+	if (GLTextureManager::Get() == 0)
 	{
 		return false;
 	}
@@ -41,7 +38,7 @@ bool GGUIImagesetIO::Read(const char* szImagesetName)
 		return false;
 	}
 
-	SoD3DTexture* pTexture = SoD3DTextureManager::Get()->CreateUITextureFromFile(strTextureName.c_str());
+	GLTexture* pTexture = GLTextureManager::Get()->CreateUITextureFromFile(strTextureName.c_str());
 	if (pTexture == 0)
 	{
 		return false;
@@ -80,6 +77,5 @@ bool GGUIImagesetIO::Read(const char* szImagesetName)
 	}
 
 	return true;
-	*/
 }
 //----------------------------------------------------------------

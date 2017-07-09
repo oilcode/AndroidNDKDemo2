@@ -16,7 +16,7 @@ public:
 	//处理Input事件。
 	//返回true，表示本函数内已经处理了事件，派生类不需要再处理input；
 	//返回false，表示派生类可以处理自己感兴趣的input。
-	virtual bool InputWindow(stInputEvent* pInputEvent);
+	virtual bool InputWindow(GGUIInputMsg* pInputMsg);
 	//处理UI事件。
 	//一般情况下，界面内的窗口抛出事件（例如Button抛出GGUIEvent_ButtonClick事件），由 GGUIWindowPanel 来响应事件。
 	virtual void ProcessUIEvent(int nEventType, void* pParam);
@@ -66,7 +66,7 @@ protected:
 	void SetID(int nID);
 	void CalculateRectInAbsCoord();
 	//返回值为true，表示鼠标正在拖拽本窗口。
-	bool InputDragLogic(stInputEvent* pInputEvent);
+	bool InputDragLogic(GGUIInputMsg* pInputMsg);
 	//返回值为true，表示抛出了“鼠标进入窗口区域”或者“鼠标离开窗口区域”事件。
 	bool InputWindowRectLogic();
 

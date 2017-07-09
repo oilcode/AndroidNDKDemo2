@@ -21,7 +21,7 @@ private:
 	char* ReadNextFileLine();
 
 private:
-	FILE* m_pf;
+	SoFile* m_pFile;
 	//存储整个文件的数据。
 	char* m_pFileBuff;
 	int m_nFileSize;

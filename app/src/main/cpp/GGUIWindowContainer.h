@@ -31,8 +31,7 @@ public:
 	virtual void RenderWindow();
 	//返回true，表示本函数内已经处理了事件，派生类不需要再处理input；
 	//返回false，表示派生类可以处理自己感兴趣的input。
-	virtual bool InputWindow(stInputEvent* pInputEvent);
-	virtual bool InputWindow2(GGUIInputMsg* kInputMsg);
+	virtual bool InputWindow(GGUIInputMsg* pInputMsg);
 	virtual void SetFullRect(const GGUIFullRect& kRect);
 	virtual void SetFullRectScalePos(float fScaleX, float fScaleY);
 	virtual void SetFullRectDeltaPos(float fDeltaX, float fDeltaY);

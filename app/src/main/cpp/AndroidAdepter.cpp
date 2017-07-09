@@ -6,6 +6,7 @@
 #include "AnInputMsgDispatch.h"
 #include "GLLogicFlowHelp.h"
 #include "GGUILogicFlowHelp.h"
+#include "NwLogicFlowHelp.h"
 //--------------------------------------------------------------------------------------------------
 void AndroidAdepter::onActivityCreate()
 {
@@ -47,12 +48,14 @@ void AndroidAdepter::onRenderSurfaceChanged(int width, int height)
     GLLogicFlowHelpResolutionChanged(width, height);
     GLLogicFlowHelpCreateOther();
     GGUILogicFlowHelp_Create();
+    NwLogicFlowHelp_Create();
 }
 //--------------------------------------------------------------------------------------------------
 void AndroidAdepter::onRenderDrawFrame()
 {
 	GLLogicFlowHelpUpdate();
     GGUILogicFlowHelp_Update(0.0f);
+    NwLogicFlowHelp_Update(0.0f);
     //
     GLLogicFlowHelpPreRender();
     GGUILogicFlowHelp_PreRender();

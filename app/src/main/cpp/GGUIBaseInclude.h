@@ -9,11 +9,12 @@
 #include "SoArray.h"
 #include "SoArrayUID.h"
 #include "SoBitFlag.h"
+#include "SoFileHelp.h"
 #include "SoMath.h"
 #include "SoIDEOutputLog.h"
 #include "SoMessageBox.h"
 //----------------------------------------------------------------
-#include "GGUIErrorHandler.h"
+#include "GGUILogHelp.h"
 #include "GGUIUserDefine.h"
 #include "GGUIRect.h"
 #include "GGUIPoint.h"
@@ -21,13 +22,6 @@
 #include "GGUIFuncHelp.h"
 #include "GGUIInputMsg.h"
 #include "GGUIInputState.h"
-//----------------------------------------------------------------
-#ifndef SoLogDebug
-#define SoLogDebug
-#endif
-#ifndef SoLogError
-#define SoLogError
-#endif
 //----------------------------------------------------------------
 enum GGUIWindowType
 {

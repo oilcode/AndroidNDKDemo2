@@ -9,5 +9,5 @@ class GGUIWindowComboBox : public GGUIWindowContainer
 
 };
 //------------------------------------------------------------
-#endif _GGUIWindowComboBox_h_
+#endif //_GGUIWindowComboBox_h_
 //------------------------------------------------------------

@@ -29,7 +29,7 @@ protected:
 	//re-write parent function
 	virtual void ClearWindow();
 	virtual void RenderWindow();
-	virtual bool InputWindow(stInputEvent* pInputEvent);
+	virtual bool InputWindow(GGUIInputMsg* pInputMsg);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	
 private:
