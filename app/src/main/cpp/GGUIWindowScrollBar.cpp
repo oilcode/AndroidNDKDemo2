@@ -45,7 +45,7 @@ void GGUIWindowScrollBar::ProcessUIEvent(int nEventType, void* pParam)
 {
 	switch (nEventType)
 	{
-	case GGUIEvent_ButtonClick:
+	case GGUIEvent_Button_Clicked:
 		{
 			GGUIEventParam_ButtonClick* myParam = (GGUIEventParam_ButtonClick*)pParam;
 			if (m_pBtnLeft->GetID() == myParam->nWindowID)
@@ -86,12 +86,12 @@ void GGUIWindowScrollBar::InitScrollBar()
 	kFullRect.fScaleY = 0.0f;
 	kFullRect.fDeltaY = 0.0f;
 	kFullRect.fScaleW = 0.0f;
-	kFullRect.fDeltaW = 20.0f;
+	kFullRect.fDeltaW = 50.0f;
 	kFullRect.fScaleH = 1.0f;
 	kFullRect.fDeltaH = 0.0f;
 	pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
 	pUIButton->SetFullRect(kFullRect);
-	pUIButton->SetTexture("texture/mm2:Name1");
+	pUIButton->SetTexture("uitexture/mm3:Name1");
 	pUIButton->SetDragEnable(false);
 	AddChild(pUIButton);
 	m_pBtnLeft = pUIButton;
@@ -101,12 +101,12 @@ void GGUIWindowScrollBar::InitScrollBar()
 	kFullRect.fScaleY = 0.0f;
 	kFullRect.fDeltaY = 0.0f;
 	kFullRect.fScaleW = 0.0f;
-	kFullRect.fDeltaW = 20.0f;
+	kFullRect.fDeltaW = 50.0f;
 	kFullRect.fScaleH = 1.0f;
 	kFullRect.fDeltaH = 0.0f;
 	pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
 	pUIButton->SetFullRect(kFullRect);
-	pUIButton->SetTexture("texture/mm2:Name1");
+	pUIButton->SetTexture("uitexture/mm3:Name1");
 	pUIButton->SetDragEnable(false);
 	AddChild(pUIButton);
 	m_pBtnRight = pUIButton;
@@ -116,12 +116,12 @@ void GGUIWindowScrollBar::InitScrollBar()
 	kFullRect.fScaleY = 0.0f;
 	kFullRect.fDeltaY = 0.0f;
 	kFullRect.fScaleW = 0.0f;
-	kFullRect.fDeltaW = 20.0f;
+	kFullRect.fDeltaW = 50.0f;
 	kFullRect.fScaleH = 1.0f;
 	kFullRect.fDeltaH = 0.0f;
 	pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
 	pUIButton->SetFullRect(kFullRect);
-	pUIButton->SetTexture("texture/mm2:Name1");
+	pUIButton->SetTexture("uitexture/mm3:Name1");
 	pUIButton->SetDragEnable(true);
 	AddChild(pUIButton);
 	m_pBtnCenter = pUIButton;

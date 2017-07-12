@@ -9,7 +9,7 @@ class GLTexture
     friend class GLTextureManager;
 public:
     int GetTextureID() const;
-    GLuint GetGLResourceID() const;
+    GLuint GetResourceID() const;
     int GetTextureWidth() const;
     int GetTextureHeight() const;
     const char* GetFileName() const;
@@ -27,7 +27,7 @@ protected:
 private:
     const char* m_pFileName;
     int m_nTextureID;
-    GLuint m_uiGLResourceID;
+    GLuint m_uiResourceID;
     int m_nWidth;
     int m_nHeight;
     int m_nRefCount;
@@ -37,7 +37,7 @@ inline void GLTexture::InitTexture(int nID, GLuint uiResourceID, const char* pFi
 {
     m_pFileName = pFileName;
     m_nTextureID = nID;
-    m_uiGLResourceID = uiResourceID;
+    m_uiResourceID = uiResourceID;
     m_nWidth = nWidth;
     m_nHeight = nHeight;
 }
@@ -47,9 +47,9 @@ inline int GLTexture::GetTextureID() const
     return m_nTextureID;
 }
 //------------------------------------------------------------
-inline GLuint GLTexture::GetGLResourceID() const
+inline GLuint GLTexture::GetResourceID() const
 {
-    return m_uiGLResourceID;
+    return m_uiResourceID;
 }
 //------------------------------------------------------------
 inline int GLTexture::GetTextureWidth() const

@@ -18,7 +18,7 @@ public:
 	//返回false，表示派生类可以处理自己感兴趣的input。
 	virtual bool InputWindow(GGUIInputMsg* pInputMsg);
 	//处理UI事件。
-	//一般情况下，界面内的窗口抛出事件（例如Button抛出GGUIEvent_ButtonClick事件），由 GGUIWindowPanel 来响应事件。
+	//一般情况下，界面内的窗口抛出事件（例如Button抛出 GGUIEvent_Button_Clicked 事件），由 GGUIWindowPanel 来响应事件。
 	virtual void ProcessUIEvent(int nEventType, void* pParam);
 
 	//获取窗口ID。
@@ -39,6 +39,7 @@ public:
 	virtual void SetFullRect(const GGUIFullRect& kRect);
 	virtual void SetFullRectScalePos(float fScaleX, float fScaleY);
 	virtual void SetFullRectDeltaPos(float fDeltaX, float fDeltaY);
+	virtual void SetFullRectScaleWH(float fScaleW, float fScaleH);
 	virtual void MoveDelta(float fDeltaX, float fDeltaY);
 	virtual void OnParentRectChanged(const GGUIRect& kParentRectInAbsCoord);
 	virtual void SetUIEventHandler(GGUIWindowBase* pHandler);

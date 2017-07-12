@@ -67,7 +67,7 @@ void GGUIImagesetManager::ClearUIImagesetManager()
 //----------------------------------------------------------------
 int GGUIImagesetManager::CreateImageset(const stImagesetParam& kParam)
 {
-	int nImagesetID = GetImagesetIndex(kParam.kName);
+	int nImagesetID = GetImagesetIDByName(kParam.kName);
 	if (nImagesetID != -1)
 	{
 		GGUILogf("GGUIImagesetManager::CreateImageset : kName[%s] is already exist!", kParam.kName.GetValue());
@@ -81,13 +81,13 @@ int GGUIImagesetManager::CreateImageset(const stImagesetParam& kParam)
 	}
 
 	pImageset->InitImageset(kParam.nInitRectCount);
-	pImageset->SetD3DTexture(kParam.pD3DTexture);
+	pImageset->SetTexture(kParam.pTexture);
 	nImagesetID = m_kImagesetArray.FillAt(-1, &pImageset);
 	m_kName2IndexMap.insert(std::make_pair(kParam.kName, nImagesetID));
 	return nImagesetID;
 }
 //----------------------------------------------------------------
-int GGUIImagesetManager::GetImagesetIndex(const SoTinyString& kName)
+int GGUIImagesetManager::GetImagesetIDByName(const SoTinyString &kName)
 {
 	mapName2Index::iterator it = m_kName2IndexMap.find(kName);
 	if (it != m_kName2IndexMap.end())
@@ -115,7 +115,7 @@ GGUIImageset* GGUIImagesetManager::GetImagesetByID(int nImagesetID)
 //----------------------------------------------------------------
 GGUIImageset* GGUIImagesetManager::GetImagesetByName(const SoTinyString& kName)
 {
-	int nIndex = GetImagesetIndex(kName);
+	int nIndex = GetImagesetIDByName(kName);
 	if (nIndex != -1)
 	{
 		return GetImagesetByID(nIndex);

@@ -20,7 +20,7 @@ bool GGUIFunc_GetImagesetIndexRectIndex(const char* szTexture, int* pImagesetInd
 	}
 	const char* pImagesetName = SoSubStr(szTexture, 0, nSplitIndex-1);
 	SoTinyString kName(pImagesetName);
-	const int nImagesetIndex = GGUIImagesetManager::Get()->GetImagesetIndex(kName);
+	const int nImagesetIndex = GGUIImagesetManager::Get()->GetImagesetIDByName(kName);
 	if (nImagesetIndex == -1)
 	{
 		return false;

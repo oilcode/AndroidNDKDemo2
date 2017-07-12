@@ -58,7 +58,7 @@ void GLModelRect::ModelRectRender()
         return;
     }
 
-    GLuint theTexId = m_pTexture->GetGLResourceID();
+    GLuint theTexId = m_pTexture->GetResourceID();
 
     GLShaderGGUIParam kParam;
     kParam.pVertexArray = (float*)m_pVertexList;

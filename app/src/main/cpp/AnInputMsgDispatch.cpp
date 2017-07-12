@@ -14,7 +14,6 @@ void AnInputMsgDispatch::InitInputMsgDispatch()
     g_eAnInputMsgType2GGUI[AnInputMsg_TouchDown] = GGUIInputMsg_TouchDown;
     g_eAnInputMsgType2GGUI[AnInputMsg_TouchMove] = GGUIInputMsg_TouchMove;
     g_eAnInputMsgType2GGUI[AnInputMsg_TouchUp] = GGUIInputMsg_TouchUp;
-    g_eAnInputMsgType2GGUI[AnInputMsg_Max] = GGUIInputMsg_Max;
 }
 //--------------------------------------------------------------------------------------------------
 void AnInputMsgDispatch::ClearInputMsgDispatch()
@@ -49,7 +48,7 @@ void AnInputMsgDispatch::DispatchInputMsg(AnInputMsgType theType, float fPosX, f
     GGUILogicFlowHelp_DispatchInputMsg(&kGGUIMsg);
     if (kGGUIMsg.bSwallowed)
     {
-        return;
+        //return;
     }
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 

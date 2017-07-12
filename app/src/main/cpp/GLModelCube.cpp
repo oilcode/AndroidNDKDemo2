@@ -42,7 +42,7 @@ void GLModelCube::ModelCubeRender()
     kParam.nVertexOffset = 0;
     kParam.nUVOffset = 10;
     kParam.nIndexCount = m_nIndexCount;
-    kParam.uiTextureID = m_pTexture->GetGLResourceID();
+    kParam.uiTextureID = m_pTexture->GetResourceID();
     m_pShader->ProcessRender(&kParam);
 }
 //-----------------------------------------------------------------------

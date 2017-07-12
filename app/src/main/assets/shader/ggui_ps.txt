@@ -2,15 +2,16 @@
 precision highp float;
 //--------------------------------------------------------------------------------------------------
 //Global Param
-uniform sampler2D  g_Texture;
+uniform sampler2D  g_TextureList[8];
 //--------------------------------------------------------------------------------------------------
 //Input Struct
-varying vec2  fragUV;
+varying vec3  fragUV_TexIndex;
 varying vec4  fragColor;
 //--------------------------------------------------------------------------------------------------
 void main()
 {
-	vec4 theColor = texture2D(g_Texture, fragUV);
+	int nTexIndex = int(fragUV_TexIndex.z + 0.5);
+	vec4 theColor = texture2D(g_TextureList[nTexIndex], fragUV_TexIndex.xy);
 
     theColor.rgb = fragColor.rgb * fragColor.a + theColor.rgb * (1.0 - fragColor.a);
 

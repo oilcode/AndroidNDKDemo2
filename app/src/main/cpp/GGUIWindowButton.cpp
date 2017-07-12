@@ -82,11 +82,9 @@ bool GGUIWindowButton::InputWindow(GGUIInputMsg* pInputMsg)
 	//2，判断按钮是否被按下；
 	bool bShouldSendEvent_ButtonClick = false;
 	const GGUIButtonState curBtnState = m_eButtonState;
+	
 #if (SoTargetPlatform == SoPlatform_Windows)
 	if (pInputEvent->theEvent == InputEvent_MouseMove)
-#elif (SoTargetPlatform == SoPlatform_Android)
-	if (pInputMsg->theType == GGUIInputMsg_TouchMove)
-#endif
 	{
 		if (m_bCursorIsInside)
 		{
@@ -103,22 +101,40 @@ bool GGUIWindowButton::InputWindow(GGUIInputMsg* pInputMsg)
 			}
 		}
 	}
+#elif (SoTargetPlatform == SoPlatform_Android)
+	if (pInputMsg->theType == GGUIInputMsg_TouchMove)
+	{
+		if (m_bCursorIsInside == false)
+		{
+			if (curBtnState != GGUIButtonState_Normal)
+			{
+				m_eButtonState = GGUIButtonState_Normal;
+			}
+		}
+	}
+#endif
+
+	
 #if (SoTargetPlatform == SoPlatform_Windows)
 	else if (pInputEvent->theEvent == InputEvent_Down && pInputEvent->theKey == InputKey_LMouse)
-#elif (SoTargetPlatform == SoPlatform_Android)
-    else if (pInputMsg->theType == GGUIInputMsg_TouchDown)
-#endif
 	{
 		if (curBtnState == GGUIButtonState_Hover)
 		{
 			m_eButtonState = GGUIButtonState_Push;
 		}
 	}
+#elif (SoTargetPlatform == SoPlatform_Android)
+    else if (pInputMsg->theType == GGUIInputMsg_TouchDown)
+	{
+		if (m_bCursorIsInside)
+		{
+			m_eButtonState = GGUIButtonState_Push;
+		}
+	}
+#endif
+
 #if (SoTargetPlatform == SoPlatform_Windows)
 	else if (pInputEvent->theEvent == InputEvent_Up && pInputEvent->theKey == InputKey_LMouse)
-#elif (SoTargetPlatform == SoPlatform_Android)
-    else if (pInputMsg->theType == GGUIInputMsg_TouchUp)
-#endif
 	{
 		if (curBtnState == GGUIButtonState_Push)
 		{
@@ -126,13 +142,24 @@ bool GGUIWindowButton::InputWindow(GGUIInputMsg* pInputMsg)
 			bShouldSendEvent_ButtonClick = true;
 		}
 	}
+#elif (SoTargetPlatform == SoPlatform_Android)
+    else if (pInputMsg->theType == GGUIInputMsg_TouchUp)
+	{
+		if (m_bCursorIsInside)
+		{
+			m_eButtonState = GGUIButtonState_Normal;
+			bShouldSendEvent_ButtonClick = true;
+		}
+	}
+#endif
+
 	//
 	if (bShouldSendEvent_ButtonClick)
 	{
 		GGUIEventParam_ButtonClick kParam;
 		kParam.szWindowName = m_kName.GetValue();
 		kParam.nWindowID = m_nID;
-		m_pUIEventHandler->ProcessUIEvent(GGUIEvent_ButtonClick, &kParam);
+		m_pUIEventHandler->ProcessUIEvent(GGUIEvent_Button_Clicked, &kParam);
 		//派生类不要再处理input。
 		return true;
 	}

@@ -14,7 +14,7 @@ struct stImagesetParam
 	//预分配多少个GGUIRect。
 	int nInitRectCount;
 	//贴图对象。
-	GLTexture* pD3DTexture;
+	GLTexture* pTexture;
 };
 //----------------------------------------------------------------
 class GGUIImagesetManager
@@ -27,7 +27,7 @@ public:
 	//创建一个新的Imageset对象。
 	//返回值为ImagesetID。
 	int CreateImageset(const stImagesetParam& kParam);
-	int GetImagesetIndex(const SoTinyString& kName);
+	int GetImagesetIDByName(const SoTinyString &kName);
 	GGUIImageset* GetImagesetByID(int nImagesetID);
 	GGUIImageset* GetImagesetByName(const SoTinyString& kName);
 

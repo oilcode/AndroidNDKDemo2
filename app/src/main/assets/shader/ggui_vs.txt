@@ -3,14 +3,14 @@ precision highp float;
 //--------------------------------------------------------------------------------------------------
 //Vertex Struct
 attribute vec3  myVertex;
-attribute vec3  myUV;
+attribute vec3  myUV_TexIndex;
 attribute vec4  myColor;
 //--------------------------------------------------------------------------------------------------
 //Global Param
 uniform mat4  g_matProjectView;
 //--------------------------------------------------------------------------------------------------
 //Output Struct
-varying vec2  fragUV;
+varying vec3  fragUV_TexIndex;
 varying vec4  fragColor;
 //--------------------------------------------------------------------------------------------------
 void main()
@@ -18,7 +18,7 @@ void main()
     vec4 worldVertex = vec4(myVertex, 1);
     gl_Position = g_matProjectView * worldVertex;
 
-    fragUV = myUV.xy;
+    fragUV_TexIndex = myUV_TexIndex;
     fragColor = myColor;
 }
 //--------------------------------------------------------------------------------------------------

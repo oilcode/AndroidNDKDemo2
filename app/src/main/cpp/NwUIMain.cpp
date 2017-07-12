@@ -45,26 +45,44 @@ NwUIMain::~NwUIMain()
 bool NwUIMain::InitUIMain()
 {
 	GGUIFullRect kFullRect;
-	kFullRect.fDeltaX = 100.0f;
-	kFullRect.fDeltaY = 50.0f;
-	kFullRect.fDeltaW = 100.0f;
-	kFullRect.fDeltaH = 200.0f;
+	kFullRect.fDeltaX = 10.0f;
+	kFullRect.fDeltaY = 10.0f;
+	kFullRect.fDeltaW = 300.0f;
+	kFullRect.fDeltaH = 300.0f;
 	GGUIWindowImage* pUIImageA = (GGUIWindowImage*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Image);
 	pUIImageA->SetFullRect(kFullRect);
 	pUIImageA->SetTexture("uitexture/mm1:Name1");
 	pUIImageA->SetInputEnable(true);
 	pUIImageA->SetDragEnable(true);
 
-	kFullRect.fDeltaX = 300.0f;
-	kFullRect.fDeltaY = 150.0f;
-	kFullRect.fDeltaW = 100.0f;
-	kFullRect.fDeltaH = 30.0f;
+	kFullRect.fDeltaX = 350.0f;
+	kFullRect.fDeltaY = 350.0f;
+	kFullRect.fDeltaW = 200.0f;
+	kFullRect.fDeltaH = 200.0f;
 	GGUIWindowButton* pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
 	pUIButton->SetFullRect(kFullRect);
-	pUIButton->SetTexture("uitexture/mm1:Name1");
+	pUIButton->SetTexture("uitexture/mm2:Name1");
 	pUIButton->SetText("µãÎÒ°É");
 	pUIButton->SetDragEnable(true);
 	m_nButtonID = pUIButton->GetID();
+
+
+    kFullRect.fDeltaX = 90.0f;
+    kFullRect.fDeltaY = 550.0f;
+    kFullRect.fDeltaW = 500.0f;
+    kFullRect.fDeltaH = 50.0f;
+    GGUIWindowScrollBar* pScrollBar = (GGUIWindowScrollBar*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_ScrollBar);
+    pScrollBar->SetFullRect(kFullRect);
+    pScrollBar->SetDragEnable(true);
+
+
+    kFullRect.fDeltaX = 90.0f;
+    kFullRect.fDeltaY = 650.0f;
+    kFullRect.fDeltaW = 500.0f;
+    kFullRect.fDeltaH = 50.0f;
+    GGUIWindowProcessBar* pProcessBar = (GGUIWindowProcessBar*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_ProcessBar);
+    pProcessBar->SetFullRect(kFullRect);
+    pProcessBar->SetDragEnable(true);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
@@ -79,6 +97,12 @@ bool NwUIMain::InitUIMain()
 
 	AddChild(pUIImageA);
 	AddChild(pUIButton);
+    AddChild(pScrollBar);
+    AddChild(pProcessBar);
+
+    pScrollBar->SetRange(0.0f, 1.0f, 0.05f);
+    pScrollBar->SetValue(0.5f);
+    pProcessBar->SetProcessValue(0.3f);
 
 	return true;
 }

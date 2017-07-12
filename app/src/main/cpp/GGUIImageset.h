@@ -25,7 +25,7 @@ protected:
 	//--nInitRectCount 预分配多少个GGUIRect。
 	bool InitImageset(int nInitRectCount);
 	void ClearImageset();
-	void SetD3DTexture(GLTexture* pD3DTexture);
+	void SetTexture(GLTexture* pTexture);
 
 private:
 	typedef std::map<SoTinyString, int> mapName2ID;
@@ -36,7 +36,7 @@ private:
 	//GGUIRect名字到GGUIRect序号的映射。
 	mapName2ID m_kName2IDMap;
 	//贴图对象指针。
-	GLTexture* m_pD3DTexture;
+	GLTexture* m_pTexture;
 };
 //----------------------------------------------------------------
 #endif //_GGUIImageset_h_

@@ -3,7 +3,7 @@
 #include "GLTexture.h"
 //----------------------------------------------------------------
 GGUIImageset::GGUIImageset()
-:m_pD3DTexture(0)
+:m_pTexture(0)
 {
 
 }
@@ -26,10 +26,10 @@ void GGUIImageset::ClearImageset()
 {
 	m_kRectArray.ClearArray();
 	m_kName2IDMap.clear();
-	if (m_pD3DTexture)
+	if (m_pTexture)
 	{
-		m_pD3DTexture->TextureRemoveRef();
-		m_pD3DTexture = 0;
+		m_pTexture->TextureRemoveRef();
+		m_pTexture = 0;
 	}
 }
 //----------------------------------------------------------------
@@ -78,9 +78,9 @@ int GGUIImageset::GetRectCount() const
 //----------------------------------------------------------------
 souint32 GGUIImageset::GetTexResourceID() const
 {
-	if (m_pD3DTexture)
+	if (m_pTexture)
 	{
-		return m_pD3DTexture->GetGLResourceID();
+		return m_pTexture->GetResourceID();
 	}
 	else
 	{
@@ -90,9 +90,9 @@ souint32 GGUIImageset::GetTexResourceID() const
 //----------------------------------------------------------------
 float GGUIImageset::GetTextureWidth() const
 {
-	if (m_pD3DTexture)
+	if (m_pTexture)
 	{
-		return (float)m_pD3DTexture->GetTextureWidth();
+		return (float)m_pTexture->GetTextureWidth();
 	}
 	else
 	{
@@ -102,9 +102,9 @@ float GGUIImageset::GetTextureWidth() const
 //----------------------------------------------------------------
 float GGUIImageset::GetTextureHeight() const
 {
-	if (m_pD3DTexture)
+	if (m_pTexture)
 	{
-		return (float)m_pD3DTexture->GetTextureHeight();
+		return (float)m_pTexture->GetTextureHeight();
 	}
 	else
 	{
@@ -112,17 +112,17 @@ float GGUIImageset::GetTextureHeight() const
 	}
 }
 //----------------------------------------------------------------
-void GGUIImageset::SetD3DTexture(GLTexture* pD3DTexture)
+void GGUIImageset::SetTexture(GLTexture* pTexture)
 {
-	if (m_pD3DTexture)
+	if (m_pTexture)
 	{
-		m_pD3DTexture->TextureRemoveRef();
-		m_pD3DTexture = 0;
+		m_pTexture->TextureRemoveRef();
+		m_pTexture = 0;
 	}
-	m_pD3DTexture = pD3DTexture;
-	if (m_pD3DTexture)
+	m_pTexture = pTexture;
+	if (m_pTexture)
 	{
-		m_pD3DTexture->TextureAddRef();
+		m_pTexture->TextureAddRef();
 	}
 }
 //----------------------------------------------------------------

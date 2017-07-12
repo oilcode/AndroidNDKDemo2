@@ -115,13 +115,17 @@ bool GGUIWindowBase::InputWindow(GGUIInputMsg* pInputMsg)
 	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	//检测是否要抛出“鼠标进入窗口区域”或者“鼠标离开窗口区域”事件。
+#if (SoTargetPlatform == SoPlatform_Windows)
+    //检测是否要抛出“鼠标进入窗口区域”或者“鼠标离开窗口区域”事件。
 	if (InputWindowRectLogic())
 	{
 		//抛出了事件，不处理其他事件，直接退出。
 		//派生类不要再处理input。
 		return true;
 	}
+#elif (SoTargetPlatform == SoPlatform_Android)
+    //移动设备没有光标，窗口没有hover状态。
+#endif
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 	return false;
@@ -149,6 +153,13 @@ void GGUIWindowBase::SetFullRectDeltaPos(float fDeltaX, float fDeltaY)
 {
 	m_kFullRect.fDeltaX = fDeltaX;
 	m_kFullRect.fDeltaY = fDeltaY;
+	CalculateRectInAbsCoord();
+}
+//----------------------------------------------------------------
+void GGUIWindowBase::SetFullRectScaleWH(float fScaleW, float fScaleH)
+{
+	m_kFullRect.fScaleW = fScaleW;
+	m_kFullRect.fScaleH = fScaleH;
 	CalculateRectInAbsCoord();
 }
 //----------------------------------------------------------------
@@ -203,7 +214,13 @@ bool GGUIWindowBase::InputDragLogic(GGUIInputMsg* pInputMsg)
 	if (m_nID != GGUIInputState::m_nWindoeID_CursorDrag)
 	{
 		//判断鼠标是否开始拖拽窗口。
-		if (m_bCursorIsInside && m_nID == GGUIInputState::m_nWindoeID_CursorInWindowRect)
+		if (m_bCursorIsInside
+#if (SoTargetPlatform == SoPlatform_Windows)
+			&& m_nID == GGUIInputState::m_nWindoeID_CursorInWindowRect
+#elif (SoTargetPlatform == SoPlatform_Android)
+            //移动设备没有光标，窗口没有hover状态。
+#endif
+				)
 		{
 			//鼠标一直位于本窗口矩形范围内。
 #if (SoTargetPlatform == SoPlatform_Windows)

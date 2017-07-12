@@ -9,7 +9,7 @@
 #define MaxWindowCountPerDrawCall 200
 //每个DrawCall最多使用多少张贴图。
 //DX11规定的上限是 D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT=128 。
-#define MaxSRVCountPerDrawCall 50
+#define MaxSRVCountPerDrawCall 8
 //----------------------------------------------------------------
 GGUIRenderManager* GGUIRenderManager::ms_pInstance = NULL;
 //----------------------------------------------------------------
@@ -290,7 +290,7 @@ void GGUIRenderManager::ReleaseIndexList()
 //----------------------------------------------------------------
 bool GGUIRenderManager::CreateSRVList()
 {
-	const int nMaxSRVCount = MaxSRVCountPerDrawCall;
+	const int nMaxSRVCount = GLShaderGGUI_MaxTexSamplerCount;
 	m_pSRVList = SoNew GLuint[nMaxSRVCount];
 	if (m_pSRVList == NULL)
 	{

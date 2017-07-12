@@ -39,10 +39,15 @@ GLShaderGGUI::GLShaderGGUI()
     if (m_uiProgramID)
     {
         m_uiVertexID = glGetAttribLocation(m_uiProgramID, "myVertex");
-        m_uiUVID = glGetAttribLocation(m_uiProgramID, "myUV");
+        m_uiUVID = glGetAttribLocation(m_uiProgramID, "myUV_TexIndex");
         m_uiColorID = glGetAttribLocation(m_uiProgramID, "myColor");
         m_uiMatProjectViewID = glGetUniformLocation(m_uiProgramID, "g_matProjectView");
-        m_uiTexSamplerID = glGetUniformLocation(m_uiProgramID, "g_Texture");
+        m_uiTexSamplerID = glGetUniformLocation(m_uiProgramID, "g_TextureList");
+    }
+
+    for (int i = 0; i < GLShaderGGUI_MaxTexSamplerCount; ++i)
+    {
+        m_kSamplerUnitList[i] = i;
     }
 }
 //--------------------------------------------------------------------------------------------------
@@ -76,10 +81,14 @@ void GLShaderGGUI::ProcessRender(void* pParam) const
 
     glUniformMatrix4fv(m_uiMatProjectViewID, 1, GL_FALSE, (float*)(kMatProjView.m));
 
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, pGGUIParam->pTexIDList[0]);
-    // Set the sampler to texture unit 0
-    glUniform1i(m_uiTexSamplerID, 0);
+    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    for (int i = 0; i < pGGUIParam->nTexIDCount; ++i)
+    {
+        glActiveTexture(GL_TEXTURE0 + i);
+        glBindTexture(GL_TEXTURE_2D, pGGUIParam->pTexIDList[i]);
+    }
+    glUniform1iv(m_uiTexSamplerID, GLShaderGGUI_MaxTexSamplerCount, m_kSamplerUnitList);
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
     glDrawElements(GL_TRIANGLES, pGGUIParam->nIndexCount, GL_UNSIGNED_SHORT, pGGUIParam->pIndexArray);
 }

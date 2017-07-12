@@ -25,6 +25,7 @@
 #include "GGUIWindowImage.h"
 #include "GGUIWindowButton.h"
 #include "GGUIWindowScrollBar.h"
+#include "GGUIWindowProcessBar.h"
 #include "GGUIWindowListBox.h"
 //----------------------------------------------------------------
 #endif //_NwBaseInclude_h_

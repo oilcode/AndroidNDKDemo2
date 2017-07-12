@@ -43,6 +43,7 @@ void GGUILogicFlowHelp_Update(float fDeltaTime)
 {
 	GGUIPanelManager::Get()->UpdateUIPanelManager(fDeltaTime);
 
+	/*
     stUIRenderUnit kUnit;
     kUnit.fRectLeft = 200.0f;
     kUnit.fRectTop = 200.0f;
@@ -57,8 +58,8 @@ void GGUILogicFlowHelp_Update(float fDeltaTime)
     kUnit.fColorB = 0.0f;
     kUnit.fColorA = 0.0f;
     kUnit.uiTexResourceId = 1;
-
     GGUIRenderManager::Get()->AddRnederUnit(&kUnit);
+    */
 }
 //----------------------------------------------------------------
 void GGUILogicFlowHelp_PreRender()

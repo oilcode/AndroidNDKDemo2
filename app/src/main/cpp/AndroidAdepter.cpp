@@ -40,6 +40,7 @@ void AndroidAdepter::onViewTouchUp(float fx, float fy)
 //--------------------------------------------------------------------------------------------------
 void AndroidAdepter::onRenderSurfaceCreated()
 {
+    AnInputMsgDispatch::InitInputMsgDispatch();
     GLLogicFlowHelpCreateBase();
 }
 //--------------------------------------------------------------------------------------------------

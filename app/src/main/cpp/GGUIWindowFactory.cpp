@@ -8,6 +8,7 @@
 #include "GGUIWindowImage.h"
 #include "GGUIWindowButton.h"
 #include "GGUIWindowScrollBar.h"
+#include "GGUIWindowProcessBar.h"
 #include "GGUIWindowListBox.h"
 //----------------------------------------------------------------
 #define UnusedIndex_TryToFindUnused -1
@@ -154,6 +155,10 @@ GGUIWindowBase* GGUIWindowFactory::CreateUIWindow(GGUIWindowType eType)
 		case GGUIWindow_ScrollBar:
 		{
 			pWindow = new GGUIWindowScrollBar;
+		} break;
+		case GGUIWindow_ProcessBar:
+		{
+			pWindow = new GGUIWindowProcessBar;
 		} break;
 		case GGUIWindow_ListBox:
 		{

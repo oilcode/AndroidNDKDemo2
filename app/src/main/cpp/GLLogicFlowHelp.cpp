@@ -8,8 +8,8 @@
 #include "GLModelCube.h"
 #include "GLModelRect.h"
 //--------------------------------------------------------------------------------------------------
-GLModelCube* g_pModelCube = 0;
-GLModelRect* g_pModelRect = 0;
+//GLModelCube* g_pModelCube = 0;
+//GLModelRect* g_pModelRect = 0;
 //--------------------------------------------------------------------------------------------------
 bool GLLogicFlowHelpCreateBase()
 {
@@ -26,9 +26,11 @@ bool GLLogicFlowHelpCreateOther()
     GLShaderManager::CreateShaderManager();
     GLCamera::CreateCamera();
     GLCameraUI::CreateCameraUI();
-    g_pModelCube = SoNew GLModelCube;
 
-    g_pModelRect = SoNew GLModelRect;
+
+    //g_pModelCube = SoNew GLModelCube;
+
+    //g_pModelRect = SoNew GLModelRect;
 
     /*
     SoFile* pFileInternal = SoFileHelp::CreateFileInternal("kk1.txt", "r");
@@ -47,8 +49,6 @@ bool GLLogicFlowHelpCreateOther()
     }
     */
 
-    SoMessageBox("ttt22", "df333333");
-
     SoIDEOutputLogInfo("GLLogicFlowHelpCreateOther : end");
     return true;
 }
@@ -56,16 +56,18 @@ bool GLLogicFlowHelpCreateOther()
 void GLLogicFlowHelpRelease()
 {
     SoIDEOutputLogInfo("GLLogicFlowHelpRelease : begin");
-    if (g_pModelCube)
-    {
-        SoDelete g_pModelCube;
-        g_pModelCube = 0;
-    }
-    if (g_pModelRect)
-    {
-        SoDelete g_pModelRect;
-        g_pModelRect = NULL;
-    }
+    //if (g_pModelCube)
+    //{
+    //    SoDelete g_pModelCube;
+    //    g_pModelCube = 0;
+    //}
+    //if (g_pModelRect)
+    //{
+    //    SoDelete g_pModelRect;
+    //    g_pModelRect = NULL;
+    //}
+
+
 
     GLCameraUI::ReleaseCameraUI();
     GLCamera::ReleaseCamera();
@@ -103,14 +105,16 @@ void GLLogicFlowHelpPreRender()
 void GLLogicFlowHelpRender()
 {
     GLManager::Get()->BeginRender();
-    if (g_pModelCube)
-    {
-        g_pModelCube->ModelCubeRender();
-    }
-    if (g_pModelRect)
-    {
-        g_pModelRect->ModelRectRender();
-    }
+
+    //if (g_pModelCube)
+    //{
+    //    g_pModelCube->ModelCubeRender();
+    // }
+    //if (g_pModelRect)
+    //{
+    //    g_pModelRect->ModelRectRender();
+    //}
+
     GLManager::Get()->EndRender();
 }
 //--------------------------------------------------------------------------------------------------
@@ -123,6 +127,7 @@ void GLLogicFlowHelpResolutionChanged(int width, int height)
 //--------------------------------------------------------------------------------------------------
 void GLLogicFlowHelpDispatchInputMsg(AnInputMsgInfo* pMsgInfo)
 {
+    /*
     if (g_pModelCube)
     {
         g_pModelCube->ModelProcessInputMsg(pMsgInfo);
@@ -141,5 +146,6 @@ void GLLogicFlowHelpDispatchInputMsg(AnInputMsgInfo* pMsgInfo)
             return;
         }
     }
+    */
 }
 //--------------------------------------------------------------------------------------------------

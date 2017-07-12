@@ -40,7 +40,7 @@ GGUIRichTextStyle::GGUIRichTextStyle()
 ,bBR(false)
 {
 #ifdef GGUIRichText_Debug
-	FontImagesetID = GGUIImagesetManager::Get()->GetImagesetIndex(Font);
+	FontImagesetID = GGUIImagesetManager::Get()->GetImagesetIDByName(Font);
 #else
 	FontImagesetID = GGUIImagesetManager::Get()->GetImagesetIndex(SoTinyString(GGUIRichText_Default_Font));
 #endif
@@ -448,7 +448,7 @@ bool GGUIRichText_PauseKey_font(const wchar_t* KeyText, const int TextCount, GGU
 			int newFontImagesetID = -1;
 #ifdef GGUIRichText_Debug
 			pStyle->Font = szFont;
-			newFontImagesetID = GGUIImagesetManager::Get()->GetImagesetIndex(pStyle->Font);
+			newFontImagesetID = GGUIImagesetManager::Get()->GetImagesetIDByName(pStyle->Font);
 #else
 			newFontImagesetID = GGUIImagesetManager::Get()->GetImagesetIndex(SoTinyString(szFont));
 #endif

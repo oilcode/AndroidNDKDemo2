@@ -48,7 +48,7 @@ bool GGUIImagesetIO::Read(const char* szImagesetName)
 	const int nDotIndex = SoStrRChr(szImagesetName, '.');
 	kParam.kName = SoSubStr(szImagesetName, 0, nDotIndex-1);
 	kParam.nInitRectCount = nRectCount;
-	kParam.pD3DTexture = pTexture;
+	kParam.pTexture = pTexture;
 
 	const int nImagesetIndex = GGUIImagesetManager::Get()->CreateImageset(kParam);
 	if (nImagesetIndex == -1)

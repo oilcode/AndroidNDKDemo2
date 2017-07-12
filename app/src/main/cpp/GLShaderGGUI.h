@@ -4,6 +4,8 @@
 //--------------------------------------------------------------------------------------------------
 #include "GLShaderBase.h"
 //--------------------------------------------------------------------------------------------------
+#define GLShaderGGUI_MaxTexSamplerCount 8
+//--------------------------------------------------------------------------------------------------
 struct GLShaderGGUIParam
 {
     const float* pVertexArray;
@@ -31,6 +33,7 @@ private:
     GLuint m_uiColorID;
     GLuint m_uiMatProjectViewID;
     GLuint m_uiTexSamplerID;
+    GLint m_kSamplerUnitList[GLShaderGGUI_MaxTexSamplerCount];
 };
 //--------------------------------------------------------------------------------------------------
 #endif //_GLShaderGGUI_h_

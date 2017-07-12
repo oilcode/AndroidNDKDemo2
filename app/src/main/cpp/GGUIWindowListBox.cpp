@@ -38,7 +38,7 @@ void GGUIWindowListBox::ProcessUIEvent(int nEventType, void* pParam)
 {
 	//switch (nEventType)
 	//{
-	//case GGUIEvent_ButtonClick:
+	//case GGUIEvent_Button_Clicked:
 	//	{
 	//		GGUIEventParam_ButtonClick* myParam = (GGUIEventParam_ButtonClick*)pParam;
 	//		if (m_pBtnLeft->GetID() == myParam->nWindowID)

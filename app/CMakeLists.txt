@@ -122,6 +122,7 @@ add_library( GGUI
              src/main/cpp/GGUIWindowImage.cpp
              src/main/cpp/GGUIWindowListBox.cpp
              src/main/cpp/GGUIWindowPanel.cpp
+             src/main/cpp/GGUIWindowProcessBar.cpp
              src/main/cpp/GGUIWindowRichText.cpp
              src/main/cpp/GGUIWindowScrollBar.cpp
              src/main/cpp/GGUIWindowText.cpp
