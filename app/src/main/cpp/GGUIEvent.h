@@ -24,13 +24,13 @@ struct GGUIEventParam_WindowRectLeave
 	int nWindowID;
 };
 //------------------------------------------------------------
-struct GGUIEventParam_ButtonClick
+struct GGUIEventParam_PosChangedByDrag
 {
 	const char* szWindowName;
 	int nWindowID;
 };
 //------------------------------------------------------------
-struct GGUIEventParam_PosChangedByDrag
+struct GGUIEventParam_Button_Clicked
 {
 	const char* szWindowName;
 	int nWindowID;

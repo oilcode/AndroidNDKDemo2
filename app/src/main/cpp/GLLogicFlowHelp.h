@@ -9,7 +9,7 @@ bool GLLogicFlowHelpCreateOther();
 void GLLogicFlowHelpRelease();
 void GLLogicFlowHelpPause();
 void GLLogicFlowHelpResume();
-void GLLogicFlowHelpUpdate();
+void GLLogicFlowHelpUpdate(float fDeltaTime);
 void GLLogicFlowHelpPreRender();
 void GLLogicFlowHelpRender();
 void GLLogicFlowHelpResolutionChanged(int width, int height);

@@ -156,7 +156,7 @@ bool GGUIWindowButton::InputWindow(GGUIInputMsg* pInputMsg)
 	//
 	if (bShouldSendEvent_ButtonClick)
 	{
-		GGUIEventParam_ButtonClick kParam;
+		GGUIEventParam_Button_Clicked kParam;
 		kParam.szWindowName = m_kName.GetValue();
 		kParam.nWindowID = m_nID;
 		m_pUIEventHandler->ProcessUIEvent(GGUIEvent_Button_Clicked, &kParam);

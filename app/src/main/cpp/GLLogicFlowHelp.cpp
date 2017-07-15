@@ -89,7 +89,7 @@ void GLLogicFlowHelpResume()
     SoIDEOutputLogInfo("GLLogicFlowHelpResume : end");
 }
 //--------------------------------------------------------------------------------------------------
-void GLLogicFlowHelpUpdate()
+void GLLogicFlowHelpUpdate(float fDeltaTime)
 {
     if (GLCamera::Get())
     {

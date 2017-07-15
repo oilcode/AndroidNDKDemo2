@@ -54,9 +54,10 @@ void AndroidAdepter::onRenderSurfaceChanged(int width, int height)
 //--------------------------------------------------------------------------------------------------
 void AndroidAdepter::onRenderDrawFrame()
 {
-	GLLogicFlowHelpUpdate();
-    GGUILogicFlowHelp_Update(0.0f);
-    NwLogicFlowHelp_Update(0.0f);
+    float fDeltaTime = 0.01666f;
+	GLLogicFlowHelpUpdate(fDeltaTime);
+    GGUILogicFlowHelp_Update(fDeltaTime);
+    NwLogicFlowHelp_Update(fDeltaTime);
     //
     GLLogicFlowHelpPreRender();
     GGUILogicFlowHelp_PreRender();

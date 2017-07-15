@@ -43,11 +43,6 @@ add_library( # Sets the name of the library.
              src/main/cpp/GLTexture.cpp
              src/main/cpp/GLTextureManager.cpp
 
-             # Nwcode
-             src/main/cpp/NwBaseInclude.cpp
-             src/main/cpp/NwLogicFlowHelp.cpp
-             src/main/cpp/NwUIMain.cpp
-
              # SoBase
              src/main/cpp/SoArray.cpp
              src/main/cpp/SoArrayUID.cpp
@@ -128,6 +123,17 @@ add_library( GGUI
              src/main/cpp/GGUIWindowText.cpp
            )
 
+add_library( NwCode
+             STATIC
+             src/main/cpp/NwBaseInclude.cpp
+             src/main/cpp/NwLogicFlowHelp.cpp
+             src/main/cpp/NwSPKLogic.cpp
+             src/main/cpp/NwSPKProcedure.cpp
+             src/main/cpp/NwUIMain.cpp
+             src/main/cpp/NwUISPK.cpp
+           )
+
+
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
 # default, you only need to specify the name of the public NDK library
@@ -152,6 +158,7 @@ target_link_libraries( # Specifies the target library.
                        "-Wl,--whole-archive"
                        png
                        GGUI
+                       NwCode
                        "-Wl,--no-whole-archive"
 
 

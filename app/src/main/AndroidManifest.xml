@@ -16,7 +16,8 @@
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
         <!-- 原有的主题是 android:theme="@style/AppTheme"/> 修改成了上面这种样式-->
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="landscape"> <!-- 强制横屏显示 -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

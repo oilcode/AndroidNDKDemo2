@@ -41,7 +41,7 @@ void GGUIWindowProcessBar::InitProcessBar()
 	kFullRect.fDeltaH = 0.0f;
 	pUIImage = (GGUIWindowImage*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Image);
 	pUIImage->SetFullRect(kFullRect);
-	pUIImage->SetTexture("uitexture/mm1:Name1");
+	pUIImage->SetTexture("uitexture/mm4:hud_30");
 	pUIImage->SetDragEnable(false);
     pUIImage->SetInputEnable(false);
 	AddChild(pUIImage);
@@ -57,7 +57,7 @@ void GGUIWindowProcessBar::InitProcessBar()
 	kFullRect.fDeltaH = 0.0f;
 	pUIImage = (GGUIWindowImage*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Image);
 	pUIImage->SetFullRect(kFullRect);
-	pUIImage->SetTexture("uitexture/mm2:Name1");
+	pUIImage->SetTexture("uitexture/mm4:hud_10");
 	pUIImage->SetDragEnable(false);
     pUIImage->SetInputEnable(false);
 	AddChild(pUIImage);

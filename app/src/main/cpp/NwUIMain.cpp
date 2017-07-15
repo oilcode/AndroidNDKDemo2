@@ -44,24 +44,25 @@ NwUIMain::~NwUIMain()
 //----------------------------------------------------------------
 bool NwUIMain::InitUIMain()
 {
+    /*
 	GGUIFullRect kFullRect;
 	kFullRect.fDeltaX = 10.0f;
 	kFullRect.fDeltaY = 10.0f;
-	kFullRect.fDeltaW = 300.0f;
-	kFullRect.fDeltaH = 300.0f;
+	kFullRect.fDeltaW = 126.0f;
+	kFullRect.fDeltaH = 50.0f;
 	GGUIWindowImage* pUIImageA = (GGUIWindowImage*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Image);
 	pUIImageA->SetFullRect(kFullRect);
-	pUIImageA->SetTexture("uitexture/mm1:Name1");
+	pUIImageA->SetTexture("uitexture/mm4:hud_31");
 	pUIImageA->SetInputEnable(true);
 	pUIImageA->SetDragEnable(true);
 
 	kFullRect.fDeltaX = 350.0f;
 	kFullRect.fDeltaY = 350.0f;
-	kFullRect.fDeltaW = 200.0f;
-	kFullRect.fDeltaH = 200.0f;
+    kFullRect.fDeltaW = 126.0f;
+    kFullRect.fDeltaH = 50.0f;
 	GGUIWindowButton* pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
 	pUIButton->SetFullRect(kFullRect);
-	pUIButton->SetTexture("uitexture/mm2:Name1");
+	pUIButton->SetTexture("uitexture/mm4:hud_32");
 	pUIButton->SetText("µãÎÒ°É");
 	pUIButton->SetDragEnable(true);
 	m_nButtonID = pUIButton->GetID();
@@ -103,7 +104,7 @@ bool NwUIMain::InitUIMain()
     pScrollBar->SetRange(0.0f, 1.0f, 0.05f);
     pScrollBar->SetValue(0.5f);
     pProcessBar->SetProcessValue(0.3f);
-
+    */
 	return true;
 }
 //----------------------------------------------------------------

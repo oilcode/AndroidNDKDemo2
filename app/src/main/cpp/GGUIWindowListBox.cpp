@@ -40,7 +40,7 @@ void GGUIWindowListBox::ProcessUIEvent(int nEventType, void* pParam)
 	//{
 	//case GGUIEvent_Button_Clicked:
 	//	{
-	//		GGUIEventParam_ButtonClick* myParam = (GGUIEventParam_ButtonClick*)pParam;
+	//		GGUIEventParam_Button_Clicked* myParam = (GGUIEventParam_Button_Clicked*)pParam;
 	//		if (m_pBtnLeft->GetID() == myParam->nWindowID)
 	//		{
 	//			m_pBtnCenter->MoveDelta(-m_fRangePosDeltaPerStep, 0.0f);
