@@ -4,8 +4,6 @@
 //----------------------------------------------------------------
 #include "GGUIBaseInclude.h"
 //----------------------------------------------------------------
-struct stInputEvent;
-//----------------------------------------------------------------
 class GGUIWindowBase
 {
 public:
@@ -18,7 +16,9 @@ public:
 	//返回false，表示派生类可以处理自己感兴趣的input。
 	virtual bool InputWindow(GGUIInputMsg* pInputMsg);
 	//处理UI事件。
-	//一般情况下，界面内的窗口抛出事件（例如Button抛出 GGUIEvent_Button_Clicked 事件），由 GGUIWindowPanel 来响应事件。
+	//此函数主要由 GGUIWindowPanel 来做处理。
+	//一般情况下，界面内的窗口抛出事件（例如Button抛出 GGUIEvent_Button_Clicked 事件），
+	//由 GGUIWindowPanel 来响应事件。
 	virtual void ProcessUIEvent(int nEventType, void* pParam);
 
 	//获取窗口ID。

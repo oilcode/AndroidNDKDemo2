@@ -3,8 +3,6 @@
 #define _GGUIWindowContainer_h_
 //------------------------------------------------------------
 #include "GGUIWindowBase.h"
-//----------------------------------------------------------------
-struct stInputEvent;
 //------------------------------------------------------------
 class GGUIWindowContainer : public GGUIWindowBase
 {

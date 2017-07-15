@@ -34,8 +34,8 @@ void GGUIWindowImage::RenderWindow()
 	GGUIRenderHelp_SimpleImage(m_nImagesetIndex, m_nImageRectIndex, m_kRectInAbsCoord, GGUIColor_Empty);
 }
 //----------------------------------------------------------------
-void GGUIWindowImage::SetTexture(const char* szTexture)
+void GGUIWindowImage::SetImage(const char* szImage)
 {
-	GGUIFunc_GetImagesetIndexRectIndex(szTexture, &m_nImagesetIndex, &m_nImageRectIndex);
+	GGUIFunc_GetImagesetIndexRectIndex(szImage, &m_nImagesetIndex, &m_nImageRectIndex);
 }
 //----------------------------------------------------------------

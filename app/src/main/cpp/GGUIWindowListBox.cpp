@@ -83,7 +83,7 @@ void GGUIWindowListBox::InitListBox()
 	kFullRect.fDeltaH = 0.0f;
 	GGUIWindowImage* pUIImage = (GGUIWindowImage*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Image);
 	pUIImage->SetFullRect(kFullRect);
-	pUIImage->SetTexture("texture/mm2:Name1");
+    pUIImage->SetImage("texture/mm2:Name1");
 	pUIImage->SetDragEnable(true);
 	AddChild(pUIImage);
 	m_pImgBG = pUIImage;

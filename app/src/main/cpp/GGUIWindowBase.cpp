@@ -23,9 +23,6 @@ void GGUIWindowBase::ClearWindow()
 {
 	//被Factory回收的Window，其ParentID都是-1；
 	//只要ParentID为-1，则该Window处于被回收待利用状态。
-	//
-	//m_nID = -1;
-	//m_eType = GGUIWindow_Invalid;
 	m_nParentID = -1;
 	m_kName.Clear();
 	m_pUIEventHandler = 0;

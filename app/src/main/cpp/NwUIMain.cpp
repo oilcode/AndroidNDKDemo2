@@ -52,7 +52,7 @@ bool NwUIMain::InitUIMain()
 	kFullRect.fDeltaH = 50.0f;
 	GGUIWindowImage* pUIImageA = (GGUIWindowImage*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Image);
 	pUIImageA->SetFullRect(kFullRect);
-	pUIImageA->SetTexture("uitexture/mm4:hud_31");
+	pUIImageA->SetImage("uitexture/mm4:hud_31");
 	pUIImageA->SetInputEnable(true);
 	pUIImageA->SetDragEnable(true);
 
@@ -62,7 +62,7 @@ bool NwUIMain::InitUIMain()
     kFullRect.fDeltaH = 50.0f;
 	GGUIWindowButton* pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
 	pUIButton->SetFullRect(kFullRect);
-	pUIButton->SetTexture("uitexture/mm4:hud_32");
+	pUIButton->SetImage("uitexture/mm4:hud_32");
 	pUIButton->SetText("µãÎÒ°É");
 	pUIButton->SetDragEnable(true);
 	m_nButtonID = pUIButton->GetID();

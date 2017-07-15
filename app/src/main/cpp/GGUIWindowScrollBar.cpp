@@ -91,7 +91,7 @@ void GGUIWindowScrollBar::InitScrollBar()
 	kFullRect.fDeltaH = 0.0f;
 	pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
 	pUIButton->SetFullRect(kFullRect);
-	pUIButton->SetTexture("uitexture/mm3:Name1");
+    pUIButton->SetImage("uitexture/mm3:Name1");
 	pUIButton->SetDragEnable(false);
 	AddChild(pUIButton);
 	m_pBtnLeft = pUIButton;
@@ -106,7 +106,7 @@ void GGUIWindowScrollBar::InitScrollBar()
 	kFullRect.fDeltaH = 0.0f;
 	pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
 	pUIButton->SetFullRect(kFullRect);
-	pUIButton->SetTexture("uitexture/mm3:Name1");
+    pUIButton->SetImage("uitexture/mm3:Name1");
 	pUIButton->SetDragEnable(false);
 	AddChild(pUIButton);
 	m_pBtnRight = pUIButton;
@@ -121,7 +121,7 @@ void GGUIWindowScrollBar::InitScrollBar()
 	kFullRect.fDeltaH = 0.0f;
 	pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
 	pUIButton->SetFullRect(kFullRect);
-	pUIButton->SetTexture("uitexture/mm3:Name1");
+    pUIButton->SetImage("uitexture/mm3:Name1");
 	pUIButton->SetDragEnable(true);
 	AddChild(pUIButton);
 	m_pBtnCenter = pUIButton;

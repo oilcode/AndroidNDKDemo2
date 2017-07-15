@@ -56,7 +56,7 @@ GGUIWindowFactory::~GGUIWindowFactory()
 //----------------------------------------------------------------
 bool GGUIWindowFactory::InitUIWindowFactory()
 {
-	if (m_kWindowArray.InitArray(sizeof(GGUIWindowBase*), 10, 10) == false)
+	if (m_kWindowArray.InitArray(sizeof(GGUIWindowBase*), 100, 100) == false)
 	{
 		return false;
 	}

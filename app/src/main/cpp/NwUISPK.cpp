@@ -71,9 +71,10 @@ NwUISPK::~NwUISPK()
 //----------------------------------------------------------------
 bool NwUISPK::InitUISPK()
 {
+    CreateWindows();
     m_pSPKLogic = SoNew NwSPKLogic;
     m_pSPKProcedure = SoNew NwSPKProcedure(m_pSPKLogic, this);
-    CreateWindows();
+    m_pSPKProcedure->StartSPKProcedure();
     return true;
 }
 //----------------------------------------------------------------
@@ -98,7 +99,10 @@ void NwUISPK::ClearUISPK()
 //----------------------------------------------------------------
 void NwUISPK::UpdateUISPK(float fDeltaTime)
 {
-
+    if (m_pSPKProcedure)
+    {
+        m_pSPKProcedure->UpdateSPKProcedure(fDeltaTime);
+    }
 }
 //----------------------------------------------------------------
 void NwUISPK::ProcessUIEvent(int nEventType, void* pParam)
@@ -170,7 +174,7 @@ void NwUISPK::CheckPlayerOptionFinished()
     if (FindEmptyTouchBtn() == TouchBtn_Max)
     {
         //没有空的指令槽了，玩家操作结束
-        //SetAllButtonEnableFlag(false);
+        SetAllButtonEnableFlag(false);
         m_pSPKProcedure->PlayerOptionFinished();
     }
 }
@@ -208,7 +212,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fDeltaH = 50.0f;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetTexture(g_CmdBtnTexture[CmdBtn_Up]);
+    pUIButton->SetImage(g_CmdBtnTexture[CmdBtn_Up]);
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(true);
     AddChild(pUIButton);
@@ -220,7 +224,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fDeltaH = 50.0f;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetTexture(g_CmdBtnTexture[CmdBtn_Middle]);
+    pUIButton->SetImage(g_CmdBtnTexture[CmdBtn_Middle]);
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(true);
     AddChild(pUIButton);
@@ -232,7 +236,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fDeltaH = 50.0f;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetTexture(g_CmdBtnTexture[CmdBtn_Down]);
+    pUIButton->SetImage(g_CmdBtnTexture[CmdBtn_Down]);
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(true);
     AddChild(pUIButton);
@@ -244,7 +248,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fDeltaH = 50.0f;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetTexture(g_CmdBtnTexture[CmdBtn_Defend]);
+    pUIButton->SetImage(g_CmdBtnTexture[CmdBtn_Defend]);
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(true);
     AddChild(pUIButton);
@@ -257,7 +261,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fDeltaH = 50.0f;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetTexture(g_CmdBtnTexture[CmdBtn_Dodge]);
+    pUIButton->SetImage(g_CmdBtnTexture[CmdBtn_Dodge]);
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(true);
     AddChild(pUIButton);
@@ -269,7 +273,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fDeltaH = 50.0f;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetTexture(g_CmdBtnTexture[CmdBtn_Insight]);
+    pUIButton->SetImage(g_CmdBtnTexture[CmdBtn_Insight]);
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(true);
     AddChild(pUIButton);
@@ -281,7 +285,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fDeltaH = 50.0f;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetTexture(g_CmdBtnTexture[CmdBtn_Swoosh]);
+    pUIButton->SetImage(g_CmdBtnTexture[CmdBtn_Swoosh]);
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(true);
     AddChild(pUIButton);
@@ -293,7 +297,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fDeltaH = 50.0f;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetTexture(g_CmdBtnTexture[CmdBtn_Revenge]);
+    pUIButton->SetImage(g_CmdBtnTexture[CmdBtn_Revenge]);
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(true);
     AddChild(pUIButton);
@@ -306,7 +310,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fDeltaH = 50.0f;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetTexture("uitexture/mm4:hud_30");
+    pUIButton->SetImage("uitexture/mm4:hud_30");
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(true);
     AddChild(pUIButton);
@@ -318,7 +322,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fDeltaH = 50.0f;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetTexture("uitexture/mm4:hud_30");
+    pUIButton->SetImage("uitexture/mm4:hud_30");
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(true);
     AddChild(pUIButton);
@@ -330,7 +334,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fDeltaH = 50.0f;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetTexture("uitexture/mm4:hud_30");
+    pUIButton->SetImage("uitexture/mm4:hud_30");
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(true);
     AddChild(pUIButton);
@@ -343,7 +347,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fDeltaH = 50.0f;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetTexture("uitexture/mm4:hud_30");
+    pUIButton->SetImage("uitexture/mm4:hud_30");
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(true);
     AddChild(pUIButton);
@@ -355,7 +359,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fDeltaH = 50.0f;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetTexture("uitexture/mm4:hud_30");
+    pUIButton->SetImage("uitexture/mm4:hud_30");
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(true);
     AddChild(pUIButton);
@@ -367,7 +371,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fDeltaH = 50.0f;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetTexture("uitexture/mm4:hud_30");
+    pUIButton->SetImage("uitexture/mm4:hud_30");
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(true);
     AddChild(pUIButton);
@@ -429,37 +433,59 @@ void NwUISPK::CreateWindows()
 //--------------------------------------------------------------------
 void NwUISPK::RefreshLeftByHeroData(const SPKHeroData* pHeroData)
 {
-
+    RefreshLeftBlood(pHeroData->nMaxHP, pHeroData->nCurHP);
+    RefreshLeftEnergy(pHeroData->nMaxEnergy, pHeroData->nCurEnergy);
+    //
+    for (int i = 0; i < TouchBtn_Max; ++i)
+    {
+        m_eLeftSelectedCmd[i] = CmdBtn_Max;
+    }
+    RefreshTouchBtn();
+    //
+    memcpy(&m_kTempHeroData, pHeroData, sizeof(m_kTempHeroData));
+    RefreshCmdBtn(pHeroData);
+    //
+    SetAllButtonEnableFlag(true);
 }
 //--------------------------------------------------------------------
 void NwUISPK::RefreshRightByHeroData(const SPKHeroData* pHeroData)
 {
-
+    RefreshRightBlood(pHeroData->nMaxHP, pHeroData->nCurHP);
+    RefreshRightEnergy(pHeroData->nMaxEnergy, pHeroData->nCurEnergy);
+    //
+    for (int i = 0; i < TouchBtn_Max; ++i)
+    {
+        m_pRightTouchBtnList[i]->SetImage("uitexture/mm4:hud_30");
+    }
 }
 //--------------------------------------------------------------------
 void NwUISPK::RefreshLeftBlood(int nMax, int nCur)
 {
-
+    float fRate = (float)nCur / (float)nMax;
+    m_pLeftBlood->SetProcessValue(fRate);
 }
 //--------------------------------------------------------------------
 void NwUISPK::RefreshRightBlood(int nMax, int nCur)
 {
-
+    float fRate = (float)nCur / (float)nMax;
+    m_pRightBlood->SetProcessValue(fRate);
 }
 //--------------------------------------------------------------------
 void NwUISPK::RefreshLeftEnergy(int nMax, int nCur)
 {
-
+    float fRate = (float)nCur / (float)nMax;
+    m_pLeftEnergy->SetProcessValue(fRate);
 }
 //--------------------------------------------------------------------
 void NwUISPK::RefreshRightEnergy(int nMax, int nCur)
 {
-
+    float fRate = (float)nCur / (float)nMax;
+    m_pRightEnergy->SetProcessValue(fRate);
 }
 //--------------------------------------------------------------------
 void NwUISPK::RefreshCmdBtn(const SPKHeroData* pHeroData)
 {
-
+    //do nothing
 }
 //--------------------------------------------------------------------
 void NwUISPK::RefreshTouchBtn()
@@ -468,53 +494,70 @@ void NwUISPK::RefreshTouchBtn()
     {
         if (m_eLeftSelectedCmd[i] == CmdBtn_Max)
         {
-            m_pLeftTouchBtnList[i]->SetTexture("uitexture/mm4:hud_30");
+            m_pLeftTouchBtnList[i]->SetImage("uitexture/mm4:hud_30");
         }
         else
         {
-            m_pLeftTouchBtnList[i]->SetTexture(g_CmdBtnTexture[m_eLeftSelectedCmd[i]]);
+            m_pLeftTouchBtnList[i]->SetImage(g_CmdBtnTexture[m_eLeftSelectedCmd[i]]);
         }
     }
 }
 //--------------------------------------------------------------------
 eCmdButton NwUISPK::GetLeftSelectedCmd(eTouchButton theTouchIndex)
 {
-    return CmdBtn_Max;
+    if (theTouchIndex >= 0 && theTouchIndex < TouchBtn_Max)
+    {
+        return m_eLeftSelectedCmd[theTouchIndex];
+    }
+    else
+    {
+        return CmdBtn_Max;
+    }
 }
 //--------------------------------------------------------------------
 void NwUISPK::SetRightSelectedCmd(int theTouchIndex, eCmdButton theCmd)
 {
-
+    if (theTouchIndex >= 0 && theTouchIndex < TouchBtn_Max)
+    {
+        if (theCmd == CmdBtn_Max)
+        {
+            m_pRightTouchBtnList[theTouchIndex]->SetImage("uitexture/mm4:hud_30");
+        }
+        else
+        {
+            m_pRightTouchBtnList[theTouchIndex]->SetImage(g_CmdBtnTexture[theCmd]);
+        }
+    }
 }
 //--------------------------------------------------------------------
 void NwUISPK::PlayAnim_LeftUnit(int theAnim)
 {
-
+    //do nothing
 }
 //--------------------------------------------------------------------
 void NwUISPK::PlayAnim_RightUnit(int theAnim)
 {
-
+    //do nothing
 }
 //--------------------------------------------------------------------
 void NwUISPK::PlayCmdName_LeftUnit(const char* szCmdName)
 {
-
+    //do nothing
 }
 //--------------------------------------------------------------------
 void NwUISPK::PlayCmdName_RightUnit(const char* szCmdName)
 {
-
+    //do nothing
 }
 //--------------------------------------------------------------------
 void NwUISPK::PlayDamageString_LeftUnit(int nNumber)
 {
-
+    //do nothing
 }
 //--------------------------------------------------------------------
 void NwUISPK::PlayDamageString_RightUnit(int nNumber)
 {
-
+    //do nothing
 }
 //----------------------------------------------------------------
 

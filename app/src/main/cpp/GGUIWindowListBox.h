@@ -14,7 +14,6 @@ public:
 	void AddItem(const char* szText, void* pUserData);
 	void InsertItem(int nItemIndex, const char* szText, void* pUserData);
 	void RemoveItem(int nItemIndex);
-	
 
 protected:
 	friend class GGUIWindowFactory;

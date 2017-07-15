@@ -1,8 +1,5 @@
 //----------------------------------------------------------------
 #include "GGUIWindowButton.h"
-#include "GGUIImagesetManager.h"
-#include "GGUIImageset.h"
-#include "GGUIRenderManager.h"
 #include "GGUIRenderHelp.h"
 #include "GGUIEvent.h"
 //----------------------------------------------------------------
@@ -66,7 +63,11 @@ void GGUIWindowButton::RenderWindow()
 	GGUIRect kAbsRect(m_kRectInAbsCoord.x + fDeltaX_BtnState, m_kRectInAbsCoord.y + fDeltaY_BtnState, m_kRectInAbsCoord.w, m_kRectInAbsCoord.h);
 	GGUIColor kColor(fColorR_BtnState, fColorG_BtnState, fColorB_BtnState, fColorA_BtnState);
 	GGUIRenderHelp_SimpleImage(m_nImagesetIndex, m_nImageRectIndex, kAbsRect, kColor);
-	GGUIRenderHelp_SimpleText(m_strText.c_str(), kAbsRect, GGUITextAlignX_Center, GGUITextAlignY_Center, g_GGUI_ButtonText_Font, g_GGUI_ButtonText_Color);
+    //
+	if (m_strText.empty() == false)
+	{
+		GGUIRenderHelp_SimpleText(m_strText.c_str(), kAbsRect, GGUITextAlignX_Center, GGUITextAlignY_Center, g_GGUI_ButtonText_Font, g_GGUI_ButtonText_Color);
+	}
 }
 //----------------------------------------------------------------
 bool GGUIWindowButton::InputWindow(GGUIInputMsg* pInputMsg)
@@ -167,9 +168,9 @@ bool GGUIWindowButton::InputWindow(GGUIInputMsg* pInputMsg)
 	return false;
 }
 //----------------------------------------------------------------
-void GGUIWindowButton::SetTexture(const char* szTexture)
+void GGUIWindowButton::SetImage(const char* szImage)
 {
-	GGUIFunc_GetImagesetIndexRectIndex(szTexture, &m_nImagesetIndex, &m_nImageRectIndex);
+	GGUIFunc_GetImagesetIndexRectIndex(szImage, &m_nImagesetIndex, &m_nImageRectIndex);
 }
 //----------------------------------------------------------------
 void GGUIWindowButton::SetText(const char* szText)

@@ -74,6 +74,9 @@ private:
 
     //记录玩家已经上架的指令
     eCmdButton m_eLeftSelectedCmd[TouchBtn_Max];
+
+    //保存玩家的武将拥有的指令信息
+    SPKHeroData m_kTempHeroData;
 };
 //----------------------------------------------------------------
 inline NwUISPK* NwUISPK::Get()

@@ -4,13 +4,11 @@
 //------------------------------------------------------------
 #include "GGUIWindowBase.h"
 //------------------------------------------------------------
-struct stInputEvent;
-//------------------------------------------------------------
 class GGUIWindowButton : public GGUIWindowBase
 {
 public:
-	//--szTexture "ImagesetName:RectName"
-	void SetTexture(const char* szTexture);
+	//--szImage "ImagesetName:RectName"
+	void SetImage(const char* szImage);
 	int GetImagesetIndex() const;
 	int GetImageRectIndex() const;
 

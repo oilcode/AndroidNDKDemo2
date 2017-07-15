@@ -26,6 +26,12 @@ void GGUIWindowContainer::UpdateWindow(float fDeltaTime)
 	for (int i = 0; i < nCount; ++i)
 	{
 		pChild = GetChildByIndex(i);
+		// 下面这个if判断务必保留，GetVisible()是内联函数，起到快速过滤的作用，
+		// 不可见的窗口不会跳转到UpdateWindow()。
+		if (pChild->GetVisible() == false)
+		{
+			continue;
+		}
 		pChild->UpdateWindow(fDeltaTime);
 	}
 }
@@ -42,6 +48,8 @@ void GGUIWindowContainer::RenderWindow()
 	for (int i = 0; i < nCount; ++i)
 	{
 		pChild = GetChildByIndex(i);
+		// 下面这个if判断务必保留，GetVisible()是内联函数，起到快速过滤的作用，
+		// 不可见的窗口不会跳转到RenderWindow()。
 		if (pChild->GetVisible() == false)
 		{
 			continue;
@@ -70,11 +78,9 @@ bool GGUIWindowContainer::InputWindow(GGUIInputMsg* pInputMsg)
 	for (int i = nCount-1; i >= 0; --i)
 	{
 		pChild = GetChildByIndex(i);
-		if (pChild->GetVisible() == false)
-		{
-			continue;
-		}
-		if (pChild->GetInputEnable() == false)
+		// 下面这个if判断务必保留，GetVisible()是内联函数，起到快速过滤的作用，
+		// 不可见的窗口不会跳转到InputWindow()。
+		if (pChild->GetVisible() == false || pChild->GetInputEnable() == false)
 		{
 			continue;
 		}

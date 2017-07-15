@@ -68,6 +68,11 @@ void GGUIPanelManager::UpdateUIPanelManager(float fDeltaTime)
 	GGUIWindowPanel* pPanel = 0;
 	for (int i = 0; i < GGUIPanelSpace_Max; ++i)
 	{
+		if (m_bUISpaceVisible[i] == false)
+		{
+			continue;
+		}
+		//
 		pArray = &(m_kUISpaceArray[i]);
 		nPanelCount = pArray->GetSize();
 		for (int j = 0; j < nPanelCount; ++j)
@@ -76,6 +81,12 @@ void GGUIPanelManager::UpdateUIPanelManager(float fDeltaTime)
 			if (pElement)
 			{
 				pPanel = *(GGUIWindowPanel**)pElement;
+                // 下面这个if判断务必保留，GetVisible()是内联函数，起到快速过滤的作用，
+                // 不可见的窗口不会跳转到UpdateWindow()。
+                if (pPanel->GetVisible() == false)
+                {
+                    continue;
+                }
 				pPanel->UpdateWindow(fDeltaTime);
 			}
 		}
@@ -103,6 +114,8 @@ void GGUIPanelManager::RenderUIPanelManager()
 			if (pElement)
 			{
 				pPanel = *(GGUIWindowPanel**)pElement;
+                // 下面这个if判断务必保留，GetVisible()是内联函数，起到快速过滤的作用，
+                // 不可见的窗口不会跳转到RenderWindow()。
 				if (pPanel->GetVisible() == false)
 				{
 					continue;
@@ -138,11 +151,9 @@ void GGUIPanelManager::InputUIPanelManager(GGUIInputMsg* kInputMsg)
 			if (pElement)
 			{
 				pPanel = *(GGUIWindowPanel**)pElement;
-				if (pPanel->GetVisible() == false)
-				{
-					continue;
-				}
-				if (pPanel->GetInputEnable() == false)
+                // 下面这个if判断务必保留，GetVisible()是内联函数，起到快速过滤的作用，
+                // 不可见的窗口不会跳转到InputWindow()。
+				if (pPanel->GetVisible() == false || pPanel->GetInputEnable() == false)
 				{
 					continue;
 				}
