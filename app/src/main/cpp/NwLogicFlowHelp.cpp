@@ -10,6 +10,7 @@ bool NwLogicFlowHelp_Create()
 	GGUIImagesetIO::Read("uitexture/mm2.txt");
     GGUIImagesetIO::Read("uitexture/mm3.txt");
 	GGUIImagesetIO::Read("uitexture/mm4.txt");
+	GGUIImagesetIO::Read("uitexture/mm5.txt");
 
 	if (NwUIMain::CreateUIMain() == false)
 	{

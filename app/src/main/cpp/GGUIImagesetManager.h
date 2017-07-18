@@ -25,8 +25,7 @@ public:
 	static GGUIImagesetManager* Get();
 
 	//创建一个新的Imageset对象。
-	//返回值为ImagesetID。
-	int CreateImageset(const stImagesetParam& kParam);
+    GGUIImageset* CreateImageset(const stImagesetParam& kParam);
 	int GetImagesetIDByName(const SoTinyString &kName);
 	GGUIImageset* GetImagesetByID(int nImagesetID);
 	GGUIImageset* GetImagesetByName(const SoTinyString& kName);

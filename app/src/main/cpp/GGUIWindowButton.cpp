@@ -62,7 +62,7 @@ void GGUIWindowButton::RenderWindow()
 	//
 	GGUIRect kAbsRect(m_kRectInAbsCoord.x + fDeltaX_BtnState, m_kRectInAbsCoord.y + fDeltaY_BtnState, m_kRectInAbsCoord.w, m_kRectInAbsCoord.h);
 	GGUIColor kColor(fColorR_BtnState, fColorG_BtnState, fColorB_BtnState, fColorA_BtnState);
-	GGUIRenderHelp_SimpleImage(m_nImagesetIndex, m_nImageRectIndex, kAbsRect, kColor);
+	GGUIRenderHelp_SimpleImage(m_nImagesetIndex, m_nImageRectIndex, kAbsRect, kColor, false, false);
     //
 	if (m_strText.empty() == false)
 	{

@@ -89,6 +89,7 @@ add_library( png
 
 add_library( GGUI
              STATIC
+             src/main/cpp/GGUIAnimation.cpp
              src/main/cpp/GGUIBaseInclude.cpp
              src/main/cpp/GGUIColor.cpp
              src/main/cpp/GGUIComponentText.cpp

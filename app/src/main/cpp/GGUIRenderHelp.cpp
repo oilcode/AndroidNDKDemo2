@@ -7,7 +7,7 @@
 //----------------------------------------------------------------
 stUIRenderUnit g_kUnit;
 //----------------------------------------------------------------
-void GGUIRenderHelp_SimpleImage(int nImagesetId, int nImageRectId, const GGUIRect& kAbsRect, const GGUIColor& kColor)
+void GGUIRenderHelp_SimpleImage(int nImagesetId, int nImageRectId, const GGUIRect& kAbsRect, const GGUIColor& kColor, bool bSwapX, bool bSwapY)
 {
 	if (nImagesetId == -1)
 	{
@@ -28,10 +28,29 @@ void GGUIRenderHelp_SimpleImage(int nImagesetId, int nImageRectId, const GGUIRec
 	g_kUnit.fRectTop = kAbsRect.y;
 	g_kUnit.fRectWidth = kAbsRect.w;
 	g_kUnit.fRectHeight = kAbsRect.h;
-	g_kUnit.fTexCoordLeft = imageRect.x;
-	g_kUnit.fTexCoordTop = imageRect.y;
-	g_kUnit.fTexCoordWidth = imageRect.w;
-	g_kUnit.fTexCoordHeight = imageRect.h;
+
+	if (bSwapX)
+	{
+		g_kUnit.fTexCoordLeft = imageRect.x + imageRect.w;
+        g_kUnit.fTexCoordWidth = -imageRect.w;
+	}
+	else
+	{
+		g_kUnit.fTexCoordLeft = imageRect.x;
+        g_kUnit.fTexCoordWidth = imageRect.w;
+	}
+
+    if (bSwapY)
+    {
+        g_kUnit.fTexCoordTop = imageRect.y + imageRect.h;
+        g_kUnit.fTexCoordHeight = -imageRect.h;
+    }
+    else
+    {
+        g_kUnit.fTexCoordTop = imageRect.y;
+        g_kUnit.fTexCoordHeight = imageRect.h;
+    }
+
 	g_kUnit.uiTexResourceId = pImageset->GetTexResourceID();
 	g_kUnit.fColorR = kColor.r;
 	g_kUnit.fColorG = kColor.g;

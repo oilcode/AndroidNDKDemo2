@@ -10,10 +10,10 @@ const char* g_CmdBtnTexture[CmdBtn_Max] =
     "uitexture/mm4:hud_32",
     "uitexture/mm4:hud_33",
     "uitexture/mm4:hud_34",
-    "uitexture/mm4:hud_30",
-    "uitexture/mm4:hud_30",
-    "uitexture/mm4:hud_30",
-    "uitexture/mm4:hud_30",
+    "uitexture/mm5:hud_35",
+    "uitexture/mm5:hud_36",
+    "uitexture/mm5:hud_37",
+    "uitexture/mm5:hud_38",
 };
 //----------------------------------------------------------------
 bool NwUISPK::CreateUISPK()
@@ -51,6 +51,8 @@ NwUISPK::NwUISPK()
 ,m_pRightBlood(NULL)
 ,m_pLeftEnergy(NULL)
 ,m_pRightEnergy(NULL)
+,m_pHeroLeft(NULL)
+,m_pHeroRight(NULL)
 {
     for (int i = 0; i < CmdBtn_Max; ++i)
     {
@@ -110,8 +112,7 @@ void NwUISPK::ProcessUIEvent(int nEventType, void* pParam)
     if (nEventType == GGUIEvent_Button_Clicked)
     {
         const GGUIEventParam_Button_Clicked* pClickParam = (GGUIEventParam_Button_Clicked*)pParam;
-        //for (int i = 0; i < CmdBtn_Max; ++i)
-        for (int i = 0; i < 4; ++i)
+        for (int i = 0; i < CmdBtn_Max; ++i)
         {
             if (m_pCardBtnList[i]->GetID() == pClickParam->nWindowID)
             {
@@ -429,6 +430,33 @@ void NwUISPK::CreateWindows()
     m_pRightEnergy = pProcessBar;
     m_pRightEnergy->SetProcessValue(0.3f);
 
+
+    GGUIWindowImage* pImage = NULL;
+
+    kFullRect.fDeltaX = 300.0f;
+    kFullRect.fDeltaY = 230.0f;
+    kFullRect.fDeltaW = 130.0f;
+    kFullRect.fDeltaH = 95.0f;
+    pImage = (GGUIWindowImage*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Image);
+    pImage->SetFullRect(kFullRect);
+    pImage->SetImage("uitexture/mm5:hero_1");
+    pImage->SetInputEnable(true);
+    pImage->SetDragEnable(true);
+    pImage->SetSwapX(true);
+    AddChild(pImage);
+    m_pHeroLeft = pImage;
+
+    kFullRect.fDeltaX = 480.0f;
+    kFullRect.fDeltaY = 220.0f;
+    kFullRect.fDeltaW = 93.0f;
+    kFullRect.fDeltaH = 125.0f;
+    pImage = (GGUIWindowImage*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Image);
+    pImage->SetFullRect(kFullRect);
+    pImage->SetImage("uitexture/mm5:hero_2");
+    pImage->SetInputEnable(true);
+    pImage->SetDragEnable(true);
+    AddChild(pImage);
+    m_pHeroRight = pImage;
 }
 //--------------------------------------------------------------------
 void NwUISPK::RefreshLeftByHeroData(const SPKHeroData* pHeroData)

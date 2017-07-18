@@ -71,6 +71,8 @@ private:
     GGUIWindowProcessBar* m_pRightBlood;
     GGUIWindowProcessBar* m_pLeftEnergy;
     GGUIWindowProcessBar* m_pRightEnergy;
+    GGUIWindowImage* m_pHeroLeft;
+    GGUIWindowImage* m_pHeroRight;
 
     //记录玩家已经上架的指令
     eCmdButton m_eLeftSelectedCmd[TouchBtn_Max];

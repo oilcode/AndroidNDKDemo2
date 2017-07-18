@@ -50,13 +50,7 @@ bool GGUIImagesetIO::Read(const char* szImagesetName)
 	kParam.nInitRectCount = nRectCount;
 	kParam.pTexture = pTexture;
 
-	const int nImagesetIndex = GGUIImagesetManager::Get()->CreateImageset(kParam);
-	if (nImagesetIndex == -1)
-	{
-		return false;
-	}
-
-	GGUIImageset* pImageset = GGUIImagesetManager::Get()->GetImagesetByID(nImagesetIndex);
+	GGUIImageset* pImageset = GGUIImagesetManager::Get()->CreateImageset(kParam);
 	if (pImageset == 0)
 	{
 		return false;
