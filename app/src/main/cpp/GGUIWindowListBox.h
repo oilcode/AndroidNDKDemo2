@@ -35,5 +35,5 @@ private:
 	GGUIWindowScrollBar* m_pScrollBar;
 };
 //------------------------------------------------------------
-#endif _GGUIWindowListBox_h_
+#endif //_GGUIWindowListBox_h_
 //------------------------------------------------------------

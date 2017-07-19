@@ -48,6 +48,7 @@ private:
     bool InitUISPK();
     void ClearUISPK();
     void CreateWindows();
+    bool InputWindow(GGUIInputMsg* pInputMsg);
     void ProcessUIEvent(int nEventType, void* pParam);
     void OnBtnCard(int nCardIndex);
     void OnBtnTouch(int nIndex);

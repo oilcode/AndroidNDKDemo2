@@ -9,8 +9,8 @@ class GGUIWindowImage : public GGUIWindowBase
 public:
 	//--szImage "ImagesetName:RectName"
 	void SetImage(const char* szImage);
-	void SetSwapX(bool bSwapX);
-	void SetSwapY(bool bSwapY);
+    void SetSwapX(bool bSwapX);
+    void SetSwapY(bool bSwapY);
 
 	int GetImagesetIndex() const;
 	int GetImageRectIndex() const;

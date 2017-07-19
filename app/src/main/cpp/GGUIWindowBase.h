@@ -4,6 +4,8 @@
 //----------------------------------------------------------------
 #include "GGUIBaseInclude.h"
 //----------------------------------------------------------------
+class GGUIActionGroup;
+//----------------------------------------------------------------
 class GGUIWindowBase
 {
 public:
@@ -59,6 +61,10 @@ public:
 	void SetDragEnable(bool bDrag);
 	bool GetDragEnable() const;
 
+	GGUIActionGroup* CreateActionGroup();
+	void DeleteActionGroup();
+	GGUIActionGroup* GetActionGroup() const;
+
 protected:
 	friend class GGUIWindowFactory;
 	GGUIWindowBase();
@@ -79,6 +85,7 @@ protected:
 	//本窗口会抛出UIEvent，而m_pUIEventHandler就是响应该UIEvent的窗口。
 	//一般情况下，GGUIWindowPanel 会充当 m_pUIEventHandler 。
 	GGUIWindowBase* m_pUIEventHandler;
+	GGUIActionGroup* m_pActionGroup;
 	GGUIFullRect m_kFullRect;
 	GGUIRect m_kRectInAbsCoord;
 	GGUIRect m_kParentRectInAbsCoord;
@@ -171,6 +178,11 @@ inline bool GGUIWindowBase::GetDragEnable() const
 inline void GGUIWindowBase::SetUIEventHandler(GGUIWindowBase* pHandler)
 {
 	m_pUIEventHandler = pHandler;
+}
+//----------------------------------------------------------------
+inline GGUIActionGroup* GGUIWindowBase::GetActionGroup() const
+{
+	return m_pActionGroup;
 }
 //----------------------------------------------------------------
 #endif //_GGUIWindowBase_h_

@@ -107,6 +107,26 @@ void NwUISPK::UpdateUISPK(float fDeltaTime)
     }
 }
 //----------------------------------------------------------------
+bool NwUISPK::InputWindow(GGUIInputMsg* pInputMsg)
+{
+    if (pInputMsg->theType == GGUIInputMsg_TouchUp)
+    {
+        pInputMsg->bSwallowed = true;
+
+        const GGUIFullRect& kFullRect = m_pHeroRight->GetFullRect();
+
+        GGUIActionMove* pActionMove = SoNew GGUIActionMove;
+        pActionMove->InitActionMove(kFullRect.fDeltaX, kFullRect.fDeltaY, pInputMsg->fPosX, pInputMsg->fPosY, 1.0f);
+
+        GGUIActionLine* pActionLine = SoNew GGUIActionLine;
+        pActionLine->AddAction(pActionMove);
+
+        GGUIActionGroup* pActionGroup = m_pHeroRight->CreateActionGroup();
+        pActionGroup->AddActionLine(pActionLine);
+    }
+    return true;
+}
+//----------------------------------------------------------------
 void NwUISPK::ProcessUIEvent(int nEventType, void* pParam)
 {
     if (nEventType == GGUIEvent_Button_Clicked)

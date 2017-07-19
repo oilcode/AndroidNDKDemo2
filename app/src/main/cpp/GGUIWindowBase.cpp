@@ -2,12 +2,14 @@
 #include "GGUIWindowBase.h"
 #include "GGUIWindowFactory.h"
 #include "GGUIEvent.h"
+#include "GGUIActionGroup.h"
 //----------------------------------------------------------------
 GGUIWindowBase::GGUIWindowBase()
 :m_nID(-1)
 ,m_nParentID(-1)
 ,m_eType(GGUIWindow_Invalid)
 ,m_pUIEventHandler(0)
+,m_pActionGroup(NULL)
 ,m_bDragEnable(false)
 ,m_bCursorIsInside(false)
 {
@@ -32,11 +34,15 @@ void GGUIWindowBase::ClearWindow()
 	m_kUnvisibleReason.Clear();
 	m_kInputDisableReason.Clear();
 	m_bCursorIsInside = false;
+	DeleteActionGroup();
 }
 //----------------------------------------------------------------
 void GGUIWindowBase::UpdateWindow(float fDeltaTime)
 {
-	//do nothing
+	if (m_pActionGroup)
+	{
+		m_pActionGroup->UpdateActionGroup(fDeltaTime);
+	}
 }
 //----------------------------------------------------------------
 void GGUIWindowBase::RenderWindow()
@@ -194,6 +200,24 @@ void GGUIWindowBase::SetInputEnableByReason(souint32 uiReason, bool bEnable)
 	else
 	{
 		m_kInputDisableReason.AddFlag(uiReason);
+	}
+}
+//----------------------------------------------------------------
+GGUIActionGroup* GGUIWindowBase::CreateActionGroup()
+{
+	if (m_pActionGroup == NULL)
+	{
+		m_pActionGroup = SoNew GGUIActionGroup(this);
+	}
+	return m_pActionGroup;
+}
+//----------------------------------------------------------------
+void GGUIWindowBase::DeleteActionGroup()
+{
+	if (m_pActionGroup)
+	{
+		SoDelete m_pActionGroup;
+		m_pActionGroup = NULL;
 	}
 }
 //----------------------------------------------------------------

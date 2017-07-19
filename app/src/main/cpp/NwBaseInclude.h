@@ -27,6 +27,9 @@
 #include "GGUIWindowScrollBar.h"
 #include "GGUIWindowProcessBar.h"
 #include "GGUIWindowListBox.h"
+#include "GGUIActionGroup.h"
+#include "GGUIActionLine.h"
+#include "GGUIActionMove.h"
 //----------------------------------------------------------------
 #endif //_NwBaseInclude_h_
 //----------------------------------------------------------------
