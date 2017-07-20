@@ -1,21 +1,21 @@
 //--------------------------------------------------------------------------------------------------
-#ifndef _GGUIActionMove_h_
-#define _GGUIActionMove_h_
+#ifndef _GGUIActionScale_h_
+#define _GGUIActionScale_h_
 //--------------------------------------------------------------------------------------------------
 #include "GGUIActionBase.h"
 //--------------------------------------------------------------------------------------------------
-class GGUIActionMove : public GGUIActionBase
+class GGUIActionScale : public GGUIActionBase
 {
 	friend class GGUIActionFactory;
 public:
 	virtual void UpdateAction(float fDeltaTime);
 	virtual bool IsActionFinished() const;
 
-	void InitActionMove(float fDeltaX, float fDeltaY, float fTime);
+	void InitActionScale(float fDeltaScaleX, float fDeltaScaleY, float fTime);
 
 protected:
-    GGUIActionMove();
-    virtual ~GGUIActionMove();
+    GGUIActionScale();
+    virtual ~GGUIActionScale();
     virtual void ClearAction();
 
 protected:
@@ -24,10 +24,10 @@ protected:
 	float m_fRemainTime;
 };
 //--------------------------------------------------------------------------------------------------
-inline bool GGUIActionMove::IsActionFinished() const
+inline bool GGUIActionScale::IsActionFinished() const
 {
 	return (m_fRemainTime < 0.0f);
 }
 //--------------------------------------------------------------------------------------------------
-#endif //_GGUIActionMove_h_
+#endif //_GGUIActionScale_h_
 //--------------------------------------------------------------------------------------------------

@@ -6,7 +6,6 @@
 #include "GGUIActionGroup.h"
 //--------------------------------------------------------------------------------------------------
 class GGUIActionBase;
-class GGUIActionGroup;
 class GGUIWindowBase;
 //--------------------------------------------------------------------------------------------------
 class GGUIActionLine
@@ -29,7 +28,6 @@ protected:
 protected:
 	GGUIActionGroup* m_pActionGroup;
 	SoArray m_kActionArray;
-
 };
 //--------------------------------------------------------------------------------------------------
 inline bool GGUIActionLine::IsActionLineFinished() const

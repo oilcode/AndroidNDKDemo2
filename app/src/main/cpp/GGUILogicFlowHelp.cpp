@@ -4,6 +4,7 @@
 #include "GGUIImagesetManager.h"
 #include "GGUIWindowFactory.h"
 #include "GGUIPanelManager.h"
+#include "GGUIActionFactory.h"
 #include "GLManager.h"
 //----------------------------------------------------------------
 bool GGUILogicFlowHelp_Create()
@@ -28,11 +29,16 @@ bool GGUILogicFlowHelp_Create()
 	{
 		return false;
 	}
+	if (GGUIActionFactory::CreateUIActionFactory() == false)
+	{
+		return false;
+	}
 	return true;
 }
 //----------------------------------------------------------------
 void GGUILogicFlowHelp_Release()
 {
+    GGUIActionFactory::ReleaseUIActionFactory();
 	GGUIPanelManager::ReleaseUIPanelManager();
 	GGUIWindowFactory::ReleaseUIWindowFactory();
 	GGUIImagesetManager::ReleaseUIImagesetManager();

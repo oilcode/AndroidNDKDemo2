@@ -2,6 +2,8 @@
 #include "NwUISPK.h"
 #include "NwSPKLogic.h"
 #include "NwSPKProcedure.h"
+#include "GGUIActionFactory.h"
+
 //----------------------------------------------------------------
 NwUISPK* NwUISPK::ms_pInstance = 0;
 const char* g_CmdBtnTexture[CmdBtn_Max] =
@@ -109,22 +111,30 @@ void NwUISPK::UpdateUISPK(float fDeltaTime)
 //----------------------------------------------------------------
 bool NwUISPK::InputWindow(GGUIInputMsg* pInputMsg)
 {
+    if (GGUIWindowPanel::InputWindow(pInputMsg))
+    {
+        return true;
+    }
+
     if (pInputMsg->theType == GGUIInputMsg_TouchUp)
     {
         pInputMsg->bSwallowed = true;
 
         const GGUIFullRect& kFullRect = m_pHeroRight->GetFullRect();
 
-        GGUIActionMove* pActionMove = SoNew GGUIActionMove;
-        pActionMove->InitActionMove(kFullRect.fDeltaX, kFullRect.fDeltaY, pInputMsg->fPosX, pInputMsg->fPosY, 1.0f);
+        GGUIActionMove* pActionMove = (GGUIActionMove*)GGUIActionFactory::Get()->CreateUIAction(GGUIAction_Move);
+        pActionMove->InitActionMove(pInputMsg->fPosX - kFullRect.fDeltaX, pInputMsg->fPosY - kFullRect.fDeltaY, 1.0f);
 
         GGUIActionLine* pActionLine = SoNew GGUIActionLine;
         pActionLine->AddAction(pActionMove);
 
         GGUIActionGroup* pActionGroup = m_pHeroRight->CreateActionGroup();
         pActionGroup->AddActionLine(pActionLine);
+
+        return true;
     }
-    return true;
+
+    return false;
 }
 //----------------------------------------------------------------
 void NwUISPK::ProcessUIEvent(int nEventType, void* pParam)
@@ -149,6 +159,11 @@ void NwUISPK::ProcessUIEvent(int nEventType, void* pParam)
             }
         }
     }
+}
+//--------------------------------------------------------------------
+void NwUISPK::ProcessActionEvent(int nEventId)
+{
+
 }
 //--------------------------------------------------------------------
 void NwUISPK::OnBtnCard(int nCardIndex)

@@ -1,33 +1,33 @@
 //--------------------------------------------------------------------------------------------------
-#ifndef _GGUIActionMove_h_
-#define _GGUIActionMove_h_
+#ifndef _GGUIActionEvent_h_
+#define _GGUIActionEvent_h_
 //--------------------------------------------------------------------------------------------------
 #include "GGUIActionBase.h"
 //--------------------------------------------------------------------------------------------------
-class GGUIActionMove : public GGUIActionBase
+class GGUIActionEvent : public GGUIActionBase
 {
 	friend class GGUIActionFactory;
 public:
 	virtual void UpdateAction(float fDeltaTime);
 	virtual bool IsActionFinished() const;
 
-	void InitActionMove(float fDeltaX, float fDeltaY, float fTime);
+	void InitActionEvent(int nEventId);
 
 protected:
-    GGUIActionMove();
-    virtual ~GGUIActionMove();
+    GGUIActionEvent();
+    virtual ~GGUIActionEvent();
     virtual void ClearAction();
 
 protected:
-	float m_fSpeedX;
-	float m_fSpeedY;
-	float m_fRemainTime;
+	// the EventID is user defined number
+    // EventID >= 0 is valid, when < 0 is invalid
+	int m_nEventId;
 };
 //--------------------------------------------------------------------------------------------------
-inline bool GGUIActionMove::IsActionFinished() const
+inline bool GGUIActionEvent::IsActionFinished() const
 {
-	return (m_fRemainTime < 0.0f);
+	return (m_nEventId < 0);
 }
 //--------------------------------------------------------------------------------------------------
-#endif //_GGUIActionMove_h_
+#endif //_GGUIActionEvent_h_
 //--------------------------------------------------------------------------------------------------

@@ -362,6 +362,18 @@ void GGUIWindowContainer::MoveDelta(float fDeltaX, float fDeltaY)
 	Notify_ParentRectChanged();
 }
 //----------------------------------------------------------------
+void GGUIWindowContainer::SetScale(float fScaleX, float fScaleY)
+{
+    GGUIWindowBase::SetScale(fScaleX, fScaleY);
+    Notify_ParentRectChanged();
+}
+//----------------------------------------------------------------
+void GGUIWindowContainer::ScaleDelta(float fDeltaX, float fDeltaY)
+{
+    GGUIWindowBase::ScaleDelta(fDeltaX, fDeltaY);
+    Notify_ParentRectChanged();
+}
+//----------------------------------------------------------------
 void GGUIWindowContainer::OnParentRectChanged(const GGUIRect& kParentRectInAbsCoord)
 {
 	GGUIWindowBase::OnParentRectChanged(kParentRectInAbsCoord);

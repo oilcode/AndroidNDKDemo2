@@ -1,6 +1,7 @@
 //--------------------------------------------------------------------------------------------------
 #include "GGUIActionLine.h"
-#include "GGUIActionMove.h"
+#include "GGUIActionBase.h"
+#include "GGUIActionFactory.h"
 //--------------------------------------------------------------------------------------------------
 GGUIActionLine::GGUIActionLine()
 :m_pActionGroup(NULL)
@@ -11,6 +12,7 @@ GGUIActionLine::GGUIActionLine()
 GGUIActionLine::~GGUIActionLine()
 {
 	ClearAllAction();
+	m_pActionGroup = NULL;
 }
 //--------------------------------------------------------------------------------------------------
 void GGUIActionLine::AddAction(GGUIActionBase* pAction)
@@ -24,13 +26,28 @@ void GGUIActionLine::AddAction(GGUIActionBase* pAction)
 //--------------------------------------------------------------------------------------------------
 void GGUIActionLine::UpdateActionLine(float fDeltaTime)
 {
+    if (m_kActionArray.GetSize() == 0)
+    {
+        return;
+    }
+
+    GGUIActionBase* pBase = *(GGUIActionBase**)m_kActionArray.GetAt(0);
+    pBase->UpdateAction(fDeltaTime);
+    // remove the finished action
+    if (pBase->IsActionFinished())
+    {
+        GGUIActionFactory::Get()->DeleteUIAction(pBase->GetActionID());
+        m_kActionArray.RemoveAt(0);
+    }
+
+    /*
 	const int nCount = m_kActionArray.GetSize();
-	GGUIActionMove* pBase = NULL;
+	GGUIActionBase* pBase = NULL;
 	int nIndex = 0;
 	// excute action
 	for (int i = 0; i < nCount; ++i)
 	{
-		pBase = *(GGUIActionMove**)m_kActionArray.GetAt(nIndex);
+		pBase = *(GGUIActionBase**)m_kActionArray.GetAt(nIndex);
 		pBase->UpdateAction(fDeltaTime);
 		// remove the finished action
 		if (pBase->IsActionFinished())
@@ -43,6 +60,7 @@ void GGUIActionLine::UpdateActionLine(float fDeltaTime)
 			++nIndex;
 		}
 	}
+    */
 }
 //--------------------------------------------------------------------------------------------------
 void GGUIActionLine::ClearAllAction()
@@ -51,7 +69,7 @@ void GGUIActionLine::ClearAllAction()
 	for (int i = 0; i < nCount; ++i)
 	{
 		GGUIActionBase* pBase = *(GGUIActionBase**)m_kActionArray.GetAt(i);
-		SoDelete pBase;
+        GGUIActionFactory::Get()->DeleteUIAction(pBase->GetActionID());
 	}
 	m_kActionArray.ClearArray();
 }

@@ -10,6 +10,8 @@ GGUIWindowBase::GGUIWindowBase()
 ,m_eType(GGUIWindow_Invalid)
 ,m_pUIEventHandler(0)
 ,m_pActionGroup(NULL)
+,m_fScaleX(1.0f)
+,m_fScaleY(1.0f)
 ,m_bDragEnable(false)
 ,m_bCursorIsInside(false)
 {
@@ -29,8 +31,11 @@ void GGUIWindowBase::ClearWindow()
 	m_kName.Clear();
 	m_pUIEventHandler = 0;
 	m_kFullRect = GGUIFullRect_Empty;
-	m_kRectInAbsCoord = GGUIRect_Empty;
 	m_kParentRectInAbsCoord = GGUIRect_Empty;
+	m_kOriginalRectInAbsCoord = GGUIRect_Empty;
+	m_kRectInAbsCoord = GGUIRect_Empty;
+    m_fScaleX = 1.0f;
+    m_fScaleY = 1.0f;
 	m_kUnvisibleReason.Clear();
 	m_kInputDisableReason.Clear();
 	m_bCursorIsInside = false;
@@ -139,44 +144,63 @@ void GGUIWindowBase::ProcessUIEvent(int nEventType, void* pParam)
 	//do nothing
 }
 //----------------------------------------------------------------
+void GGUIWindowBase::ProcessActionEvent(int nEventId)
+{
+    //do nothing
+}
+//----------------------------------------------------------------
 void GGUIWindowBase::SetFullRect(const GGUIFullRect& kRect)
 {
 	m_kFullRect = kRect;
-	CalculateRectInAbsCoord();
+	CalculateRectInAbsCoord(false);
 }
 //----------------------------------------------------------------
 void GGUIWindowBase::SetFullRectScalePos(float fScaleX, float fScaleY)
 {
 	m_kFullRect.fScaleX = fScaleX;
 	m_kFullRect.fScaleY = fScaleY;
-	CalculateRectInAbsCoord();
+	CalculateRectInAbsCoord(false);
 }
 //----------------------------------------------------------------
 void GGUIWindowBase::SetFullRectDeltaPos(float fDeltaX, float fDeltaY)
 {
 	m_kFullRect.fDeltaX = fDeltaX;
 	m_kFullRect.fDeltaY = fDeltaY;
-	CalculateRectInAbsCoord();
+	CalculateRectInAbsCoord(false);
 }
 //----------------------------------------------------------------
 void GGUIWindowBase::SetFullRectScaleWH(float fScaleW, float fScaleH)
 {
 	m_kFullRect.fScaleW = fScaleW;
 	m_kFullRect.fScaleH = fScaleH;
-	CalculateRectInAbsCoord();
+	CalculateRectInAbsCoord(false);
 }
 //----------------------------------------------------------------
 void GGUIWindowBase::MoveDelta(float fDeltaX, float fDeltaY)
 {
 	m_kFullRect.fDeltaX += fDeltaX;
 	m_kFullRect.fDeltaY += fDeltaY;
-	CalculateRectInAbsCoord();
+	CalculateRectInAbsCoord(false);
+}
+//----------------------------------------------------------------
+void GGUIWindowBase::SetScale(float fScaleX, float fScaleY)
+{
+    m_fScaleX = fScaleX;
+    m_fScaleY = fScaleY;
+    CalculateRectInAbsCoord(true);
+}
+//----------------------------------------------------------------
+void GGUIWindowBase::ScaleDelta(float fDeltaX, float fDeltaY)
+{
+    m_fScaleX += fDeltaX;
+    m_fScaleY += fDeltaY;
+    CalculateRectInAbsCoord(true);
 }
 //----------------------------------------------------------------
 void GGUIWindowBase::OnParentRectChanged(const GGUIRect& kParentRectInAbsCoord)
 {
 	m_kParentRectInAbsCoord = kParentRectInAbsCoord;
-	CalculateRectInAbsCoord();
+	CalculateRectInAbsCoord(false);
 }
 //----------------------------------------------------------------
 void GGUIWindowBase::SetVisibleByReason(souint32 uiReason, bool bVisible)
@@ -221,12 +245,19 @@ void GGUIWindowBase::DeleteActionGroup()
 	}
 }
 //----------------------------------------------------------------
-void GGUIWindowBase::CalculateRectInAbsCoord()
+void GGUIWindowBase::CalculateRectInAbsCoord(bool bOnlyScaleChanged)
 {
-	m_kRectInAbsCoord.x = m_kParentRectInAbsCoord.x + m_kParentRectInAbsCoord.w * m_kFullRect.fScaleX + m_kFullRect.fDeltaX;
-	m_kRectInAbsCoord.y = m_kParentRectInAbsCoord.y + m_kParentRectInAbsCoord.h * m_kFullRect.fScaleY + m_kFullRect.fDeltaY;
-	m_kRectInAbsCoord.w = m_kParentRectInAbsCoord.w * m_kFullRect.fScaleW + m_kFullRect.fDeltaW;
-	m_kRectInAbsCoord.h = m_kParentRectInAbsCoord.h * m_kFullRect.fScaleH + m_kFullRect.fDeltaH;
+    if (bOnlyScaleChanged == false)
+    {
+        m_kOriginalRectInAbsCoord.x = m_kParentRectInAbsCoord.x + m_kParentRectInAbsCoord.w * m_kFullRect.fScaleX + m_kFullRect.fDeltaX;
+        m_kOriginalRectInAbsCoord.y = m_kParentRectInAbsCoord.y + m_kParentRectInAbsCoord.h * m_kFullRect.fScaleY + m_kFullRect.fDeltaY;
+        m_kOriginalRectInAbsCoord.w = m_kParentRectInAbsCoord.w * m_kFullRect.fScaleW + m_kFullRect.fDeltaW;
+        m_kOriginalRectInAbsCoord.h = m_kParentRectInAbsCoord.h * m_kFullRect.fScaleH + m_kFullRect.fDeltaH;
+    }
+    m_kRectInAbsCoord.x = m_kOriginalRectInAbsCoord.x;
+    m_kRectInAbsCoord.y = m_kOriginalRectInAbsCoord.y;
+    m_kRectInAbsCoord.w = m_kOriginalRectInAbsCoord.w * m_fScaleX;
+    m_kRectInAbsCoord.h = m_kOriginalRectInAbsCoord.h * m_fScaleY;
 }
 //----------------------------------------------------------------
 bool GGUIWindowBase::InputDragLogic(GGUIInputMsg* pInputMsg)

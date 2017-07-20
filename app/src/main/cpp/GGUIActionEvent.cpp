@@ -1,31 +1,37 @@
 //--------------------------------------------------------------------------------------------------
-#include "GGUIActionBase.h"
+#include "GGUIActionEvent.h"
 //--------------------------------------------------------------------------------------------------
-GGUIActionBase::GGUIActionBase()
-:m_nActionId(-1)
-,m_eType(GGUIAction_Invalid)
-,m_pActionLine(NULL)
+GGUIActionEvent::GGUIActionEvent()
+:m_nEventId(-1)
+{
+	m_eType = GGUIAction_Event;
+}
+//--------------------------------------------------------------------------------------------------
+GGUIActionEvent::~GGUIActionEvent()
 {
 
 }
 //--------------------------------------------------------------------------------------------------
-GGUIActionBase::~GGUIActionBase()
+void GGUIActionEvent::ClearAction()
 {
+	GGUIActionBase::ClearAction();
+    m_nEventId = -1;
+}
+//--------------------------------------------------------------------------------------------------
+void GGUIActionEvent::UpdateAction(float fDeltaTime)
+{
+	if (m_nEventId < 0)
+	{
+		//already finished
+		return;
+	}
 
+    GetActionLine()->GetActionGroup()->AddEventID(m_nEventId);
+    m_nEventId = -1;
 }
 //--------------------------------------------------------------------------------------------------
-void GGUIActionBase::ClearAction()
+void GGUIActionEvent::InitActionEvent(int nEventId)
 {
-    m_pActionLine = NULL;
-}
-//--------------------------------------------------------------------------------------------------
-void GGUIActionBase::UpdateAction(float fDeltaTime)
-{
-
-}
-//--------------------------------------------------------------------------------------------------
-bool GGUIActionBase::IsActionFinished() const
-{
-	return true;
+	m_nEventId = nEventId;
 }
 //--------------------------------------------------------------------------------------------------

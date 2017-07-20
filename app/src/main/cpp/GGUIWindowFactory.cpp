@@ -186,13 +186,13 @@ void GGUIWindowFactory::DeleteUIWindow(int nWindowID)
 	//
 	if (pWindow->GetParentID() == -1)
 	{
-		//被回收的Window，其ParentID都是-1；
-		//只要ParentID为-1，则该Window处于被回收待利用状态。
+		//被回收的Window没有父窗口，可能是一个GGUIWindowPanel对象。
 		pWindow->ClearWindow();
 		m_nUnusedObjectIndex[pWindow->GetType()] = nWindowID;
 		return;
 	}
 	//
+	//有父窗口，则由父窗口删除这个Window对象。
 	GGUIWindowBase* pParentBase = GetUIWindow(pWindow->GetParentID());
 	if (pParentBase == 0)
 	{

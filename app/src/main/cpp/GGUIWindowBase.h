@@ -22,6 +22,8 @@ public:
 	//一般情况下，界面内的窗口抛出事件（例如Button抛出 GGUIEvent_Button_Clicked 事件），
 	//由 GGUIWindowPanel 来响应事件。
 	virtual void ProcessUIEvent(int nEventType, void* pParam);
+	//处理Action事件。
+	virtual void ProcessActionEvent(int nEventId);
 
 	//获取窗口ID。
 	int GetID() const;
@@ -43,6 +45,8 @@ public:
 	virtual void SetFullRectDeltaPos(float fDeltaX, float fDeltaY);
 	virtual void SetFullRectScaleWH(float fScaleW, float fScaleH);
 	virtual void MoveDelta(float fDeltaX, float fDeltaY);
+    virtual void SetScale(float fScaleX, float fScaleY);
+    virtual void ScaleDelta(float fDeltaX, float fDeltaY);
 	virtual void OnParentRectChanged(const GGUIRect& kParentRectInAbsCoord);
 	virtual void SetUIEventHandler(GGUIWindowBase* pHandler);
 
@@ -71,7 +75,7 @@ protected:
 	virtual ~GGUIWindowBase();
 	virtual void ClearWindow();
 	void SetID(int nID);
-	void CalculateRectInAbsCoord();
+	void CalculateRectInAbsCoord(bool bOnlyScaleChanged);
 	//返回值为true，表示鼠标正在拖拽本窗口。
 	bool InputDragLogic(GGUIInputMsg* pInputMsg);
 	//返回值为true，表示抛出了“鼠标进入窗口区域”或者“鼠标离开窗口区域”事件。
@@ -86,9 +90,21 @@ protected:
 	//一般情况下，GGUIWindowPanel 会充当 m_pUIEventHandler 。
 	GGUIWindowBase* m_pUIEventHandler;
 	GGUIActionGroup* m_pActionGroup;
-	GGUIFullRect m_kFullRect;
+
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    //本窗口原始的完全矩形，是UI编辑器中指定的值。
+    GGUIFullRect m_kFullRect;
+    //父窗口当前的矩形范围。
+    GGUIRect m_kParentRectInAbsCoord;
+    //在父窗口的影响下，本窗口原始的未被缩放的矩形范围。
+    GGUIRect m_kOriginalRectInAbsCoord;
+    //在父窗口的影响下，本窗口当前的矩形范围。
 	GGUIRect m_kRectInAbsCoord;
-	GGUIRect m_kParentRectInAbsCoord;
+    //缩放相关的值。
+    float m_fScaleX;
+    float m_fScaleY;
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 	SoBitFlag m_kUnvisibleReason;
 	SoBitFlag m_kInputDisableReason;
 	bool m_bDragEnable;

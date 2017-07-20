@@ -7,11 +7,13 @@ GGUIActionGroup::GGUIActionGroup(GGUIWindowBase* pDestWindow)
 :m_pDestWindow(pDestWindow)
 {
 	m_kLineArray.InitArray(sizeof(GGUIActionLine*), 10, 10);
+	m_kEventArray.InitArray(sizeof(int), 10, 10);
 }
 //--------------------------------------------------------------------------------------------------
 GGUIActionGroup::~GGUIActionGroup()
 {
 	ClearAllActionLine();
+    m_kEventArray.ClearArray();
 	m_pDestWindow = NULL;
 }
 //--------------------------------------------------------------------------------------------------
@@ -50,6 +52,17 @@ void GGUIActionGroup::UpdateActionGroup(float fDeltaTime)
 			++nIndex;
 		}
 	}
+
+    const int nEventCount = m_kEventArray.GetSize();
+    if (nEventCount > 0)
+    {
+        for (int i = 0; i < nEventCount; ++i)
+        {
+            int nEventId = *(int*)m_kEventArray.GetAt(i);
+            m_pDestWindow->ProcessActionEvent(nEventId);
+        }
+        m_kEventArray.ClearArray();
+    }
 }
 //--------------------------------------------------------------------------------------------------
 void GGUIActionGroup::ClearAllActionLine()

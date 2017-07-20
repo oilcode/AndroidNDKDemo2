@@ -50,6 +50,7 @@ private:
     void CreateWindows();
     bool InputWindow(GGUIInputMsg* pInputMsg);
     void ProcessUIEvent(int nEventType, void* pParam);
+    void ProcessActionEvent(int nEventId);
     void OnBtnCard(int nCardIndex);
     void OnBtnTouch(int nIndex);
 

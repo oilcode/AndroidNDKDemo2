@@ -1,28 +1,28 @@
 //--------------------------------------------------------------------------------------------------
-#include "GGUIActionMove.h"
+#include "GGUIActionScale.h"
 //--------------------------------------------------------------------------------------------------
-GGUIActionMove::GGUIActionMove()
+GGUIActionScale::GGUIActionScale()
 :m_fSpeedX(0.0f)
 ,m_fSpeedY(0.0f)
 ,m_fRemainTime(-1.0f)
 {
-	m_eType = GGUIAction_Move;
+	m_eType = GGUIAction_Scale;
 }
 //--------------------------------------------------------------------------------------------------
-GGUIActionMove::~GGUIActionMove()
+GGUIActionScale::~GGUIActionScale()
 {
 
 }
 //--------------------------------------------------------------------------------------------------
-void GGUIActionMove::ClearAction()
+void GGUIActionScale::ClearAction()
 {
-    GGUIActionBase::ClearAction();
-    m_fSpeedX = 0.0f;
-    m_fSpeedY = 0.0f;
-    m_fRemainTime = -1.0f;
+	GGUIActionBase::ClearAction();
+	m_fSpeedX = 0.0f;
+	m_fSpeedY = 0.0f;
+	m_fRemainTime = -1.0f;
 }
 //--------------------------------------------------------------------------------------------------
-void GGUIActionMove::UpdateAction(float fDeltaTime)
+void GGUIActionScale::UpdateAction(float fDeltaTime)
 {
 	if (m_fRemainTime < 0.0f)
 	{
@@ -46,10 +46,10 @@ void GGUIActionMove::UpdateAction(float fDeltaTime)
 		m_fRemainTime = -1.0f;
 	}
 
-	GetDestWindow()->MoveDelta(fDeltaX, fDeltaY);
+	GetDestWindow()->ScaleDelta(fDeltaX, fDeltaY);
 }
 //--------------------------------------------------------------------------------------------------
-void GGUIActionMove::InitActionMove(float fDeltaX, float fDeltaY, float fTime)
+void GGUIActionScale::InitActionScale(float fDeltaScaleX, float fDeltaScaleY, float fTime)
 {
 	// fTime must not be zero
 	if (-0.01f < fTime && fTime < 0.01f )
@@ -57,8 +57,8 @@ void GGUIActionMove::InitActionMove(float fDeltaX, float fDeltaY, float fTime)
 		fTime = 0.01f;
 	}
 
-	m_fSpeedX = fDeltaX / fTime;
-	m_fSpeedY = fDeltaY / fTime;
+	m_fSpeedX = fDeltaScaleX / fTime;
+	m_fSpeedY = fDeltaScaleY / fTime;
     m_fRemainTime = fTime;
 }
 //--------------------------------------------------------------------------------------------------

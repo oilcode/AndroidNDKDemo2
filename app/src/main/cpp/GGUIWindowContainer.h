@@ -34,6 +34,8 @@ public:
 	virtual void SetFullRectScalePos(float fScaleX, float fScaleY);
 	virtual void SetFullRectDeltaPos(float fDeltaX, float fDeltaY);
 	virtual void MoveDelta(float fDeltaX, float fDeltaY);
+	virtual void SetScale(float fScaleX, float fScaleY);
+	virtual void ScaleDelta(float fDeltaX, float fDeltaY);
 	virtual void OnParentRectChanged(const GGUIRect& kParentRectInAbsCoord);
 	virtual void SetUIEventHandler(GGUIWindowBase* pHandler);
 	virtual void SetVisibleByReason(souint32 uiReason, bool bVisible);

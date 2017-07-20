@@ -19,6 +19,7 @@
 #include "GGUIEvent.h"
 #include "GGUIWindowFactory.h"
 #include "GGUIPanelManager.h"
+#include "GGUIActionFactory.h"
 #include "GGUIWindowPanel.h"
 #include "GGUIWindowContainer.h"
 #include "GGUIWindowText.h"
