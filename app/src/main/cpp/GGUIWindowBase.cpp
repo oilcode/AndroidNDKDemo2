@@ -3,6 +3,8 @@
 #include "GGUIWindowFactory.h"
 #include "GGUIEvent.h"
 #include "GGUIActionGroup.h"
+#include "GGUIActionFactory.h"
+
 //----------------------------------------------------------------
 GGUIWindowBase::GGUIWindowBase()
 :m_nID(-1)
@@ -231,7 +233,8 @@ GGUIActionGroup* GGUIWindowBase::CreateActionGroup()
 {
 	if (m_pActionGroup == NULL)
 	{
-		m_pActionGroup = SoNew GGUIActionGroup(this);
+		m_pActionGroup = (GGUIActionGroup*)GGUIActionFactory::Get()->CreateUIAction(GGUIAction_Group);
+        m_pActionGroup->SetDestWindow(this);
 	}
 	return m_pActionGroup;
 }
@@ -240,7 +243,7 @@ void GGUIWindowBase::DeleteActionGroup()
 {
 	if (m_pActionGroup)
 	{
-		SoDelete m_pActionGroup;
+        GGUIActionFactory::Get()->DeleteUIAction(m_pActionGroup->GetActionID());
 		m_pActionGroup = NULL;
 	}
 }

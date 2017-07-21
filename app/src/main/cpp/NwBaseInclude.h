@@ -19,7 +19,6 @@
 #include "GGUIEvent.h"
 #include "GGUIWindowFactory.h"
 #include "GGUIPanelManager.h"
-#include "GGUIActionFactory.h"
 #include "GGUIWindowPanel.h"
 #include "GGUIWindowContainer.h"
 #include "GGUIWindowText.h"
@@ -28,9 +27,12 @@
 #include "GGUIWindowScrollBar.h"
 #include "GGUIWindowProcessBar.h"
 #include "GGUIWindowListBox.h"
+#include "GGUIActionFactory.h"
 #include "GGUIActionGroup.h"
 #include "GGUIActionLine.h"
 #include "GGUIActionMove.h"
+#include "GGUIActionScale.h"
+#include "GGUIActionEvent.h"
 //----------------------------------------------------------------
 #endif //_NwBaseInclude_h_
 //----------------------------------------------------------------

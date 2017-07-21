@@ -1,5 +1,7 @@
 //--------------------------------------------------------------------------------------------------
 #include "GGUIActionFactory.h"
+#include "GGUIActionGroup.h"
+#include "GGUIActionLine.h"
 #include "GGUIActionMove.h"
 #include "GGUIActionScale.h"
 #include "GGUIActionEvent.h"
@@ -58,6 +60,8 @@ bool GGUIActionFactory::InitUIActionFactory()
     {
         m_nUnusedObjectIndex[i] = UnusedIndex_CreateNewOne;
     }
+    //
+    m_kEventArray.InitArray(sizeof(int), 10, 10);
     return true;
 }
 //--------------------------------------------------------------------------------------------------
@@ -70,6 +74,7 @@ void GGUIActionFactory::ClearUIActionFactory()
         pAction = GetUIAction(i);
         if (pAction)
         {
+            pAction->ClearAction();
             SoDelete pAction;
         }
     }
@@ -79,6 +84,8 @@ void GGUIActionFactory::ClearUIActionFactory()
     {
         m_nUnusedObjectIndex[i] = UnusedIndex_CreateNewOne;
     }
+    //
+    m_kEventArray.ClearArray();
 }
 //--------------------------------------------------------------------------------------------------
 GGUIActionBase* GGUIActionFactory::CreateUIAction(GGUIActionType eType)
@@ -106,6 +113,14 @@ GGUIActionBase* GGUIActionFactory::CreateUIAction(GGUIActionType eType)
     GGUIActionBase* pAction = 0;
     switch (eType)
     {
+        case GGUIAction_Group:
+        {
+            pAction = new GGUIActionGroup;
+        } break;
+        case GGUIAction_Line:
+        {
+            pAction = new GGUIActionLine;
+        } break;
         case GGUIAction_Move:
         {
             pAction = new GGUIActionMove;
@@ -171,5 +186,21 @@ int GGUIActionFactory::FindUnusedAction(GGUIActionType eType)
         }
     }
     return nID;
+}
+//--------------------------------------------------------------------------------------------------
+void GGUIActionFactory::DispatchActionEvent(GGUIWindowBase* pDestWindow)
+{
+    if (m_kEventArray.GetSize() == 0)
+    {
+        return;
+    }
+
+    const int nEventCount = m_kEventArray.GetSize();
+    for (int i = 0; i < nEventCount; ++i)
+    {
+        int nEventId = *(int*)m_kEventArray.GetAt(i);
+        pDestWindow->ProcessActionEvent(nEventId);
+    }
+    m_kEventArray.ClearArray();
 }
 //--------------------------------------------------------------------------------------------------

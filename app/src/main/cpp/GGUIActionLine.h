@@ -2,18 +2,14 @@
 #ifndef _GGUIActionLine_h_
 #define _GGUIActionLine_h_
 //--------------------------------------------------------------------------------------------------
-#include "GGUIBaseInclude.h"
-#include "GGUIActionGroup.h"
+#include "GGUIActionBase.h"
 //--------------------------------------------------------------------------------------------------
-class GGUIActionBase;
-class GGUIWindowBase;
+class GGUIActionGroup;
 //--------------------------------------------------------------------------------------------------
-class GGUIActionLine
+class GGUIActionLine : public GGUIActionBase
 {
+    friend class GGUIActionFactory;
 public:
-	GGUIActionLine();
-	~GGUIActionLine();
-
 	void AddAction(GGUIActionBase* pAction);
 	void UpdateActionLine(float fDeltaTime);
 	bool IsActionLineFinished() const;
@@ -23,7 +19,10 @@ public:
 	GGUIWindowBase* GetDestWindow() const;
 
 protected:
-	void ClearAllAction();
+    GGUIActionLine();
+    ~GGUIActionLine();
+    //re-write parent function
+    void ClearAction();
 
 protected:
 	GGUIActionGroup* m_pActionGroup;
@@ -43,11 +42,6 @@ inline void GGUIActionLine::SetActionGroup(GGUIActionGroup* pGroup)
 inline GGUIActionGroup* GGUIActionLine::GetActionGroup() const
 {
 	return m_pActionGroup;
-}
-//--------------------------------------------------------------------------------------------------
-inline GGUIWindowBase* GGUIActionLine::GetDestWindow() const
-{
-	return m_pActionGroup->GetDestWindow();
 }
 //--------------------------------------------------------------------------------------------------
 #endif //_GGUIActionLine_h_

@@ -1,18 +1,32 @@
 //--------------------------------------------------------------------------------------------------
 #include "GGUIActionLine.h"
-#include "GGUIActionBase.h"
+#include "GGUIActionGroup.h"
 #include "GGUIActionFactory.h"
 //--------------------------------------------------------------------------------------------------
 GGUIActionLine::GGUIActionLine()
 :m_pActionGroup(NULL)
 {
+    m_eActionType = GGUIAction_Line;
 	m_kActionArray.InitArray(sizeof(GGUIActionBase*), 10, 10);
 }
 //--------------------------------------------------------------------------------------------------
 GGUIActionLine::~GGUIActionLine()
 {
-	ClearAllAction();
-	m_pActionGroup = NULL;
+
+}
+//--------------------------------------------------------------------------------------------------
+void GGUIActionLine::ClearAction()
+{
+    GGUIActionBase::ClearAction();
+    //
+    const int nCount = m_kActionArray.GetSize();
+    for (int i = 0; i < nCount; ++i)
+    {
+        GGUIActionBase* pBase = *(GGUIActionBase**)m_kActionArray.GetAt(i);
+        GGUIActionFactory::Get()->DeleteUIAction(pBase->GetActionID());
+    }
+    m_kActionArray.ClearArray();
+    m_pActionGroup = NULL;
 }
 //--------------------------------------------------------------------------------------------------
 void GGUIActionLine::AddAction(GGUIActionBase* pAction)
@@ -63,14 +77,8 @@ void GGUIActionLine::UpdateActionLine(float fDeltaTime)
     */
 }
 //--------------------------------------------------------------------------------------------------
-void GGUIActionLine::ClearAllAction()
+GGUIWindowBase* GGUIActionLine::GetDestWindow() const
 {
-	const int nCount = m_kActionArray.GetSize();
-	for (int i = 0; i < nCount; ++i)
-	{
-		GGUIActionBase* pBase = *(GGUIActionBase**)m_kActionArray.GetAt(i);
-        GGUIActionFactory::Get()->DeleteUIAction(pBase->GetActionID());
-	}
-	m_kActionArray.ClearArray();
+    return m_pActionGroup->GetDestWindow();
 }
 //--------------------------------------------------------------------------------------------------

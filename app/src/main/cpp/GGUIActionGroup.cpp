@@ -1,19 +1,24 @@
 //--------------------------------------------------------------------------------------------------
 #include "GGUIActionGroup.h"
-#include "GGUIActionBase.h"
 #include "GGUIActionLine.h"
+#include "GGUIActionFactory.h"
 //--------------------------------------------------------------------------------------------------
-GGUIActionGroup::GGUIActionGroup(GGUIWindowBase* pDestWindow)
-:m_pDestWindow(pDestWindow)
+GGUIActionGroup::GGUIActionGroup()
+:m_pDestWindow(NULL)
 {
+	m_eActionType = GGUIAction_Group;
 	m_kLineArray.InitArray(sizeof(GGUIActionLine*), 10, 10);
-	m_kEventArray.InitArray(sizeof(int), 10, 10);
 }
 //--------------------------------------------------------------------------------------------------
 GGUIActionGroup::~GGUIActionGroup()
 {
-	ClearAllActionLine();
-    m_kEventArray.ClearArray();
+
+}
+//--------------------------------------------------------------------------------------------------
+void GGUIActionGroup::ClearAction()
+{
+    GGUIActionBase::ClearAction();
+    ClearAllAction();
 	m_pDestWindow = NULL;
 }
 //--------------------------------------------------------------------------------------------------
@@ -21,19 +26,31 @@ void GGUIActionGroup::AddActionLine(GGUIActionLine* pLine)
 {
 	if (pLine)
 	{
+        pLine->SetActionLine(pLine);
         pLine->SetActionGroup(this);
 		m_kLineArray.PushBack(&pLine);
 	}
 }
 //--------------------------------------------------------------------------------------------------
+void GGUIActionGroup::ClearAllAction()
+{
+    const int nCount = m_kLineArray.GetSize();
+    for (int i = 0; i < nCount; ++i)
+    {
+        GGUIActionLine* pLine = *(GGUIActionLine**)m_kLineArray.GetAt(i);
+        GGUIActionFactory::Get()->DeleteUIAction(pLine->GetActionID());
+    }
+    m_kLineArray.ClearArray();
+}
+//--------------------------------------------------------------------------------------------------
 void GGUIActionGroup::UpdateActionGroup(float fDeltaTime)
 {
-	const int nCount = m_kLineArray.GetSize();
-	if (nCount == 0)
+	if (m_kLineArray.GetSize() == 0)
 	{
 		return;
 	}
 
+    const int nCount = m_kLineArray.GetSize();
 	GGUIActionLine* pLine = NULL;
 	int nIndex = 0;
 	// excute action
@@ -44,7 +61,7 @@ void GGUIActionGroup::UpdateActionGroup(float fDeltaTime)
 		// remove the finished action
 		if (pLine->IsActionLineFinished())
 		{
-			SoDelete pLine;
+            GGUIActionFactory::Get()->DeleteUIAction(pLine->GetActionID());
 			m_kLineArray.RemoveAt(nIndex);
 		}
 		else
@@ -53,26 +70,6 @@ void GGUIActionGroup::UpdateActionGroup(float fDeltaTime)
 		}
 	}
 
-    const int nEventCount = m_kEventArray.GetSize();
-    if (nEventCount > 0)
-    {
-        for (int i = 0; i < nEventCount; ++i)
-        {
-            int nEventId = *(int*)m_kEventArray.GetAt(i);
-            m_pDestWindow->ProcessActionEvent(nEventId);
-        }
-        m_kEventArray.ClearArray();
-    }
-}
-//--------------------------------------------------------------------------------------------------
-void GGUIActionGroup::ClearAllActionLine()
-{
-	const int nCount = m_kLineArray.GetSize();
-	for (int i = 0; i < nCount; ++i)
-	{
-		GGUIActionLine* pLine = *(GGUIActionLine**)m_kLineArray.GetAt(i);
-		SoDelete pLine;
-	}
-	m_kLineArray.ClearArray();
+    GGUIActionFactory::Get()->DispatchActionEvent(m_pDestWindow);
 }
 //--------------------------------------------------------------------------------------------------

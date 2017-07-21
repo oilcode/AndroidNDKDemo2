@@ -2,18 +2,21 @@
 #ifndef _GGUIActionBase_h_
 #define _GGUIActionBase_h_
 //--------------------------------------------------------------------------------------------------
-#include "GGUIBaseInclude.h"
-#include "GGUIActionLine.h"
 #include "GGUIWindowBase.h"
 //--------------------------------------------------------------------------------------------------
 enum GGUIActionType
 {
     GGUIAction_Invalid = -1,
+    GGUIAction_Group,
+    GGUIAction_Line,
+    //
     GGUIAction_Move,
     GGUIAction_Scale,
     GGUIAction_Event,
     GGUIAction_Max,
 };
+//--------------------------------------------------------------------------------------------------
+class GGUIActionLine;
 //--------------------------------------------------------------------------------------------------
 class GGUIActionBase
 {
@@ -37,7 +40,7 @@ protected:
 
 protected:
     int m_nActionId;
-    GGUIActionType m_eType;
+    GGUIActionType m_eActionType;
 	GGUIActionLine* m_pActionLine;
 };
 //--------------------------------------------------------------------------------------------------
@@ -53,7 +56,7 @@ inline int GGUIActionBase::GetActionID() const
 //--------------------------------------------------------------------------------------------------
 inline GGUIActionType GGUIActionBase::GetActionType() const
 {
-    return m_eType;
+    return m_eActionType;
 }
 //--------------------------------------------------------------------------------------------------
 inline void GGUIActionBase::SetActionLine(GGUIActionLine* pLine)
@@ -64,11 +67,6 @@ inline void GGUIActionBase::SetActionLine(GGUIActionLine* pLine)
 inline GGUIActionLine* GGUIActionBase::GetActionLine() const
 {
     return m_pActionLine;
-}
-//--------------------------------------------------------------------------------------------------
-inline GGUIWindowBase* GGUIActionBase::GetDestWindow() const
-{
-	return m_pActionLine->GetDestWindow();
 }
 //--------------------------------------------------------------------------------------------------
 #endif //_GGUIActionBase_h_

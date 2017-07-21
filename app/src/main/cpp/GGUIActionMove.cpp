@@ -6,7 +6,7 @@ GGUIActionMove::GGUIActionMove()
 ,m_fSpeedY(0.0f)
 ,m_fRemainTime(-1.0f)
 {
-	m_eType = GGUIAction_Move;
+	m_eActionType = GGUIAction_Move;
 }
 //--------------------------------------------------------------------------------------------------
 GGUIActionMove::~GGUIActionMove()

@@ -1,10 +1,11 @@
 //--------------------------------------------------------------------------------------------------
 #include "GGUIActionEvent.h"
+#include "GGUIActionFactory.h"
 //--------------------------------------------------------------------------------------------------
 GGUIActionEvent::GGUIActionEvent()
 :m_nEventId(-1)
 {
-	m_eType = GGUIAction_Event;
+	m_eActionType = GGUIAction_Event;
 }
 //--------------------------------------------------------------------------------------------------
 GGUIActionEvent::~GGUIActionEvent()
@@ -26,7 +27,7 @@ void GGUIActionEvent::UpdateAction(float fDeltaTime)
 		return;
 	}
 
-    GetActionLine()->GetActionGroup()->AddEventID(m_nEventId);
+    GGUIActionFactory::Get()->AddActionEvent(m_nEventId);
     m_nEventId = -1;
 }
 //--------------------------------------------------------------------------------------------------

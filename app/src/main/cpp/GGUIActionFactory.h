@@ -16,6 +16,9 @@ public:
 	void DeleteUIAction(int nActionID);
     GGUIActionBase* GetUIAction(int nActionID);
 
+    void AddActionEvent(int nEventId);
+    void DispatchActionEvent(GGUIWindowBase* pDestWindow);
+
 private:
 	GGUIActionFactory();
 	~GGUIActionFactory();
@@ -27,11 +30,18 @@ private:
     static GGUIActionFactory* ms_pInstance;
     SoArrayUID m_kActionArray;
     int m_nUnusedObjectIndex[GGUIAction_Max];
+    //
+    SoArray m_kEventArray;
 };
 //--------------------------------------------------------------------------------------------------
 inline GGUIActionFactory* GGUIActionFactory::Get()
 {
     return ms_pInstance;
+}
+//--------------------------------------------------------------------------------------------------
+inline void GGUIActionFactory::AddActionEvent(int nEventId)
+{
+    m_kEventArray.PushBack(&nEventId);
 }
 //--------------------------------------------------------------------------------------------------
 #endif //_GGUIActionFactory_h_

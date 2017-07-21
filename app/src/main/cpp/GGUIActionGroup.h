@@ -2,39 +2,42 @@
 #ifndef _GGUIActionGroup_h_
 #define _GGUIActionGroup_h_
 //--------------------------------------------------------------------------------------------------
-#include "GGUIBaseInclude.h"
+#include "GGUIActionBase.h"
 //--------------------------------------------------------------------------------------------------
 class GGUIActionLine;
-class GGUIWindowBase;
 //--------------------------------------------------------------------------------------------------
-class GGUIActionGroup
+class GGUIActionGroup : public GGUIActionBase
 {
+	friend class GGUIActionFactory;
 public:
-	GGUIActionGroup(GGUIWindowBase* pDestWindow);
-	~GGUIActionGroup();
-
 	void AddActionLine(GGUIActionLine* pLine);
-    void AddEventID(int nEventId);
+    void ClearAllAction();
 	void UpdateActionGroup(float fDeltaTime);
+
+    void SetDestWindow(GGUIWindowBase* pWindow);
 	GGUIWindowBase* GetDestWindow() const;
 
 protected:
-	void ClearAllActionLine();
+    GGUIActionGroup();
+    ~GGUIActionGroup();
+    //re-write parent function
+    void ClearAction();
 
 protected:
 	GGUIWindowBase* m_pDestWindow;
 	SoArray m_kLineArray;
-	SoArray m_kEventArray;
 };
+//--------------------------------------------------------------------------------------------------
+inline void GGUIActionGroup::SetDestWindow(GGUIWindowBase* pWindow)
+{
+    m_pDestWindow = pWindow;
+	//m_pActionLine must not be NULL
+    SetActionLine((GGUIActionLine*)1);
+}
 //--------------------------------------------------------------------------------------------------
 inline GGUIWindowBase* GGUIActionGroup::GetDestWindow() const
 {
 	return m_pDestWindow;
-}
-//--------------------------------------------------------------------------------------------------
-inline void GGUIActionGroup::AddEventID(int nEventId)
-{
-    m_kEventArray.PushBack(&nEventId);
 }
 //--------------------------------------------------------------------------------------------------
 #endif //_GGUIActionGroup_h_

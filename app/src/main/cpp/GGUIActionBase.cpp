@@ -1,9 +1,10 @@
 //--------------------------------------------------------------------------------------------------
 #include "GGUIActionBase.h"
+#include "GGUIActionLine.h"
 //--------------------------------------------------------------------------------------------------
 GGUIActionBase::GGUIActionBase()
 :m_nActionId(-1)
-,m_eType(GGUIAction_Invalid)
+,m_eActionType(GGUIAction_Invalid)
 ,m_pActionLine(NULL)
 {
 
@@ -27,5 +28,10 @@ void GGUIActionBase::UpdateAction(float fDeltaTime)
 bool GGUIActionBase::IsActionFinished() const
 {
 	return true;
+}
+//--------------------------------------------------------------------------------------------------
+GGUIWindowBase* GGUIActionBase::GetDestWindow() const
+{
+    return m_pActionLine->GetDestWindow();
 }
 //--------------------------------------------------------------------------------------------------
