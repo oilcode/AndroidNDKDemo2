@@ -4,10 +4,16 @@
 //--------------------------------------------------------------------
 #define SoPlatform_Windows  1
 #define SoPlatform_Android  2
+//--------------------------------------------------------------------
+#ifdef WIN32
+#define SoTargetPlatform  SoPlatform_Windows
+#else
 #define SoTargetPlatform  SoPlatform_Android
+#endif
 //--------------------------------------------------------------------
 #define SoAppBit_32  1
 #define SoAppBit_64  2
+//--------------------------------------------------------------------
 #define SoTargetAppBit  SoAppBit_32
 //--------------------------------------------------------------------
 #include <cstdlib>

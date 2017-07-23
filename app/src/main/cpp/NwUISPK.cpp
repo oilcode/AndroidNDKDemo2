@@ -487,7 +487,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fDeltaH = 125.0f;
     pImage = (GGUIWindowImage*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Image);
     pImage->SetFullRect(kFullRect);
-    pImage->SetImage("uitexture/mm5:hero_2");
+    pImage->SetImage("uitexture/mm6:M");
     pImage->SetInputEnable(true);
     pImage->SetDragEnable(true);
     AddChild(pImage);
