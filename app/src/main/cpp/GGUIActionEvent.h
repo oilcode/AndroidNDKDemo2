@@ -7,11 +7,10 @@
 class GGUIActionEvent : public GGUIActionBase
 {
 	friend class GGUIActionFactory;
-public:
-	virtual void UpdateAction(float fDeltaTime);
-	virtual bool IsActionFinished() const;
 
-	void InitActionEvent(int nEventId);
+public:
+    void InitActionEvent(int nEventId);
+	virtual void UpdateAction(float fDeltaTime);
 
 protected:
     GGUIActionEvent();
@@ -23,11 +22,6 @@ protected:
     // EventID >= 0 is valid, when < 0 is invalid
 	int m_nEventId;
 };
-//--------------------------------------------------------------------------------------------------
-inline bool GGUIActionEvent::IsActionFinished() const
-{
-	return (m_nEventId < 0);
-}
 //--------------------------------------------------------------------------------------------------
 #endif //_GGUIActionEvent_h_
 //--------------------------------------------------------------------------------------------------

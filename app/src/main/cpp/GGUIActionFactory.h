@@ -2,7 +2,6 @@
 #ifndef _GGUIActionFactory_h_
 #define _GGUIActionFactory_h_
 //--------------------------------------------------------------------------------------------------
-#include "GGUIBaseInclude.h"
 #include "GGUIActionBase.h"
 //--------------------------------------------------------------------------------------------------
 class GGUIActionFactory
@@ -30,7 +29,7 @@ private:
     static GGUIActionFactory* ms_pInstance;
     SoArrayUID m_kActionArray;
     int m_nUnusedObjectIndex[GGUIAction_Max];
-    //
+    //wait for dispatch
     SoArray m_kEventArray;
 };
 //--------------------------------------------------------------------------------------------------

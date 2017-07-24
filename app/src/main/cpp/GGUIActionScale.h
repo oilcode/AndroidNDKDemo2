@@ -7,11 +7,10 @@
 class GGUIActionScale : public GGUIActionBase
 {
 	friend class GGUIActionFactory;
-public:
-	virtual void UpdateAction(float fDeltaTime);
-	virtual bool IsActionFinished() const;
 
+public:
 	void InitActionScale(float fDeltaScaleX, float fDeltaScaleY, float fTime);
+	virtual void UpdateAction(float fDeltaTime);
 
 protected:
     GGUIActionScale();
@@ -23,11 +22,6 @@ protected:
 	float m_fSpeedY;
 	float m_fRemainTime;
 };
-//--------------------------------------------------------------------------------------------------
-inline bool GGUIActionScale::IsActionFinished() const
-{
-	return (m_fRemainTime < 0.0f);
-}
 //--------------------------------------------------------------------------------------------------
 #endif //_GGUIActionScale_h_
 //--------------------------------------------------------------------------------------------------

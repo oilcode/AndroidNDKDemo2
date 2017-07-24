@@ -1,11 +1,11 @@
 //--------------------------------------------------------------------------------------------------
 #include "GGUIActionBase.h"
-#include "GGUIActionLine.h"
 //--------------------------------------------------------------------------------------------------
 GGUIActionBase::GGUIActionBase()
-:m_nActionId(-1)
+:m_pDestWindow(NULL)
+,m_nActionId(-1)
 ,m_eActionType(GGUIAction_Invalid)
-,m_pActionLine(NULL)
+,m_eLifeStep(ActionLife_Finished)
 {
 
 }
@@ -15,23 +15,14 @@ GGUIActionBase::~GGUIActionBase()
 
 }
 //--------------------------------------------------------------------------------------------------
-void GGUIActionBase::ClearAction()
-{
-    m_pActionLine = NULL;
-}
-//--------------------------------------------------------------------------------------------------
 void GGUIActionBase::UpdateAction(float fDeltaTime)
 {
 
 }
 //--------------------------------------------------------------------------------------------------
-bool GGUIActionBase::IsActionFinished() const
+void GGUIActionBase::ClearAction()
 {
-	return true;
-}
-//--------------------------------------------------------------------------------------------------
-GGUIWindowBase* GGUIActionBase::GetDestWindow() const
-{
-    return m_pActionLine->GetDestWindow();
+    m_pDestWindow = NULL;
+    m_eLifeStep = ActionLife_Dead;
 }
 //--------------------------------------------------------------------------------------------------

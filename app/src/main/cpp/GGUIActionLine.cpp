@@ -1,10 +1,8 @@
 //--------------------------------------------------------------------------------------------------
 #include "GGUIActionLine.h"
-#include "GGUIActionGroup.h"
 #include "GGUIActionFactory.h"
 //--------------------------------------------------------------------------------------------------
 GGUIActionLine::GGUIActionLine()
-:m_pActionGroup(NULL)
 {
     m_eActionType = GGUIAction_Line;
 	m_kActionArray.InitArray(sizeof(GGUIActionBase*), 10, 10);
@@ -15,32 +13,25 @@ GGUIActionLine::~GGUIActionLine()
 
 }
 //--------------------------------------------------------------------------------------------------
-void GGUIActionLine::ClearAction()
-{
-    GGUIActionBase::ClearAction();
-    //
-    const int nCount = m_kActionArray.GetSize();
-    for (int i = 0; i < nCount; ++i)
-    {
-        GGUIActionBase* pBase = *(GGUIActionBase**)m_kActionArray.GetAt(i);
-        GGUIActionFactory::Get()->DeleteUIAction(pBase->GetActionID());
-    }
-    m_kActionArray.ClearArray();
-    m_pActionGroup = NULL;
-}
-//--------------------------------------------------------------------------------------------------
 void GGUIActionLine::AddAction(GGUIActionBase* pAction)
 {
+    if (m_pDestWindow == NULL)
+    {
+        SoMessageBox("GGUIActionLine::AddAction Error", "m_pDestWindow == NULL! GGUIActionLine should be added to Group, then add Action");
+        return;
+    }
+
 	if (pAction)
 	{
-        pAction->SetActionLine(this);
+        pAction->SetDestWindow(m_pDestWindow);
 		m_kActionArray.PushBack(&pAction);
+        m_eLifeStep = ActionLife_Running;
 	}
 }
 //--------------------------------------------------------------------------------------------------
-void GGUIActionLine::UpdateActionLine(float fDeltaTime)
+void GGUIActionLine::UpdateAction(float fDeltaTime)
 {
-    if (m_kActionArray.GetSize() == 0)
+    if (m_eLifeStep == ActionLife_Finished)
     {
         return;
     }
@@ -52,6 +43,11 @@ void GGUIActionLine::UpdateActionLine(float fDeltaTime)
     {
         GGUIActionFactory::Get()->DeleteUIAction(pBase->GetActionID());
         m_kActionArray.RemoveAt(0);
+    }
+
+    if (m_kActionArray.GetSize() == 0)
+    {
+        m_eLifeStep = ActionLife_Finished;
     }
 
     /*
@@ -77,8 +73,16 @@ void GGUIActionLine::UpdateActionLine(float fDeltaTime)
     */
 }
 //--------------------------------------------------------------------------------------------------
-GGUIWindowBase* GGUIActionLine::GetDestWindow() const
+void GGUIActionLine::ClearAction()
 {
-    return m_pActionGroup->GetDestWindow();
+    GGUIActionBase::ClearAction();
+    //
+    const int nCount = m_kActionArray.GetSize();
+    for (int i = 0; i < nCount; ++i)
+    {
+        GGUIActionBase* pBase = *(GGUIActionBase**)m_kActionArray.GetAt(i);
+        GGUIActionFactory::Get()->DeleteUIAction(pBase->GetActionID());
+    }
+    m_kActionArray.ClearArray();
 }
 //--------------------------------------------------------------------------------------------------

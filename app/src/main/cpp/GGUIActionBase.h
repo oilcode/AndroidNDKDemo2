@@ -16,21 +16,28 @@ enum GGUIActionType
     GGUIAction_Max,
 };
 //--------------------------------------------------------------------------------------------------
-class GGUIActionLine;
-//--------------------------------------------------------------------------------------------------
 class GGUIActionBase
 {
     friend class GGUIActionFactory;
+
 public:
 	virtual void UpdateAction(float fDeltaTime);
-	virtual bool IsActionFinished() const;
-
-	void SetActionLine(GGUIActionLine* pLine);
-    GGUIActionLine* GetActionLine() const;
-	GGUIWindowBase* GetDestWindow() const;
 
     int GetActionID() const;
     GGUIActionType GetActionType() const;
+    bool IsActionFinished() const;
+    bool IsActionDead() const;
+
+    void SetDestWindow(GGUIWindowBase* pWindow);
+    GGUIWindowBase* GetDestWindow() const;
+
+protected:
+	enum eActionLifeStep
+    {
+        ActionLife_Running,
+        ActionLife_Finished,
+        ActionLife_Dead,
+    };
 
 protected:
     GGUIActionBase();
@@ -39,9 +46,10 @@ protected:
     void SetActionID(int nId);
 
 protected:
+    GGUIWindowBase* m_pDestWindow;
     int m_nActionId;
     GGUIActionType m_eActionType;
-	GGUIActionLine* m_pActionLine;
+    eActionLifeStep m_eLifeStep;
 };
 //--------------------------------------------------------------------------------------------------
 inline void GGUIActionBase::SetActionID(int nId)
@@ -59,14 +67,24 @@ inline GGUIActionType GGUIActionBase::GetActionType() const
     return m_eActionType;
 }
 //--------------------------------------------------------------------------------------------------
-inline void GGUIActionBase::SetActionLine(GGUIActionLine* pLine)
+inline bool GGUIActionBase::IsActionFinished() const
 {
-	m_pActionLine = pLine;
+    return (m_eLifeStep == ActionLife_Finished);
 }
 //--------------------------------------------------------------------------------------------------
-inline GGUIActionLine* GGUIActionBase::GetActionLine() const
+inline bool GGUIActionBase::IsActionDead() const
 {
-    return m_pActionLine;
+    return (m_eLifeStep == ActionLife_Dead);
+}
+//--------------------------------------------------------------------------------------------------
+inline void GGUIActionBase::SetDestWindow(GGUIWindowBase* pWindow)
+{
+    m_pDestWindow = pWindow;
+}
+//--------------------------------------------------------------------------------------------------
+inline GGUIWindowBase* GGUIActionBase::GetDestWindow() const
+{
+    return m_pDestWindow;
 }
 //--------------------------------------------------------------------------------------------------
 #endif //_GGUIActionBase_h_

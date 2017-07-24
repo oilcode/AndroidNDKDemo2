@@ -13,10 +13,10 @@ GGUIActionEvent::~GGUIActionEvent()
 
 }
 //--------------------------------------------------------------------------------------------------
-void GGUIActionEvent::ClearAction()
+void GGUIActionEvent::InitActionEvent(int nEventId)
 {
-	GGUIActionBase::ClearAction();
-    m_nEventId = -1;
+    m_eLifeStep = ActionLife_Running;
+	m_nEventId = nEventId;
 }
 //--------------------------------------------------------------------------------------------------
 void GGUIActionEvent::UpdateAction(float fDeltaTime)
@@ -28,11 +28,13 @@ void GGUIActionEvent::UpdateAction(float fDeltaTime)
 	}
 
     GGUIActionFactory::Get()->AddActionEvent(m_nEventId);
+    m_eLifeStep = ActionLife_Finished;
     m_nEventId = -1;
 }
 //--------------------------------------------------------------------------------------------------
-void GGUIActionEvent::InitActionEvent(int nEventId)
+void GGUIActionEvent::ClearAction()
 {
-	m_nEventId = nEventId;
+    GGUIActionBase::ClearAction();
+    m_nEventId = -1;
 }
 //--------------------------------------------------------------------------------------------------

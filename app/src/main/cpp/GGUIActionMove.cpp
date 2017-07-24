@@ -14,12 +14,18 @@ GGUIActionMove::~GGUIActionMove()
 
 }
 //--------------------------------------------------------------------------------------------------
-void GGUIActionMove::ClearAction()
+void GGUIActionMove::InitActionMove(float fDeltaX, float fDeltaY, float fTime)
 {
-    GGUIActionBase::ClearAction();
-    m_fSpeedX = 0.0f;
-    m_fSpeedY = 0.0f;
-    m_fRemainTime = -1.0f;
+	// fTime must not be zero
+	if (-0.01f < fTime && fTime < 0.01f )
+	{
+		fTime = 0.01f;
+	}
+
+	m_fSpeedX = fDeltaX / fTime;
+	m_fSpeedY = fDeltaY / fTime;
+	m_fRemainTime = fTime;
+    m_eLifeStep = ActionLife_Running;
 }
 //--------------------------------------------------------------------------------------------------
 void GGUIActionMove::UpdateAction(float fDeltaTime)
@@ -44,21 +50,17 @@ void GGUIActionMove::UpdateAction(float fDeltaTime)
         fDeltaX = m_fRemainTime * fDeltaTime;
         fDeltaY = m_fRemainTime * fDeltaTime;
 		m_fRemainTime = -1.0f;
+        m_eLifeStep = ActionLife_Finished;
 	}
 
-	GetDestWindow()->MoveDelta(fDeltaX, fDeltaY);
+    m_pDestWindow->MoveDelta(fDeltaX, fDeltaY);
 }
 //--------------------------------------------------------------------------------------------------
-void GGUIActionMove::InitActionMove(float fDeltaX, float fDeltaY, float fTime)
+void GGUIActionMove::ClearAction()
 {
-	// fTime must not be zero
-	if (-0.01f < fTime && fTime < 0.01f )
-	{
-		fTime = 0.01f;
-	}
-
-	m_fSpeedX = fDeltaX / fTime;
-	m_fSpeedY = fDeltaY / fTime;
-    m_fRemainTime = fTime;
+    GGUIActionBase::ClearAction();
+    m_fSpeedX = 0.0f;
+    m_fSpeedY = 0.0f;
+    m_fRemainTime = -1.0f;
 }
 //--------------------------------------------------------------------------------------------------

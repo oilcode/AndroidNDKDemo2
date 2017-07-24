@@ -177,9 +177,8 @@ int GGUIActionFactory::FindUnusedAction(GGUIActionType eType)
     const int nCount = m_kActionArray.GetCapacity();
     for (int i = 0; i < nCount; ++i)
     {
-        //被回收的Action，其ActionLine都是NULL。
         pAction = GetUIAction(i);
-        if (pAction && pAction->GetActionLine() == NULL && pAction->GetActionType() == eType)
+        if (pAction && pAction->IsActionDead() == NULL && pAction->GetActionType() == eType)
         {
             nID = i;
             break;

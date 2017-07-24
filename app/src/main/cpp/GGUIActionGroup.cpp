@@ -4,7 +4,6 @@
 #include "GGUIActionFactory.h"
 //--------------------------------------------------------------------------------------------------
 GGUIActionGroup::GGUIActionGroup()
-:m_pDestWindow(NULL)
 {
 	m_eActionType = GGUIAction_Group;
 	m_kLineArray.InitArray(sizeof(GGUIActionLine*), 10, 10);
@@ -15,24 +14,17 @@ GGUIActionGroup::~GGUIActionGroup()
 
 }
 //--------------------------------------------------------------------------------------------------
-void GGUIActionGroup::ClearAction()
-{
-    GGUIActionBase::ClearAction();
-    ClearAllAction();
-	m_pDestWindow = NULL;
-}
-//--------------------------------------------------------------------------------------------------
 void GGUIActionGroup::AddActionLine(GGUIActionLine* pLine)
 {
 	if (pLine)
 	{
-        pLine->SetActionLine(pLine);
-        pLine->SetActionGroup(this);
+        pLine->SetDestWindow(m_pDestWindow);
 		m_kLineArray.PushBack(&pLine);
+        m_eLifeStep = ActionLife_Running;
 	}
 }
 //--------------------------------------------------------------------------------------------------
-void GGUIActionGroup::ClearAllAction()
+void GGUIActionGroup::RemoveAllAction()
 {
     const int nCount = m_kLineArray.GetSize();
     for (int i = 0; i < nCount; ++i)
@@ -41,11 +33,12 @@ void GGUIActionGroup::ClearAllAction()
         GGUIActionFactory::Get()->DeleteUIAction(pLine->GetActionID());
     }
     m_kLineArray.ClearArray();
+    m_eLifeStep = ActionLife_Finished;
 }
 //--------------------------------------------------------------------------------------------------
-void GGUIActionGroup::UpdateActionGroup(float fDeltaTime)
+void GGUIActionGroup::UpdateAction(float fDeltaTime)
 {
-	if (m_kLineArray.GetSize() == 0)
+	if (m_eLifeStep == ActionLife_Finished)
 	{
 		return;
 	}
@@ -57,9 +50,9 @@ void GGUIActionGroup::UpdateActionGroup(float fDeltaTime)
 	for (int i = 0; i < nCount; ++i)
 	{
 		pLine = *(GGUIActionLine**)m_kLineArray.GetAt(nIndex);
-		pLine->UpdateActionLine(fDeltaTime);
+		pLine->UpdateAction(fDeltaTime);
 		// remove the finished action
-		if (pLine->IsActionLineFinished())
+		if (pLine->IsActionFinished())
 		{
             GGUIActionFactory::Get()->DeleteUIAction(pLine->GetActionID());
 			m_kLineArray.RemoveAt(nIndex);
@@ -70,6 +63,19 @@ void GGUIActionGroup::UpdateActionGroup(float fDeltaTime)
 		}
 	}
 
+    if (m_kLineArray.GetSize() == 0)
+    {
+        m_eLifeStep = ActionLife_Finished;
+    }
+
     GGUIActionFactory::Get()->DispatchActionEvent(m_pDestWindow);
+}
+//--------------------------------------------------------------------------------------------------
+void GGUIActionGroup::ClearAction()
+{
+    //first RemoveAllAction() second ClearAction()
+    //then m_eLifeStep is the correct value
+    RemoveAllAction();
+	GGUIActionBase::ClearAction();
 }
 //--------------------------------------------------------------------------------------------------

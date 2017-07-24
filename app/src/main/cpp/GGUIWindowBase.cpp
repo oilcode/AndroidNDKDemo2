@@ -4,7 +4,6 @@
 #include "GGUIEvent.h"
 #include "GGUIActionGroup.h"
 #include "GGUIActionFactory.h"
-
 //----------------------------------------------------------------
 GGUIWindowBase::GGUIWindowBase()
 :m_nID(-1)
@@ -48,7 +47,7 @@ void GGUIWindowBase::UpdateWindow(float fDeltaTime)
 {
 	if (m_pActionGroup)
 	{
-		m_pActionGroup->UpdateActionGroup(fDeltaTime);
+		m_pActionGroup->UpdateAction(fDeltaTime);
 	}
 }
 //----------------------------------------------------------------

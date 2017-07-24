@@ -121,16 +121,16 @@ bool NwUISPK::InputWindow(GGUIInputMsg* pInputMsg)
         pInputMsg->bSwallowed = true;
 
         GGUIActionGroup* theActionGroup = m_pHeroRight->CreateActionGroup();
-        theActionGroup->ClearAllAction();
+        theActionGroup->RemoveAllAction();
+
+        GGUIActionLine* pActionLine = (GGUIActionLine*)GGUIActionFactory::Get()->CreateUIAction(GGUIAction_Line);;
+        theActionGroup->AddActionLine(pActionLine);
 
         const GGUIFullRect& kFullRect = m_pHeroRight->GetFullRect();
         GGUIActionMove* pActionMove = (GGUIActionMove*)GGUIActionFactory::Get()->CreateUIAction(GGUIAction_Move);
         pActionMove->InitActionMove(pInputMsg->fPosX - kFullRect.fDeltaX, pInputMsg->fPosY - kFullRect.fDeltaY, 1.0f);
-
-        GGUIActionLine* pActionLine = (GGUIActionLine*)GGUIActionFactory::Get()->CreateUIAction(GGUIAction_Line);;
         pActionLine->AddAction(pActionMove);
 
-        theActionGroup->AddActionLine(pActionLine);
         return true;
     }
 
