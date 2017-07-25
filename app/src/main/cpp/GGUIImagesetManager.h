@@ -2,8 +2,8 @@
 #ifndef _GGUIImagesetManager_h_
 #define _GGUIImagesetManager_h_
 //----------------------------------------------------------------
-#include "GGUIBaseInclude.h"
 #include "GGUIImageset.h"
+#include "GGUIImagesetFont.h"
 //----------------------------------------------------------------
 class GLTexture;
 //----------------------------------------------------------------
@@ -12,6 +12,16 @@ struct stImagesetParam
 	//Imageset的名字。
 	SoTinyString kName;
 	//预分配多少个GGUIRect。
+	int nInitRectCount;
+	//贴图对象。
+	GLTexture* pTexture;
+};
+//----------------------------------------------------------------
+struct stImagesetFontParam
+{
+	//Imageset的名字。
+	SoTinyString kName;
+	//预分配多少个Rect。
 	int nInitRectCount;
 	//贴图对象。
 	GLTexture* pTexture;
@@ -26,9 +36,12 @@ public:
 
 	//创建一个新的Imageset对象。
     GGUIImageset* CreateImageset(const stImagesetParam& kParam);
+	//创建一个新的ImagesetFont对象。
+    GGUIImagesetFont* CreateImagesetFont(const stImagesetFontParam& kParam);
+
 	int GetImagesetIDByName(const SoTinyString &kName);
-	GGUIImageset* GetImagesetByID(int nImagesetID);
-	GGUIImageset* GetImagesetByName(const SoTinyString& kName);
+	GGUIImagesetBase* GetImagesetByID(int nImagesetID);
+	GGUIImagesetBase* GetImagesetByName(const SoTinyString& kName);
 
 private:
 	GGUIImagesetManager();
@@ -41,7 +54,7 @@ private:
 
 private:
 	static GGUIImagesetManager* ms_pInstance;
-	//数组，存储的元素是GGUIImageset*。
+	//数组，存储的元素是GGUIImagesetBase*。
 	SoArrayUID m_kImagesetArray;
 	//Imageset名字到Imageset序号的映射。
 	mapName2Index m_kName2IndexMap;

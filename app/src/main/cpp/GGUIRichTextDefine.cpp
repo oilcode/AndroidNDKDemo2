@@ -250,7 +250,7 @@ bool GGUIRichText_GenerateTextChunk(const GGUIRichTextStyle* pStyle, GGUITextChu
 	{
 		return false;
 	}
-	GGUIImageset* pImageset = GGUIImagesetManager::Get()->GetImagesetByID(pStyle->FontImagesetID);
+	GGUIImageset* pImageset = (GGUIImageset*)GGUIImagesetManager::Get()->GetImagesetByID(pStyle->FontImagesetID);
 	if (pImageset == 0)
 	{
 		return false;

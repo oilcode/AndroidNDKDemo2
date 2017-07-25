@@ -25,7 +25,7 @@ bool GGUIFunc_GetImagesetIndexRectIndex(const char* szTexture, int* pImagesetInd
 	{
 		return false;
 	}
-	GGUIImageset* pImageset = GGUIImagesetManager::Get()->GetImagesetByID(nImagesetIndex);
+	GGUIImageset* pImageset = (GGUIImageset*)GGUIImagesetManager::Get()->GetImagesetByID(nImagesetIndex);
 	if (pImageset)
 	{
 		kName.SetValue(szTexture + nSplitIndex + 1);

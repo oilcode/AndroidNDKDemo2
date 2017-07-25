@@ -5,7 +5,7 @@
 GGUIImageset::GGUIImageset()
 :m_pTexture(0)
 {
-
+	m_eImagesetType = GGUIImagesetType_Normal;
 }
 //----------------------------------------------------------------
 GGUIImageset::~GGUIImageset()

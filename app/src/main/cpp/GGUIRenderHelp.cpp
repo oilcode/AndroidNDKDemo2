@@ -17,7 +17,7 @@ void GGUIRenderHelp_SimpleImage(int nImagesetId, int nImageRectId, const GGUIRec
 	{
 		return;
 	}
-	const GGUIImageset* pImageset = GGUIImagesetManager::Get()->GetImagesetByID(nImagesetId);
+	const GGUIImageset* pImageset = (GGUIImageset*)GGUIImagesetManager::Get()->GetImagesetByID(nImagesetId);
 	if (pImageset == 0)
 	{
 		return;
@@ -70,7 +70,7 @@ void GGUIRenderHelp_SimpleText(const char* szText, const GGUIRect& kAbsRect, GGU
 	{
 		return;
 	}
-	const GGUIImageset* pImageset = GGUIImagesetManager::Get()->GetImagesetByName(kFontName);
+	const GGUIImageset* pImageset = (GGUIImageset*)GGUIImagesetManager::Get()->GetImagesetByName(kFontName);
 	if (pImageset == 0)
 	{
 		return;
@@ -186,7 +186,7 @@ void GGUIRenderHelp_ComponetText(const GGUIComponentText* pCompText)
 		{
 			continue;
 		}
-		const GGUIImageset* pImageset = GGUIImagesetManager::Get()->GetImagesetByID(pChunk->FontImagesetID);
+		const GGUIImageset* pImageset = (GGUIImageset*)GGUIImagesetManager::Get()->GetImagesetByID(pChunk->FontImagesetID);
 		if (pImageset == 0)
 		{
 			continue;

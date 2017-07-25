@@ -42,7 +42,7 @@ GGUIImagesetManager::~GGUIImagesetManager()
 //----------------------------------------------------------------
 bool GGUIImagesetManager::InitUIImagesetManager()
 {
-	if (m_kImagesetArray.InitArray(sizeof(GGUIImageset*), 10, 10) == false)
+	if (m_kImagesetArray.InitArray(sizeof(GGUIImagesetBase*), 50, 20) == false)
 	{
 		return false;
 	}
@@ -52,13 +52,13 @@ bool GGUIImagesetManager::InitUIImagesetManager()
 void GGUIImagesetManager::ClearUIImagesetManager()
 {
 	const int nCount = m_kImagesetArray.GetCapacity();
-	GGUIImageset* pImageset = 0;
+	GGUIImagesetBase* pImageset = 0;
 	for (int i = 0; i < nCount; ++i)
 	{
 		pImageset = GetImagesetByID(i);
 		if (pImageset)
 		{
-			delete pImageset;
+			SoDelete pImageset;
 		}
 	}
 	m_kImagesetArray.ClearArray();
@@ -71,16 +71,38 @@ GGUIImageset* GGUIImagesetManager::CreateImageset(const stImagesetParam& kParam)
 	if (nImagesetID != -1)
 	{
 		GGUILogf("GGUIImagesetManager::CreateImageset : kName[%s] is already exist!", kParam.kName.GetValue());
-		return GetImagesetByID(nImagesetID);
+		return (GGUIImageset*)GetImagesetByID(nImagesetID);
 	}
 
-	GGUIImageset* pImageset = new GGUIImageset;
+	GGUIImageset* pImageset = SoNew GGUIImageset;
 	if (pImageset == 0)
 	{
 		return NULL;
 	}
 
 	pImageset->InitImageset(kParam.nInitRectCount);
+	pImageset->SetTexture(kParam.pTexture);
+	nImagesetID = m_kImagesetArray.FillAt(-1, &pImageset);
+	m_kName2IndexMap.insert(std::make_pair(kParam.kName, nImagesetID));
+	return pImageset;
+}
+//----------------------------------------------------------------
+GGUIImagesetFont* GGUIImagesetManager::CreateImagesetFont(const stImagesetFontParam& kParam)
+{
+	int nImagesetID = GetImagesetIDByName(kParam.kName);
+	if (nImagesetID != -1)
+	{
+		GGUILogf("GGUIImagesetManager::CreateImagesetFont : kName[%s] is already exist!", kParam.kName.GetValue());
+		return (GGUIImagesetFont*)GetImagesetByID(nImagesetID);
+	}
+
+	GGUIImagesetFont* pImageset = SoNew GGUIImagesetFont;
+	if (pImageset == 0)
+	{
+		return NULL;
+	}
+
+	pImageset->InitImagesetFont(kParam.nInitRectCount);
 	pImageset->SetTexture(kParam.pTexture);
 	nImagesetID = m_kImagesetArray.FillAt(-1, &pImageset);
 	m_kName2IndexMap.insert(std::make_pair(kParam.kName, nImagesetID));
@@ -100,12 +122,12 @@ int GGUIImagesetManager::GetImagesetIDByName(const SoTinyString &kName)
 	}
 }
 //----------------------------------------------------------------
-GGUIImageset* GGUIImagesetManager::GetImagesetByID(int nImagesetID)
+GGUIImagesetBase* GGUIImagesetManager::GetImagesetByID(int nImagesetID)
 {
 	void* pElement = m_kImagesetArray.GetAt(nImagesetID);
 	if (pElement)
 	{
-		return (*((GGUIImageset**)pElement));
+		return (*((GGUIImagesetBase**)pElement));
 	}
 	else
 	{
@@ -113,7 +135,7 @@ GGUIImageset* GGUIImagesetManager::GetImagesetByID(int nImagesetID)
 	}
 }
 //----------------------------------------------------------------
-GGUIImageset* GGUIImagesetManager::GetImagesetByName(const SoTinyString& kName)
+GGUIImagesetBase* GGUIImagesetManager::GetImagesetByName(const SoTinyString& kName)
 {
 	int nIndex = GetImagesetIDByName(kName);
 	if (nIndex != -1)

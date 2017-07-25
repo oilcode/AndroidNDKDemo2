@@ -104,6 +104,8 @@ add_library( GGUI
              src/main/cpp/GGUIFileGGM.cpp
              src/main/cpp/GGUIFuncHelp.cpp
              src/main/cpp/GGUIImageset.cpp
+             src/main/cpp/GGUIImagesetBase.cpp
+             src/main/cpp/GGUIImagesetFont.cpp
              src/main/cpp/GGUIImagesetIO.cpp
              src/main/cpp/GGUIImagesetManager.cpp
              src/main/cpp/GGUIInputMsg.cpp

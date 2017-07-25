@@ -2,11 +2,11 @@
 #ifndef _GGUIImageset_h_
 #define _GGUIImageset_h_
 //----------------------------------------------------------------
-#include "GGUIBaseInclude.h"
+#include "GGUIImagesetBase.h"
 //----------------------------------------------------------------
 class GLTexture;
 //----------------------------------------------------------------
-class GGUIImageset
+class GGUIImageset : public GGUIImagesetBase
 {
 public:
 	void AddRect(const SoTinyString& kName, const GGUIRect& kRect);

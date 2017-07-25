@@ -86,5 +86,11 @@ enum GGUIPanelSpaceType
 	GGUIPanelSpace_Max,
 };
 //----------------------------------------------------------------
+enum GGUIImagesetType
+{
+	GGUIImagesetType_Normal,
+	GGUIImagesetType_Font,
+};
+//----------------------------------------------------------------
 #endif //_GGUIBaseInclude_h_
 //----------------------------------------------------------------
