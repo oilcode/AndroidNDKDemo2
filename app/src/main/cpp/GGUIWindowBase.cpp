@@ -249,17 +249,17 @@ void GGUIWindowBase::DeleteActionGroup()
 //----------------------------------------------------------------
 void GGUIWindowBase::CalculateRectInAbsCoord(bool bOnlyScaleChanged)
 {
-    if (bOnlyScaleChanged == false)
+    if (! bOnlyScaleChanged)
     {
         m_kOriginalRectInAbsCoord.x = m_kParentRectInAbsCoord.x + m_kParentRectInAbsCoord.w * m_kFullRect.fScaleX + m_kFullRect.fDeltaX;
         m_kOriginalRectInAbsCoord.y = m_kParentRectInAbsCoord.y + m_kParentRectInAbsCoord.h * m_kFullRect.fScaleY + m_kFullRect.fDeltaY;
         m_kOriginalRectInAbsCoord.w = m_kParentRectInAbsCoord.w * m_kFullRect.fScaleW + m_kFullRect.fDeltaW;
         m_kOriginalRectInAbsCoord.h = m_kParentRectInAbsCoord.h * m_kFullRect.fScaleH + m_kFullRect.fDeltaH;
     }
-    m_kRectInAbsCoord.x = m_kOriginalRectInAbsCoord.x;
-    m_kRectInAbsCoord.y = m_kOriginalRectInAbsCoord.y;
-    m_kRectInAbsCoord.w = m_kOriginalRectInAbsCoord.w * m_fScaleX;
-    m_kRectInAbsCoord.h = m_kOriginalRectInAbsCoord.h * m_fScaleY;
+    m_kRectInAbsCoord.x = floorf(m_kOriginalRectInAbsCoord.x + 0.5f);
+    m_kRectInAbsCoord.y = floorf(m_kOriginalRectInAbsCoord.y + 0.5f);
+    m_kRectInAbsCoord.w = floorf(m_kOriginalRectInAbsCoord.w * m_fScaleX + 0.5f);
+    m_kRectInAbsCoord.h = floorf(m_kOriginalRectInAbsCoord.h * m_fScaleY + 0.5f);
 }
 //----------------------------------------------------------------
 bool GGUIWindowBase::InputDragLogic(GGUIInputMsg* pInputMsg)

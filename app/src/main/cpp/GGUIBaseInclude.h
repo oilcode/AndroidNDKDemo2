@@ -92,5 +92,34 @@ enum GGUIImagesetType
 	GGUIImagesetType_Font,
 };
 //----------------------------------------------------------------
+struct stImageRect
+{
+	float left;
+	float right;
+	float top;
+	float bottom;
+
+	stImageRect() : left(0.0f), right(0.0f), top(0.0f), bottom(0.0f)
+	{
+
+	}
+};
+//----------------------------------------------------------------
+struct stImageFontRect
+{
+	float left;
+	float right;
+	float top;
+	float bottom;
+	float offsetX;
+	float offsetY;
+	float advanceX;
+
+	stImageFontRect() : left(0.0f), right(0.0f), top(0.0f), bottom(0.0f), offsetX(0.0f), offsetY(0.0f), advanceX(0.0f)
+	{
+
+	}
+};
+//----------------------------------------------------------------
 #endif //_GGUIBaseInclude_h_
 //----------------------------------------------------------------

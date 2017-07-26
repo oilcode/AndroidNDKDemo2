@@ -7,10 +7,13 @@
 class GGUIImagesetBase
 {
 public:
+	GGUIImagesetType GetImagesetType() const;
+
+protected:
+	friend class GGUIImagesetManager;
 	GGUIImagesetBase();
 	virtual ~GGUIImagesetBase();
-	GGUIImagesetType GetImagesetType() const;
-	
+
 protected:
 	GGUIImagesetType m_eImagesetType;
 };

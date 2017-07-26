@@ -6,31 +6,16 @@
 //----------------------------------------------------------------
 class GLTexture;
 //----------------------------------------------------------------
-struct stImagesetFontRect
-{
-	float x;
-	float y;
-	float w;
-	float h;
-	float offsetX;
-	float offsetY;
-	float advanceX;
-
-	stImagesetFontRect() : x(0.0f), y(0.0f), w(0.0f), h(0.0f), offsetX(0.0f), offsetY(0.0f), advanceX(0.0f)
-	{
-
-	}
-};
-extern stImagesetFontRect ImagesetFontRect_Empty;
-//----------------------------------------------------------------
 class GGUIImagesetFont : public GGUIImagesetBase
 {
 public:
-	void AddRect(const char* szChar, const stImagesetFontRect& kRect);
-	const stImagesetFontRect& GetRect(const char* szChar);
-	const stImagesetFontRect* GetRectP(const char* szChar);
+	void AddRect(const char* szChar, const stImageFontRect& kRect);
+	const stImageFontRect* GetRect(const char* szChar) const;
+	void CalculateStringGlyphSize(const char* szString, int nCharCount, float* pStringWidth, float* pStringHeight) const;
 	//
 	souint32 GetTexResourceID() const;
+    float GetTextureWidth() const;
+    float GetTextureHeight() const;
 
 protected:
 	friend class GGUIImagesetManager;
@@ -41,16 +26,16 @@ protected:
 	bool InitImagesetFont(int nInitRectCount);
 	void ClearImagesetFont();
 	void SetTexture(GLTexture* pTexture);
-	souint32 GenerateCharNumber(const souint8* szChar);
+	souint32 GenerateCharNumber(const souint8* szChar) const;
 	int GetIndexByCharNumber(souint32 Number) const;
 
 private:
 	typedef std::map<souint32, int> mapCharNumber2ID;
 
 private:
-	//数组，存储的元素是 stImagesetFontRect 。
+	//数组，存储的元素是 stImageFontRect 。
 	SoArrayUID m_kRectArray;
-	//字符数字到 stImagesetFontRect 序号的映射。
+	//字符数字到 stImageFontRect 序号的映射。
 	mapCharNumber2ID m_kIDMap;
 	//贴图对象指针。
 	GLTexture* m_pTexture;

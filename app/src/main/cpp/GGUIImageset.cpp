@@ -15,7 +15,7 @@ GGUIImageset::~GGUIImageset()
 //----------------------------------------------------------------
 bool GGUIImageset::InitImageset(int nInitRectCount)
 {
-	if (m_kRectArray.InitArray(sizeof(GGUIRect), nInitRectCount, 10) == false)
+	if (m_kRectArray.InitArray(sizeof(stImageRect), nInitRectCount, 10) == false)
 	{
 		return false;
 	}
@@ -33,7 +33,7 @@ void GGUIImageset::ClearImageset()
 	}
 }
 //----------------------------------------------------------------
-void GGUIImageset::AddRect(const SoTinyString& kName, const GGUIRect& kRect)
+void GGUIImageset::AddRect(const SoTinyString& kName, const stImageRect& kRect)
 {
 	if (GetRectID(kName) != -1)
 	{
@@ -58,22 +58,27 @@ int GGUIImageset::GetRectID(const SoTinyString& kName) const
 	}
 }
 //----------------------------------------------------------------
-const GGUIRect& GGUIImageset::GetRect(int nID) const
+const stImageRect* GGUIImageset::GetRectByID(int nID) const
 {
 	void* pElement = m_kRectArray.GetAt(nID);
 	if (pElement)
 	{
-		return (*((GGUIRect*)pElement));
+		return (stImageRect*)pElement;
 	}
 	else
 	{
-		return GGUIRect_Empty;
+		return NULL;
 	}
 }
 //----------------------------------------------------------------
-int GGUIImageset::GetRectCount() const
+const stImageRect* GGUIImageset::GetRectByName(const SoTinyString& kName) const
 {
-	return m_kRectArray.GetUsingElementCount();
+	int nID = GetRectID(kName);
+	if (nID == -1)
+	{
+		return NULL;
+	}
+	return GetRectByID(nID);
 }
 //----------------------------------------------------------------
 souint32 GGUIImageset::GetTexResourceID() const

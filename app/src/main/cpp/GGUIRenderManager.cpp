@@ -145,8 +145,8 @@ void GGUIRenderManager::AddRnederUnit(const stUIRenderUnit* pUIRenderUnit)
 	//填充顶点数据
     //左上
 	stVertexType* pVertex = m_pVertexList + (m_nCurWindowCount * 4 + 0);
-	pVertex->kPosition.x = pUIRenderUnit->fRectLeft;
-	pVertex->kPosition.y = m_fScreenHeight - pUIRenderUnit->fRectTop;
+	pVertex->kPosition.x = floorf(pUIRenderUnit->fRectLeft + 0.5f);
+	pVertex->kPosition.y = floorf(m_fScreenHeight - pUIRenderUnit->fRectTop - 0.5f);
 	pVertex->kPosition.z = m_fCurrentRenderOrder;
 	pVertex->kTexCoordAndTexIndex.x = pUIRenderUnit->fTexCoordLeft;
 	pVertex->kTexCoordAndTexIndex.y = pUIRenderUnit->fTexCoordTop;
@@ -158,10 +158,10 @@ void GGUIRenderManager::AddRnederUnit(const stUIRenderUnit* pUIRenderUnit)
 
     //右上
     pVertex = pVertex + 1;
-    pVertex->kPosition.x = pUIRenderUnit->fRectLeft + pUIRenderUnit->fRectWidth;
-    pVertex->kPosition.y = m_fScreenHeight - pUIRenderUnit->fRectTop;
+    pVertex->kPosition.x = floorf(pUIRenderUnit->fRectRight + 0.5f);
+    pVertex->kPosition.y = floorf(m_fScreenHeight - pUIRenderUnit->fRectTop - 0.5f);
     pVertex->kPosition.z = m_fCurrentRenderOrder;
-    pVertex->kTexCoordAndTexIndex.x = pUIRenderUnit->fTexCoordLeft + pUIRenderUnit->fTexCoordWidth;
+    pVertex->kTexCoordAndTexIndex.x = pUIRenderUnit->fTexCoordRight;
     pVertex->kTexCoordAndTexIndex.y = pUIRenderUnit->fTexCoordTop;
     pVertex->kTexCoordAndTexIndex.z = fTextureIndex;
     pVertex->kColorRGBA.x = pUIRenderUnit->fColorR;
@@ -171,11 +171,11 @@ void GGUIRenderManager::AddRnederUnit(const stUIRenderUnit* pUIRenderUnit)
 
     //右下
 	pVertex = pVertex + 1;
-	pVertex->kPosition.x = pUIRenderUnit->fRectLeft + pUIRenderUnit->fRectWidth;
-	pVertex->kPosition.y = m_fScreenHeight - pUIRenderUnit->fRectTop - pUIRenderUnit->fRectHeight;
+	pVertex->kPosition.x = floorf(pUIRenderUnit->fRectRight + 0.5f);
+	pVertex->kPosition.y = floorf(m_fScreenHeight - pUIRenderUnit->fRectBottom - 0.5f);
 	pVertex->kPosition.z = m_fCurrentRenderOrder;
-	pVertex->kTexCoordAndTexIndex.x = pUIRenderUnit->fTexCoordLeft + pUIRenderUnit->fTexCoordWidth;
-	pVertex->kTexCoordAndTexIndex.y = pUIRenderUnit->fTexCoordTop + pUIRenderUnit->fTexCoordHeight;
+	pVertex->kTexCoordAndTexIndex.x = pUIRenderUnit->fTexCoordRight;
+	pVertex->kTexCoordAndTexIndex.y = pUIRenderUnit->fTexCoordBottom;
 	pVertex->kTexCoordAndTexIndex.z = fTextureIndex;
 	pVertex->kColorRGBA.x = pUIRenderUnit->fColorR;
 	pVertex->kColorRGBA.y = pUIRenderUnit->fColorG;
@@ -184,11 +184,11 @@ void GGUIRenderManager::AddRnederUnit(const stUIRenderUnit* pUIRenderUnit)
 
     //左下
     pVertex = pVertex + 1;
-    pVertex->kPosition.x = pUIRenderUnit->fRectLeft;
-    pVertex->kPosition.y = m_fScreenHeight - pUIRenderUnit->fRectTop - pUIRenderUnit->fRectHeight;
+    pVertex->kPosition.x = floorf(pUIRenderUnit->fRectLeft + 0.5f);
+    pVertex->kPosition.y = floorf(m_fScreenHeight - pUIRenderUnit->fRectBottom - 0.5f);
     pVertex->kPosition.z = m_fCurrentRenderOrder;
     pVertex->kTexCoordAndTexIndex.x = pUIRenderUnit->fTexCoordLeft;
-    pVertex->kTexCoordAndTexIndex.y = pUIRenderUnit->fTexCoordTop + pUIRenderUnit->fTexCoordHeight;
+    pVertex->kTexCoordAndTexIndex.y = pUIRenderUnit->fTexCoordBottom;
     pVertex->kTexCoordAndTexIndex.z = fTextureIndex;
     pVertex->kColorRGBA.x = pUIRenderUnit->fColorR;
     pVertex->kColorRGBA.y = pUIRenderUnit->fColorG;

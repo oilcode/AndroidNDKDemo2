@@ -1,6 +1,6 @@
 //----------------------------------------------------------------
 #include "GGUIUserDefine.h"
 //----------------------------------------------------------------
-SoTinyString g_GGUI_ButtonText_Font("ËÎÌו");
+SoTinyString g_GGUI_ButtonText_Font("uitexture/mm6");
 GGUIColor g_GGUI_ButtonText_Color(1.0f, 1.0f, 1.0f, 1.0f);
 //----------------------------------------------------------------

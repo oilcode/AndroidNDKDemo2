@@ -246,6 +246,7 @@ int GGUIRichText_PauseStyle(const wchar_t* StyleText, const int TextCount, GGUIR
 //----------------------------------------------------------------
 bool GGUIRichText_GenerateTextChunk(const GGUIRichTextStyle* pStyle, GGUITextChunk* pNewTextChunk, GGUIComponentText* pCompText)
 {
+    /*
 	if (pStyle->FontImagesetID == -1)
 	{
 		return false;
@@ -325,6 +326,7 @@ bool GGUIRichText_GenerateTextChunk(const GGUIRichTextStyle* pStyle, GGUITextChu
 		pNewTextChunk->TextCount = nValidCharCount;
 		pCompText->AddTextChunk(pNewTextChunk);
 	}
+     */
 	return true;
 }
 //----------------------------------------------------------------

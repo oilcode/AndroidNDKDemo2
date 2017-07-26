@@ -1,11 +1,10 @@
 //----------------------------------------------------------------
 #include "GGUIImagesetIO.h"
-#include "GGUIBaseInclude.h"
 #include "GGUIFileGGM.h"
 #include "GGUIImagesetManager.h"
 #include "GLTextureManager.h"
 //----------------------------------------------------------------
-bool GGUIImagesetIO::Read(const char* szImagesetName)
+bool GGUIImagesetIO::Read(const char* szImagesetName, GGUIImagesetType eType)
 {
 	if (szImagesetName == 0 || szImagesetName[0] == 0)
 	{
@@ -44,29 +43,64 @@ bool GGUIImagesetIO::Read(const char* szImagesetName)
 		return false;
 	}
 
-	stImagesetParam kParam;
-	const int nDotIndex = SoStrRChr(szImagesetName, '.');
-	kParam.kName = SoSubStr(szImagesetName, 0, nDotIndex-1);
-	kParam.nInitRectCount = nRectCount;
-	kParam.pTexture = pTexture;
+	GGUIImageset* pImageset = NULL;
+	GGUIImagesetFont* pImagesetFont = NULL;
 
-	GGUIImageset* pImageset = GGUIImagesetManager::Get()->CreateImageset(kParam);
-	if (pImageset == 0)
+	const int nDotIndex = SoStrRChr(szImagesetName, '.');
+
+	if (eType == GGUIImagesetType_Normal)
 	{
-		return false;
+		stImagesetParam kParam;
+		kParam.kName = SoSubStr(szImagesetName, 0, nDotIndex-1);
+		kParam.nInitRectCount = nRectCount;
+		kParam.pTexture = pTexture;
+
+		pImageset = GGUIImagesetManager::Get()->CreateImageset(kParam);
+		if (pImageset == NULL)
+		{
+			return false;
+		}
+	}
+	else
+	{
+		stImagesetFontParam kParam;
+		kParam.kName = SoSubStr(szImagesetName, 0, nDotIndex-1);
+		kParam.nInitRectCount = nRectCount;
+		kParam.pTexture = pTexture;
+
+		pImagesetFont = GGUIImagesetManager::Get()->CreateImagesetFont(kParam);
+		if (pImagesetFont == NULL)
+		{
+			return false;
+		}
 	}
 
 	SoTinyString kRectName;
-	GGUIRect kRectData;
+	stImageRect kRectData;
+	stImageFontRect kFontRect;
 	for (int i = 0; i < nRectCount; ++i)
 	{
-		if (kFile.GetNextImageRect(kRectName, kRectData))
+		if (eType == GGUIImagesetType_Normal)
 		{
-			pImageset->AddRect(kRectName, kRectData);
+			if (kFile.GetNextImageRect(kRectName, kRectData))
+			{
+				pImageset->AddRect(kRectName, kRectData);
+			}
+			else
+			{
+				break;
+			}
 		}
 		else
 		{
-			break;
+			if (kFile.GetNextImageFontRect(kRectName, kFontRect))
+			{
+				pImagesetFont->AddRect(kRectName.GetValue(), kFontRect);
+			}
+			else
+			{
+				break;
+			}
 		}
 	}
 

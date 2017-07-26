@@ -9,13 +9,13 @@ class GLShaderBase;
 struct stUIRenderUnit
 {
 	float fRectLeft;
+	float fRectRight;
 	float fRectTop;
-	float fRectWidth;
-	float fRectHeight;
+	float fRectBottom;
 	float fTexCoordLeft;
+	float fTexCoordRight;
 	float fTexCoordTop;
-	float fTexCoordWidth;
-	float fTexCoordHeight;
+	float fTexCoordBottom;
 	float fColorR;
 	float fColorG;
 	float fColorB;

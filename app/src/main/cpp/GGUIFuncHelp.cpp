@@ -1,7 +1,6 @@
 //----------------------------------------------------------------
 #include "GGUIBaseInclude.h"
 #include "GGUIImagesetManager.h"
-#include "GGUIImageset.h"
 #include "GGUIPanelManager.h"
 //----------------------------------------------------------------
 float g_fResolutionWidth = 800.0f;
@@ -25,13 +24,20 @@ bool GGUIFunc_GetImagesetIndexRectIndex(const char* szTexture, int* pImagesetInd
 	{
 		return false;
 	}
-	GGUIImageset* pImageset = (GGUIImageset*)GGUIImagesetManager::Get()->GetImagesetByID(nImagesetIndex);
-	if (pImageset)
+	GGUIImagesetBase* pImagesetBase = GGUIImagesetManager::Get()->GetImagesetByID(nImagesetIndex);
+	if (pImagesetBase == NULL)
 	{
-		kName.SetValue(szTexture + nSplitIndex + 1);
-		*pImagesetIndex = nImagesetIndex;
-		*pRectIndex = pImageset->GetRectID(kName);
+		return false;
 	}
+	if (pImagesetBase->GetImagesetType() != GGUIImagesetType_Normal)
+	{
+		return false;
+	}
+	//
+	GGUIImageset* pImageset = (GGUIImageset*)pImagesetBase;
+	kName.SetValue(szTexture + nSplitIndex + 1);
+	*pImagesetIndex = nImagesetIndex;
+	*pRectIndex = pImageset->GetRectID(kName);
 	return true;
 }
 //----------------------------------------------------------------

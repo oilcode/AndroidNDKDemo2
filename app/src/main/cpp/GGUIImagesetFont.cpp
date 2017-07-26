@@ -2,8 +2,6 @@
 #include "GGUIImagesetFont.h"
 #include "GLTexture.h"
 //----------------------------------------------------------------
-stImagesetFontRect ImagesetFontRect_Empty;
-//----------------------------------------------------------------
 GGUIImagesetFont::GGUIImagesetFont()
 :m_pTexture(NULL)
 {
@@ -17,7 +15,7 @@ GGUIImagesetFont::~GGUIImagesetFont()
 //----------------------------------------------------------------
 bool GGUIImagesetFont::InitImagesetFont(int nInitRectCount)
 {
-	if (m_kRectArray.InitArray(sizeof(stImagesetFontRect), nInitRectCount, 40) == false)
+	if (m_kRectArray.InitArray(sizeof(stImageFontRect), nInitRectCount, 40) == false)
 	{
 		return false;
 	}
@@ -49,19 +47,7 @@ void GGUIImagesetFont::SetTexture(GLTexture* pTexture)
 	}
 }
 //----------------------------------------------------------------
-souint32 GGUIImagesetFont::GetTexResourceID() const
-{
-	if (m_pTexture)
-	{
-		return m_pTexture->GetResourceID();
-	}
-	else
-	{
-		return 0;
-	}
-}
-//----------------------------------------------------------------
-void GGUIImagesetFont::AddRect(const char* szChar, const stImagesetFontRect& kRect)
+void GGUIImagesetFont::AddRect(const char* szChar, const stImageFontRect& kRect)
 {
 	const souint32 Number = GenerateCharNumber((const souint8*)szChar);
 	if (GetIndexByCharNumber(Number) != -1)
@@ -74,27 +60,7 @@ void GGUIImagesetFont::AddRect(const char* szChar, const stImagesetFontRect& kRe
 	m_kIDMap.insert(std::make_pair(Number, nIndex));
 }
 //----------------------------------------------------------------
-const stImagesetFontRect& GGUIImagesetFont::GetRect(const char* szChar)
-{
-	const souint32 Number = GenerateCharNumber((const souint8*)szChar);
-	int nIndex = GetIndexByCharNumber(Number);
-	if (nIndex == -1)
-	{
-		return ImagesetFontRect_Empty;
-	}
-
-	void* pElement = m_kRectArray.GetAt(nIndex);
-	if (pElement)
-	{
-		return (*((stImagesetFontRect*)pElement));
-	}
-	else
-	{
-		return ImagesetFontRect_Empty;
-	}
-}
-//----------------------------------------------------------------
-const stImagesetFontRect* GGUIImagesetFont::GetRectP(const char* szChar)
+const stImageFontRect* GGUIImagesetFont::GetRect(const char* szChar) const
 {
 	const souint32 Number = GenerateCharNumber((const souint8*)szChar);
 	int nIndex = GetIndexByCharNumber(Number);
@@ -106,7 +72,7 @@ const stImagesetFontRect* GGUIImagesetFont::GetRectP(const char* szChar)
 	void* pElement = m_kRectArray.GetAt(nIndex);
 	if (pElement)
 	{
-		return (stImagesetFontRect*)pElement;
+		return (stImageFontRect*)pElement;
 	}
 	else
 	{
@@ -114,7 +80,29 @@ const stImagesetFontRect* GGUIImagesetFont::GetRectP(const char* szChar)
 	}
 }
 //----------------------------------------------------------------
-souint32 GGUIImagesetFont::GenerateCharNumber(const souint8* szChar)
+void GGUIImagesetFont::CalculateStringGlyphSize(const char* szString, int nCharCount, float* pStringWidth, float* pStringHeight) const
+{
+    char szChar[2] = {0};
+    float fWidth = 0.0f;
+    float fHeight = 56.0f;
+
+    for (int i = 0; i < nCharCount; ++i)
+    {
+        szChar[0] = szString[i];
+        const stImageFontRect* pRect = GetRect(szChar);
+        if (pRect == NULL)
+        {
+            continue;
+        }
+
+        fWidth += pRect->advanceX;
+    }
+
+    *pStringWidth = fWidth;
+    *pStringHeight = fHeight;
+}
+//----------------------------------------------------------------
+souint32 GGUIImagesetFont::GenerateCharNumber(const souint8* szChar) const
 {
 	souint32 nNum = 0;
 	for (int i = 0; i < 4; ++i)
@@ -142,5 +130,41 @@ int GGUIImagesetFont::GetIndexByCharNumber(souint32 Number) const
 	{
 		return -1;
 	}
+}
+//----------------------------------------------------------------
+souint32 GGUIImagesetFont::GetTexResourceID() const
+{
+    if (m_pTexture)
+    {
+        return m_pTexture->GetResourceID();
+    }
+    else
+    {
+        return 0;
+    }
+}
+//----------------------------------------------------------------
+float GGUIImagesetFont::GetTextureWidth() const
+{
+    if (m_pTexture)
+    {
+        return (float)m_pTexture->GetTextureWidth();
+    }
+    else
+    {
+        return 0.0f;
+    }
+}
+//----------------------------------------------------------------
+float GGUIImagesetFont::GetTextureHeight() const
+{
+    if (m_pTexture)
+    {
+        return (float)m_pTexture->GetTextureHeight();
+    }
+    else
+    {
+        return 0.0f;
+    }
 }
 //----------------------------------------------------------------

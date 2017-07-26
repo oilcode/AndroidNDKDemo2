@@ -9,10 +9,11 @@ class GLTexture;
 class GGUIImageset : public GGUIImagesetBase
 {
 public:
-	void AddRect(const SoTinyString& kName, const GGUIRect& kRect);
+	void AddRect(const SoTinyString& kName, const stImageRect& kRect);
 	int GetRectID(const SoTinyString& kName) const;
-	const GGUIRect& GetRect(int nID) const;
-	int GetRectCount() const;
+	const stImageRect* GetRectByID(int nID) const;
+	const stImageRect* GetRectByName(const SoTinyString& kName) const;
+
 	souint32 GetTexResourceID() const;
 	float GetTextureWidth() const;
 	float GetTextureHeight() const;

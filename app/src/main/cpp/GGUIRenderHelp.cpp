@@ -1,6 +1,5 @@
 //----------------------------------------------------------------
 #include "GGUIRenderHelp.h"
-//#include "SoD3DTextureSystemFont.h"
 #include "GGUIRenderManager.h"
 #include "GGUIImagesetManager.h"
 #include "GGUIComponentText.h"
@@ -18,37 +17,41 @@ void GGUIRenderHelp_SimpleImage(int nImagesetId, int nImageRectId, const GGUIRec
 		return;
 	}
 	const GGUIImageset* pImageset = (GGUIImageset*)GGUIImagesetManager::Get()->GetImagesetByID(nImagesetId);
-	if (pImageset == 0)
+	if (pImageset == NULL)
 	{
 		return;
 	}
-	//
-	const GGUIRect& imageRect = pImageset->GetRect(nImageRectId);
+	const stImageRect* imageRect = pImageset->GetRectByID(nImageRectId);
+	if (imageRect == NULL)
+	{
+		return;
+	}
+
 	g_kUnit.fRectLeft = kAbsRect.x;
+	g_kUnit.fRectRight = kAbsRect.x + kAbsRect.w;
 	g_kUnit.fRectTop = kAbsRect.y;
-	g_kUnit.fRectWidth = kAbsRect.w;
-	g_kUnit.fRectHeight = kAbsRect.h;
+	g_kUnit.fRectBottom = kAbsRect.y + kAbsRect.h;
 
 	if (bSwapX)
 	{
-		g_kUnit.fTexCoordLeft = imageRect.x + imageRect.w;
-        g_kUnit.fTexCoordWidth = -imageRect.w;
+		g_kUnit.fTexCoordLeft = imageRect->right;
+        g_kUnit.fTexCoordRight = imageRect->left;
 	}
 	else
 	{
-		g_kUnit.fTexCoordLeft = imageRect.x;
-        g_kUnit.fTexCoordWidth = imageRect.w;
+		g_kUnit.fTexCoordLeft = imageRect->left;
+        g_kUnit.fTexCoordRight = imageRect->right;
 	}
 
     if (bSwapY)
     {
-        g_kUnit.fTexCoordTop = imageRect.y + imageRect.h;
-        g_kUnit.fTexCoordHeight = -imageRect.h;
+        g_kUnit.fTexCoordTop = imageRect->bottom;
+        g_kUnit.fTexCoordBottom = imageRect->top;
     }
     else
     {
-        g_kUnit.fTexCoordTop = imageRect.y;
-        g_kUnit.fTexCoordHeight = imageRect.h;
+        g_kUnit.fTexCoordTop = imageRect->top;
+        g_kUnit.fTexCoordBottom = imageRect->bottom;
     }
 
 	g_kUnit.uiTexResourceId = pImageset->GetTexResourceID();
@@ -70,24 +73,17 @@ void GGUIRenderHelp_SimpleText(const char* szText, const GGUIRect& kAbsRect, GGU
 	{
 		return;
 	}
-	const GGUIImageset* pImageset = (GGUIImageset*)GGUIImagesetManager::Get()->GetImagesetByName(kFontName);
+	const GGUIImagesetFont* pImageset = (GGUIImagesetFont*)GGUIImagesetManager::Get()->GetImagesetByName(kFontName);
 	if (pImageset == 0)
 	{
 		return;
 	}
-	//wchar_t* wString = SoAnsiToUnicode(szText);
-    wchar_t* wString = L"";
-    if (wString[0] == 0)
-	{
-		return;
-	}
-	const int nWCharCount = SoWStrLen(wString);
+
+	const int nWCharCount = SoStrLen(szText);
 	//
 	float fStringWidth = 0.0f;
 	float fStringHeight = 0.0f;
-	//下面这个函数内部，会把尚未绘制的字形绘制出来，并添加到Imageset中。
-	//所以后面的代码就不需要绘制字形。
-	//SoD3DTextureSystemFont::Get()->CalculateGlyphSize(wString, nWCharCount, &fStringWidth, &fStringHeight);
+	pImageset->CalculateStringGlyphSize(szText, nWCharCount, &fStringWidth, &fStringHeight);
 	if (fStringWidth < 1.0f || fStringHeight < 1.0f)
 	{
 		//字符串宽度或者高度小于1个像素，不需要绘制。
@@ -131,32 +127,28 @@ void GGUIRenderHelp_SimpleText(const char* szText, const GGUIRect& kAbsRect, GGU
 		break;
 	}
 	//
-	SoTinyString kRectName;
-	wchar_t wRectName[2] = {0};
+	char wRectName[2] = {0};
 	float fCurRectLeft = fAbsStartPosX;
 	float fCurRectTop = fAbsStartPosY;
 	const float fTexWidth = pImageset->GetTextureWidth();
 	const float fTexHeight = pImageset->GetTextureHeight();
-	int nRectIndex = -1;
 	for (int i = 0; i < nWCharCount; ++i)
 	{
-		wRectName[0] = wString[i];
-		kRectName = (char*)wRectName;
-		nRectIndex = pImageset->GetRectID(kRectName);
-		if (nRectIndex == -1)
+		wRectName[0] = szText[i];
+        const stImageFontRect* imageRect = pImageset->GetRect(wRectName);
+		if (imageRect == NULL)
 		{
 			continue;
 		}
 		//
-		const GGUIRect& imageRect = pImageset->GetRect(nRectIndex);
-		g_kUnit.fRectLeft = fCurRectLeft;
-		g_kUnit.fRectTop = fCurRectTop;
-		g_kUnit.fRectWidth = imageRect.w * fTexWidth;
-		g_kUnit.fRectHeight = imageRect.h * fTexHeight;
-		g_kUnit.fTexCoordLeft = imageRect.x;
-		g_kUnit.fTexCoordTop = imageRect.y;
-		g_kUnit.fTexCoordWidth = imageRect.w;
-		g_kUnit.fTexCoordHeight = imageRect.h;
+		g_kUnit.fRectLeft = fCurRectLeft + imageRect->offsetX;
+        g_kUnit.fRectRight = g_kUnit.fRectLeft + (imageRect->right-imageRect->left) * fTexWidth;
+		g_kUnit.fRectTop = fCurRectTop + imageRect->offsetY;
+        g_kUnit.fRectBottom = g_kUnit.fRectTop + (imageRect->bottom-imageRect->top) * fTexHeight;
+		g_kUnit.fTexCoordLeft = imageRect->left;
+        g_kUnit.fTexCoordRight = imageRect->right;
+		g_kUnit.fTexCoordTop = imageRect->top;
+		g_kUnit.fTexCoordBottom = imageRect->bottom;
 		g_kUnit.uiTexResourceId = pImageset->GetTexResourceID();
 		g_kUnit.fColorR = kColor.r;
 		g_kUnit.fColorG = kColor.g;
@@ -164,12 +156,13 @@ void GGUIRenderHelp_SimpleText(const char* szText, const GGUIRect& kAbsRect, GGU
 		g_kUnit.fColorA = kColor.a;
 		pRenderManager->AddRnederUnit(&g_kUnit);
 		//
-		fCurRectLeft += g_kUnit.fRectWidth;
+		fCurRectLeft += imageRect->advanceX;
 	}
 }
 //----------------------------------------------------------------
 void GGUIRenderHelp_ComponetText(const GGUIComponentText* pCompText)
 {
+	/*
 	const int nCount = pCompText->GetTextChunkCount();
 	if (nCount == 0)
 	{
@@ -227,5 +220,6 @@ void GGUIRenderHelp_ComponetText(const GGUIComponentText* pCompText)
 			fCurRectLeft += g_kUnit.fRectWidth;
 		}
 	}
+	*/
 }
 //----------------------------------------------------------------

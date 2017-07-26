@@ -48,7 +48,7 @@ bool GGUIFileGGM::GetTextureName(std::string& strTextureName)
 	}
 }
 //----------------------------------------------------------------
-bool GGUIFileGGM::GetNextImageRect(SoTinyString& kName, GGUIRect& kRect)
+bool GGUIFileGGM::GetNextImageRect(SoTinyString& kName, stImageRect& kRect)
 {
 	char* szLine = ReadNextFileLine();
 	if (szLine == 0)
@@ -67,10 +67,39 @@ bool GGUIFileGGM::GetNextImageRect(SoTinyString& kName, GGUIRect& kRect)
 	const char* szRectData = szLine + nSplitIndex + 1;
 	//
 	kName = SoStrSlim(szRectName);
-	kRect.x = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "x", 0.0f);
-	kRect.y = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "y", 0.0f);
-	kRect.w = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "w", 0.0f);
-	kRect.h = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "h", 0.0f);
+	kRect.left = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "l", 0.0f);
+	kRect.right = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "r", 0.0f);
+	kRect.top = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "t", 0.0f);
+	kRect.bottom = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "b", 0.0f);
+	return true;
+}
+//----------------------------------------------------------------
+bool GGUIFileGGM::GetNextImageFontRect(SoTinyString& kName, stImageFontRect& kRect)
+{
+	char* szLine = ReadNextFileLine();
+	if (szLine == 0)
+	{
+		return false;
+	}
+
+	const int nSplitIndex = SoStrChr(szLine, '=');
+	if (nSplitIndex == -1)
+	{
+		return false;
+	}
+
+	szLine[nSplitIndex] = 0;
+	const char* szRectName = szLine;
+	const char* szRectData = szLine + nSplitIndex + 1;
+	//
+	kName = SoStrSlim(szRectName);
+	kRect.left = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "l", 0.0f);
+	kRect.right = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "r", 0.0f);
+	kRect.top = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "t", 0.0f);
+	kRect.bottom = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "b", 0.0f);
+	kRect.offsetX = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "ox", 0.0f);
+	kRect.offsetY = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "oy", 0.0f);
+	kRect.advanceX = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "ax", 0.0f);
 	return true;
 }
 //----------------------------------------------------------------

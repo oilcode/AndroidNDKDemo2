@@ -249,6 +249,7 @@ void NwUISPK::CreateWindows()
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
     pUIButton->SetImage(g_CmdBtnTexture[CmdBtn_Up]);
+    pUIButton->SetText("x2");
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(true);
     AddChild(pUIButton);
@@ -487,11 +488,24 @@ void NwUISPK::CreateWindows()
     kFullRect.fDeltaH = 125.0f;
     pImage = (GGUIWindowImage*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Image);
     pImage->SetFullRect(kFullRect);
-    pImage->SetImage("uitexture/mm6:M");
+    pImage->SetImage("uitexture/mm5:hero_2");
     pImage->SetInputEnable(true);
     pImage->SetDragEnable(true);
     AddChild(pImage);
     m_pHeroRight = pImage;
+
+
+    kFullRect.fDeltaX = 300.0f;
+    kFullRect.fDeltaY = 300.0f;
+    kFullRect.fDeltaW = 300.0f;
+    kFullRect.fDeltaH = 100.0f;
+    GGUIWindowText* pUITextFPS = (GGUIWindowText*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Text);
+    pUITextFPS->SetFullRect(kFullRect);
+    pUITextFPS->SetColor(GGUIColor_Red);
+    pUITextFPS->SetFont("uitexture/mm6");
+    pUITextFPS->SetText("[oilOIL3]24/KFkf");
+    pUITextFPS->SetDragEnable(true);
+    AddChild(pUITextFPS);
 }
 //--------------------------------------------------------------------
 void NwUISPK::RefreshLeftByHeroData(const SPKHeroData* pHeroData)
