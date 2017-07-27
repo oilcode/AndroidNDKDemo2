@@ -99,7 +99,6 @@ add_library( GGUI
              src/main/cpp/GGUIAnimation.cpp
              src/main/cpp/GGUIBaseInclude.cpp
              src/main/cpp/GGUIColor.cpp
-             src/main/cpp/GGUIComponentText.cpp
              src/main/cpp/GGUIEvent.cpp
              src/main/cpp/GGUIFileGGM.cpp
              src/main/cpp/GGUIFuncHelp.cpp
@@ -117,7 +116,6 @@ add_library( GGUI
              src/main/cpp/GGUIRect.cpp
              src/main/cpp/GGUIRenderHelp.cpp
              src/main/cpp/GGUIRenderManager.cpp
-             src/main/cpp/GGUIRichTextDefine.cpp
              src/main/cpp/GGUIUserDefine.cpp
              src/main/cpp/GGUIWindowBase.cpp
              src/main/cpp/GGUIWindowButton.cpp
@@ -128,17 +126,19 @@ add_library( GGUI
              src/main/cpp/GGUIWindowListBox.cpp
              src/main/cpp/GGUIWindowPanel.cpp
              src/main/cpp/GGUIWindowProcessBar.cpp
-             src/main/cpp/GGUIWindowRichText.cpp
              src/main/cpp/GGUIWindowScrollBar.cpp
              src/main/cpp/GGUIWindowText.cpp
            )
 
 add_library( NwCode
              STATIC
+             src/main/cpp/NwActorData.cpp
+             src/main/cpp/NwActorDataManager.cpp
              src/main/cpp/NwBaseInclude.cpp
              src/main/cpp/NwLogicFlowHelp.cpp
              src/main/cpp/NwSPKLogic.cpp
              src/main/cpp/NwSPKProcedure.cpp
+             src/main/cpp/NwUIEffect.cpp
              src/main/cpp/NwUIMain.cpp
              src/main/cpp/NwUISPK.cpp
            )

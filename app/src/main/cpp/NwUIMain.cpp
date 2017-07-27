@@ -94,7 +94,7 @@ bool NwUIMain::InitUIMain()
 	SetFullRect(kFullRect);
 	SetInputEnable(true);
 	SetDragEnable(false); //本Panel是全屏窗口，不能拖拽。
-    SetSpaceType(GGUIPanelSpace_1);
+    SetSpaceType(GGUIPanelSpace_Normal);
 
 	AddChild(pUIImageA);
 	AddChild(pUIButton);

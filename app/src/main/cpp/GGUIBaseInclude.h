@@ -80,9 +80,9 @@ enum GGUIButtonState
 enum GGUIPanelSpaceType
 {
 	GGUIPanelSpace_Invalid = -1,
-	GGUIPanelSpace_1,
-	GGUIPanelSpace_2,
-	GGUIPanelSpace_3,
+	GGUIPanelSpace_BG,
+	GGUIPanelSpace_Normal,
+	GGUIPanelSpace_Effect,
 	GGUIPanelSpace_Max,
 };
 //----------------------------------------------------------------

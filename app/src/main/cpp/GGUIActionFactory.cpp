@@ -178,7 +178,7 @@ int GGUIActionFactory::FindUnusedAction(GGUIActionType eType)
     for (int i = 0; i < nCount; ++i)
     {
         pAction = GetUIAction(i);
-        if (pAction && pAction->IsActionDead() == NULL && pAction->GetActionType() == eType)
+        if (pAction && pAction->IsActionDead() && pAction->GetActionType() == eType)
         {
             nID = i;
             break;

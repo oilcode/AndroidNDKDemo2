@@ -3,6 +3,7 @@
 #include "GGUIImagesetIO.h"
 #include "NwUIMain.h"
 #include "NwUISPK.h"
+#include "NwUIEffect.h"
 //----------------------------------------------------------------
 bool NwLogicFlowHelp_Create()
 {
@@ -23,11 +24,17 @@ bool NwLogicFlowHelp_Create()
 		return false;
 	}
 
+	if (NwUIEffect::CreateUIEffect() == false)
+	{
+		return false;
+	}
+
 	return true;
 }
 //----------------------------------------------------------------
 void NwLogicFlowHelp_Release()
 {
+	NwUIEffect::ReleaseUIEffect();
 	NwUIMain::ReleaseUIMain();
 	NwUISPK::ReleaseUISPK();
 }

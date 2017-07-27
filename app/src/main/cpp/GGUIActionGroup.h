@@ -15,6 +15,8 @@ public:
     void RemoveAllAction();
 	void UpdateAction(float fDeltaTime);
 
+    void SetActionEventHandler(GGUIWindowBase* pHandler);
+
 protected:
     GGUIActionGroup();
     ~GGUIActionGroup();
@@ -22,7 +24,9 @@ protected:
     void ClearAction();
 
 protected:
+	GGUIWindowBase* m_pActionEventHandler;
 	SoArray m_kLineArray;
+
 };
 //--------------------------------------------------------------------------------------------------
 #endif //_GGUIActionGroup_h_

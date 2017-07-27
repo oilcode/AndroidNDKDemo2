@@ -31,7 +31,7 @@ void GGUIActionLine::AddAction(GGUIActionBase* pAction)
 //--------------------------------------------------------------------------------------------------
 void GGUIActionLine::UpdateAction(float fDeltaTime)
 {
-    if (m_eLifeStep == ActionLife_Finished)
+    if (m_eLifeStep != ActionLife_Running)
     {
         return;
     }

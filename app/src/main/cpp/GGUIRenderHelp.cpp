@@ -2,7 +2,6 @@
 #include "GGUIRenderHelp.h"
 #include "GGUIRenderManager.h"
 #include "GGUIImagesetManager.h"
-#include "GGUIComponentText.h"
 //----------------------------------------------------------------
 stUIRenderUnit g_kUnit;
 //----------------------------------------------------------------
@@ -127,15 +126,15 @@ void GGUIRenderHelp_SimpleText(const char* szText, const GGUIRect& kAbsRect, GGU
 		break;
 	}
 	//
-	char wRectName[2] = {0};
+	char szRectName[2] = {0};
 	float fCurRectLeft = fAbsStartPosX;
 	float fCurRectTop = fAbsStartPosY;
 	const float fTexWidth = pImageset->GetTextureWidth();
 	const float fTexHeight = pImageset->GetTextureHeight();
 	for (int i = 0; i < nWCharCount; ++i)
 	{
-		wRectName[0] = szText[i];
-        const stImageFontRect* imageRect = pImageset->GetRect(wRectName);
+		szRectName[0] = szText[i];
+        const stImageFontRect* imageRect = pImageset->GetRect(szRectName);
 		if (imageRect == NULL)
 		{
 			continue;

@@ -4,6 +4,7 @@
 #include "GGUIActionFactory.h"
 //--------------------------------------------------------------------------------------------------
 GGUIActionGroup::GGUIActionGroup()
+:m_pActionEventHandler(NULL)
 {
 	m_eActionType = GGUIAction_Group;
 	m_kLineArray.InitArray(sizeof(GGUIActionLine*), 10, 10);
@@ -38,7 +39,7 @@ void GGUIActionGroup::RemoveAllAction()
 //--------------------------------------------------------------------------------------------------
 void GGUIActionGroup::UpdateAction(float fDeltaTime)
 {
-	if (m_eLifeStep == ActionLife_Finished)
+	if (m_eLifeStep != ActionLife_Running)
 	{
 		return;
 	}
@@ -68,7 +69,7 @@ void GGUIActionGroup::UpdateAction(float fDeltaTime)
         m_eLifeStep = ActionLife_Finished;
     }
 
-    GGUIActionFactory::Get()->DispatchActionEvent(m_pDestWindow);
+    GGUIActionFactory::Get()->DispatchActionEvent(m_pActionEventHandler);
 }
 //--------------------------------------------------------------------------------------------------
 void GGUIActionGroup::ClearAction()
@@ -77,5 +78,10 @@ void GGUIActionGroup::ClearAction()
     //then m_eLifeStep is the correct value
     RemoveAllAction();
 	GGUIActionBase::ClearAction();
+}
+//--------------------------------------------------------------------------------------------------
+void GGUIActionGroup::SetActionEventHandler(GGUIWindowBase* pHandler)
+{
+	m_pActionEventHandler = pHandler;
 }
 //--------------------------------------------------------------------------------------------------

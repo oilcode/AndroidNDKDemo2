@@ -206,18 +206,3 @@ float SoCmdLineHelp::GetFloatByKey(const char* szCmdLine, const int nCmdLength, 
 	}
 }
 //-----------------------------------------------------------------------------
-wchar_t* SoCmdLineHelp::GetValueByKey_W(const wchar_t* szCmdLine, const int nCmdLength, const wchar_t* szKey)
-{
-	return L"";
-}
-//-----------------------------------------------------------------------------
-int SoCmdLineHelp::GetIntByKey_W(const wchar_t* szCmdLine, const int nCmdLength, const wchar_t* szKey, const int nDefaultValue)
-{
-    return nDefaultValue;
-}
-//-----------------------------------------------------------------------------
-float SoCmdLineHelp::GetFloatByKey_W(const wchar_t* szCmdLine, const int nCmdLength, const wchar_t* szKey, const float fDefaultValue)
-{
-    return fDefaultValue;
-}
-//-----------------------------------------------------------------------------

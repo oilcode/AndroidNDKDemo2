@@ -2,8 +2,7 @@
 #include "NwUISPK.h"
 #include "NwSPKLogic.h"
 #include "NwSPKProcedure.h"
-#include "GGUIActionFactory.h"
-
+#include "NwUIEffect.h"
 //----------------------------------------------------------------
 NwUISPK* NwUISPK::ms_pInstance = 0;
 const char* g_CmdBtnTexture[CmdBtn_Max] =
@@ -41,6 +40,7 @@ void NwUISPK::ReleaseUISPK()
 {
     if (ms_pInstance)
     {
+        ms_pInstance->ClearUISPK();
         delete ms_pInstance;
         ms_pInstance = 0;
     }
@@ -70,7 +70,7 @@ NwUISPK::NwUISPK()
 //----------------------------------------------------------------
 NwUISPK::~NwUISPK()
 {
-    ClearUISPK();
+    
 }
 //----------------------------------------------------------------
 bool NwUISPK::InitUISPK()
@@ -119,18 +119,13 @@ bool NwUISPK::InputWindow(GGUIInputMsg* pInputMsg)
     if (pInputMsg->theType == GGUIInputMsg_TouchUp)
     {
         pInputMsg->bSwallowed = true;
-
-        GGUIActionGroup* theActionGroup = m_pHeroRight->CreateActionGroup();
-        theActionGroup->RemoveAllAction();
-
-        GGUIActionLine* pActionLine = (GGUIActionLine*)GGUIActionFactory::Get()->CreateUIAction(GGUIAction_Line);;
-        theActionGroup->AddActionLine(pActionLine);
-
-        const GGUIFullRect& kFullRect = m_pHeroRight->GetFullRect();
-        GGUIActionMove* pActionMove = (GGUIActionMove*)GGUIActionFactory::Get()->CreateUIAction(GGUIAction_Move);
-        pActionMove->InitActionMove(pInputMsg->fPosX - kFullRect.fDeltaX, pInputMsg->fPosY - kFullRect.fDeltaY, 1.0f);
-        pActionLine->AddAction(pActionMove);
-
+        //
+        stDamageNumberParam kParam;
+        kParam.nNumber = -324;
+        kParam.fStartPosX = pInputMsg->fPosX;
+        kParam.fStartPosY = pInputMsg->fPosY;
+        kParam.fTime = 1.0f;
+        NwUIEffect::Get()->PlayDamageNumber(kParam);
         return true;
     }
 
@@ -238,7 +233,7 @@ void NwUISPK::CreateWindows()
     SetFullRect(kFullRect);
     SetInputEnable(true);
     SetDragEnable(false); //本Panel是全屏窗口，不能拖拽。
-    SetSpaceType(GGUIPanelSpace_1);
+    SetSpaceType(GGUIPanelSpace_Normal);
 
     GGUIWindowButton* pUIButton = NULL;
 
