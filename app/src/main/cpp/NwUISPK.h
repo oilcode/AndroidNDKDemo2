@@ -3,90 +3,62 @@
 #define _NwUISPK_h_
 //----------------------------------------------------------------
 #include "NwBaseInclude.h"
-#include "NwSPKLogic.h"
+#include "NwSPKDefine.h"
 //----------------------------------------------------------------
-class NwSPKLogic;
-class NwSPKProcedure;
+class NwActorSPKData;
 //----------------------------------------------------------------
 class NwUISPK : public GGUIWindowPanel
 {
 public:
-    static bool CreateUISPK();
-    static void ReleaseUISPK();
-    static NwUISPK* Get();
+    enum eSideType
+    {
+        SideLeft,
+        SideRight,
+        SideMax,
+    };
 
-    void UpdateUISPK(float fDeltaTime);
-
-    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    void RefreshLeftByHeroData(const SPKHeroData* pHeroData);
-    void RefreshRightByHeroData(const SPKHeroData* pHeroData);
-
-    void RefreshLeftBlood(int nMax, int nCur);
-    void RefreshRightBlood(int nMax, int nCur);
-    void RefreshLeftEnergy(int nMax, int nCur);
-    void RefreshRightEnergy(int nMax, int nCur);
-    void RefreshCmdBtn(const SPKHeroData* pHeroData);
-    void RefreshTouchBtn();
-
-    eCmdButton GetLeftSelectedCmd(eTouchButton theTouchIndex);
+public:
+    //开始选择指令阶段
+    void StartSelectCmd(const NwActorSPKData* pSPKData);
+    void StartSelectCmd2(const SPKHeroData* pSPKData);
+    //更新血条
+    void SetHP(eSideType theSide, int nMax, int nCur);
+    void SetMP(eSideType theSide, int nMax, int nCur);
     //设置右方武将选择的指令
-    void SetRightSelectedCmd(int theTouchIndex, eCmdButton theCmd);
+    void SetRightSelectedCmd(NwSPKTouchType theTouchIndex, NwSPKCmdType theCmd);
+    //获取左方武将选择的指令
+    NwSPKCmdType GetSelectedCmd(NwSPKTouchType theTouchIndex);
 
-    void PlayAnim_LeftUnit(int theAnim);
-    void PlayAnim_RightUnit(int theAnim);
-    //头顶冒字
-    void PlayCmdName_LeftUnit(const char* szCmdName);
-    void PlayCmdName_RightUnit(const char* szCmdName);
-    void PlayDamageString_LeftUnit(int nNumber);
-    void PlayDamageString_RightUnit(int nNumber);
-    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-
-private:
+protected:
+    friend class NwSceneSPK;
     NwUISPK();
     ~NwUISPK();
     bool InitUISPK();
     void ClearUISPK();
     void CreateWindows();
-    bool InputWindow(GGUIInputMsg* pInputMsg);
     void ProcessUIEvent(int nEventType, void* pParam);
-    void ProcessActionEvent(int nEventId);
-    void OnBtnCard(int nCardIndex);
-    void OnBtnTouch(int nIndex);
-
-    //寻找空的指令槽，如果找不到则返回TouchBtn_Max
-    eTouchButton FindEmptyTouchBtn();
+    void OnBtnCmd(int nCmdIndex);
+    void OnBtnTouch(int nTouchIndex);
+    void RefreshCmdBtn();
+    void RefreshTouchBtn();
+    //寻找空的指令槽，如果找不到则返回 NwSPKTouch_Max
+    NwSPKTouchType FindEmptyTouchBtn();
     //检测玩家选择指令的操作阶段是否结束
     void CheckPlayerOptionFinished();
     //设置所有的按钮可用和不可用
     void SetAllButtonEnableFlag(bool bEnable);
 
 private:
-    static NwUISPK* ms_pInstance;
-    NwSPKLogic* m_pSPKLogic;
-    NwSPKProcedure* m_pSPKProcedure;
-
-    GGUIWindowButton* m_pCardBtnList[CmdBtn_Max];
-    GGUIWindowButton* m_pLeftTouchBtnList[TouchBtn_Max];
-    GGUIWindowButton* m_pRightTouchBtnList[TouchBtn_Max];
-    GGUIWindowProcessBar* m_pLeftBlood;
-    GGUIWindowProcessBar* m_pRightBlood;
-    GGUIWindowProcessBar* m_pLeftEnergy;
-    GGUIWindowProcessBar* m_pRightEnergy;
-    GGUIWindowImage* m_pHeroLeft;
-    GGUIWindowImage* m_pHeroRight;
-
-    //记录玩家已经上架的指令
-    eCmdButton m_eLeftSelectedCmd[TouchBtn_Max];
-
-    //保存玩家的武将拥有的指令信息
-    SPKHeroData m_kTempHeroData;
+    GGUIWindowButton* m_pBtnCmdList[NwSPKCmd_Max];
+    GGUIWindowButton* m_pBtnTouchList[SideMax][NwSPKTouch_Max];
+    GGUIWindowProcessBar* m_pHPList[SideMax];
+    GGUIWindowProcessBar* m_pMPList[SideMax];
+    GGUIWindowImage* m_pHeroList[SideMax];
+    //记录客户端主角拥有的指令的个数
+    int m_kOwnCmdCount[NwSPKCmd_Max];
+    //记录客户端主角已经上架的指令
+    NwSPKCmdType m_kSelectedCmdList[NwSPKTouch_Max];
 };
-//----------------------------------------------------------------
-inline NwUISPK* NwUISPK::Get()
-{
-    return ms_pInstance;
-}
 //----------------------------------------------------------------
 #endif //_NwUISPK_h_
 //----------------------------------------------------------------

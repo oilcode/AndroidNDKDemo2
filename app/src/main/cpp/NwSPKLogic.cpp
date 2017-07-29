@@ -7,96 +7,12 @@
 //5，如果敌方是眩晕状态，则AI的第一个指令是攻击类指令。
 //--------------------------------------------------------------------
 #include "NwSPKLogic.h"
-#include <cstdlib>
 //--------------------------------------------------------------------
 const int g_nCmdCount_Normal = 2;
-//
-std::string g_strCmdNameList[CmdBtn_Max];
-std::string g_strDizzyName;
-//--------------------------------------------------------------------
-SPKHeroData::SPKHeroData()
-{
-    nWuLi = 0;
-    nMaxHP = 0;
-    nCurHP = 0;
-    nMaxEnergy = 0;
-    nCurEnergy = 0;
-    nCmdUp = 0;
-    nCmdMiddle = 0;
-    nCmdDown = 0;
-    nCmdDefend = 0;
-    nCmdDodge = 0;
-    nCmdInsight = 0;
-    nCmdSwoosh = 0;
-    nCmdRevenge = 0;
-    nDodgeCountInBag = 0;
-    nInsightCountInBag = 0;
-    nSwooshCountInBag = 0;
-    nRevengeCountInBag = 0;
-    bDizzy = false;
-	//初始化全局变量
-	g_strCmdNameList[CmdBtn_Up] = "cmd_up"; //MyWord::GetWord("cmd_up");
-	g_strCmdNameList[CmdBtn_Middle] = "cmd_middle"; //MyWord::GetWord("cmd_middle");
-	g_strCmdNameList[CmdBtn_Down] = "cmd_down"; //MyWord::GetWord("cmd_down");
-	g_strCmdNameList[CmdBtn_Defend] = "cmd_defend"; //MyWord::GetWord("cmd_defend");
-	g_strCmdNameList[CmdBtn_Dodge] = "cmd_dodge"; //MyWord::GetWord("cmd_dodge");
-	g_strCmdNameList[CmdBtn_Insight] = "cmd_insight"; //MyWord::GetWord("cmd_insight");
-	g_strCmdNameList[CmdBtn_Swoosh] = "cmd_swoosh"; //MyWord::GetWord("cmd_swoosh");
-	g_strCmdNameList[CmdBtn_Revenge] = "cmd_revenge"; //MyWord::GetWord("cmd_revenge");
-	g_strDizzyName = "buff_dizzy"; //MyWord::GetWord("buff_dizzy");
-}
-//--------------------------------------------------------------------
-void SPKHeroData::IncreaseCmdCount(eCmdButton theCmd, int nDelta)
-{
-    const int nCmdType = theCmd;
-    switch (nCmdType)
-    {
-        case CmdBtn_Up:
-        {
-            nCmdUp += nDelta;
-            break;
-        }
-        case CmdBtn_Middle:
-        {
-            nCmdMiddle += nDelta;
-            break;
-        }
-        case CmdBtn_Down:
-        {
-            nCmdDown += nDelta;
-            break;
-        }
-        case CmdBtn_Defend:
-        {
-            nCmdDefend += nDelta;
-            break;
-        }
-        case CmdBtn_Dodge:
-        {
-            nCmdDodge += nDelta;
-            break;
-        }
-        case CmdBtn_Insight:
-        {
-            nCmdInsight += nDelta;
-            break;
-        }
-        case CmdBtn_Swoosh:
-        {
-            nCmdSwoosh += nDelta;
-            break;
-        }
-        case CmdBtn_Revenge:
-        {
-            nCmdRevenge += nDelta;
-            break;
-        }
-    }
-}
 //--------------------------------------------------------------------
 NwSPKLogic::NwSPKLogic()
 {
-    InitSPKLogic();
+    ResetSPKLogic();
 }
 //--------------------------------------------------------------------
 NwSPKLogic::~NwSPKLogic()
@@ -114,12 +30,12 @@ const SPKHeroData* NwSPKLogic::GetAIHeroData()
     return &m_kAIHeroData;
 }
 //--------------------------------------------------------------------
-void NwSPKLogic::InitSPKLogic()
+void NwSPKLogic::ResetSPKLogic()
 {
-    for (int i = 0; i < TouchBtn_Max; ++i)
+    for (int i = 0; i < NwSPKTouch_Max; ++i)
     {
-        m_kMyCmdList[i] = CmdBtn_Max;
-        m_kAICmdList[i] = CmdBtn_Max;
+        m_kMyCmdList[i] = NwSPKCmd_Max;
+        m_kAICmdList[i] = NwSPKCmd_Max;
     }
     //
     m_kMyHeroData.nWuLi = 70;
@@ -155,13 +71,13 @@ void NwSPKLogic::PrepareForRound_AIHero()
     m_kAIHeroData.nCmdDefend = g_nCmdCount_Normal;
 }
 //--------------------------------------------------------------------
-void NwSPKLogic::SetPlayerOption(eCmdButton nCmd_Touch0, eCmdButton nCmd_Touch1, eCmdButton nCmd_Touch2)
+void NwSPKLogic::SetPlayerOption(NwSPKCmdType nCmd_Touch0, NwSPKCmdType nCmd_Touch1, NwSPKCmdType nCmd_Touch2)
 {
     m_kMyCmdList[0] = nCmd_Touch0;
     m_kMyCmdList[1] = nCmd_Touch1;
     m_kMyCmdList[2] = nCmd_Touch2;
     //减少指令的数量
-    if (nCmd_Touch0 == CmdBtn_Swoosh)
+    if (nCmd_Touch0 == NwSPKCmd_XuanFeng)
     {
         //消耗旋风斩
         m_kMyHeroData.IncreaseCmdCount(nCmd_Touch0, -1);
@@ -211,7 +127,7 @@ void NwSPKLogic::GenerateCmdForAI()
             bCmdReady_0 = true;
         }
         //如果第一个指令是旋风斩或者反杀，则需要特殊处理
-        if (m_kAICmdList[0] == CmdBtn_Swoosh || m_kAICmdList[0] == CmdBtn_Revenge)
+        if (m_kAICmdList[0] == NwSPKCmd_XuanFeng || m_kAICmdList[0] == NwSPKCmd_FanSha)
         {
             m_kAICmdList[1] = m_kAICmdList[0];
             m_kAICmdList[2] = m_kAICmdList[0];
@@ -228,7 +144,7 @@ void NwSPKLogic::GenerateCmdForAI()
         RemoveFromAIWaitingCmd(m_kAICmdList[0]);
         //选出第二个指令
         //如果前面的指令是闪避，则本指令是攻击类指令
-        if (m_kAICmdList[0] == CmdBtn_Dodge)
+        if (m_kAICmdList[0] == NwSPKCmd_ShanBi)
         {
             PrepareAIWaitingCmd_Attack();
             const int nAttackCount = (int)m_vecAIWaitingCmd_Attack.size();
@@ -254,7 +170,7 @@ void NwSPKLogic::GenerateCmdForAI()
         RemoveFromAIWaitingCmd(m_kAICmdList[1]);
         //选出第三个指令
         //如果前面的指令是闪避，则本指令是攻击类指令
-        if (m_kAICmdList[1] == CmdBtn_Dodge)
+        if (m_kAICmdList[1] == NwSPKCmd_ShanBi)
         {
             PrepareAIWaitingCmd_Attack();
             const int nAttackCount = (int)m_vecAIWaitingCmd_Attack.size();
@@ -274,7 +190,7 @@ void NwSPKLogic::GenerateCmdForAI()
     }
     
     //减少指令的数量
-    if (m_kAICmdList[0] == CmdBtn_Swoosh)
+    if (m_kAICmdList[0] == NwSPKCmd_XuanFeng)
     {
         //消耗旋风斩
         m_kAIHeroData.IncreaseCmdCount(m_kAICmdList[0], -1);
@@ -304,8 +220,6 @@ void NwSPKLogic::GenerateCurrentTouchResult()
 {
     m_nMyCmd = m_kMyCmdList[m_nCurrentTouchIndex];
     m_nAICmd = m_kAICmdList[m_nCurrentTouchIndex];
-	m_szMyFinalCmdName = g_strCmdNameList[m_nMyCmd].c_str();
-	m_szAIFinalCmdName = g_strCmdNameList[m_nAICmd].c_str();
     //判断两个指令的大小
     JudgeCmd(m_nMyCmd, m_nAICmd);
     //计算攻击伤害
@@ -314,9 +228,9 @@ void NwSPKLogic::GenerateCurrentTouchResult()
 //--------------------------------------------------------------------
 void NwSPKLogic::ApplyTouchResult()
 {
-    if (m_eTouchResult == TouchResult_Win)
+    if (m_NwSPKTouchResult == NwSPKTouchResult_Win)
     {
-        if (m_nMyCmd == CmdBtn_Dodge)
+        if (m_nMyCmd == NwSPKCmd_ShanBi)
         {
             //对敌人施加一次眩晕
             m_kAIHeroData.bDizzy = true;
@@ -342,9 +256,9 @@ void NwSPKLogic::ApplyTouchResult()
             }
         }
     }
-    else if (m_eTouchResult == TouchResult_Lose)
+    else if (m_NwSPKTouchResult == NwSPKTouchResult_Lose)
     {
-        if (m_nAICmd == CmdBtn_Dodge)
+        if (m_nAICmd == NwSPKCmd_ShanBi)
         {
             //对敌人施加一次眩晕
             m_kMyHeroData.bDizzy = true;
@@ -369,7 +283,7 @@ void NwSPKLogic::ApplyTouchResult()
             }
         }
     }
-    else if (m_eTouchResult == TouchResult_Draw)
+    else if (m_NwSPKTouchResult == NwSPKTouchResult_Draw)
     {
         ++m_nTouchDrawCount;
         if (m_nTouchDrawCount >= 3)
@@ -402,20 +316,20 @@ void NwSPKLogic::ApplyTouchResult()
     }
 }
 //--------------------------------------------------------------------
-eTouchResult NwSPKLogic::GetTouchResult()
+NwSPKTouchResult NwSPKLogic::GetTouchResult()
 {
-    return m_eTouchResult;
+    return m_NwSPKTouchResult;
 }
 //--------------------------------------------------------------------
-eCmdButton NwSPKLogic::GetAITouchCmd(int theTouchIndex)
+NwSPKCmdType NwSPKLogic::GetAITouchCmd(int theTouchIndex)
 {
-    if (theTouchIndex >= TouchBtn_0 && theTouchIndex < TouchBtn_Max)
+    if (theTouchIndex >= NwSPKTouch_0 && theTouchIndex < NwSPKTouch_Max)
     {
         return m_kAICmdList[theTouchIndex];
     }
     else
     {
-        return CmdBtn_Max;
+        return NwSPKCmd_Max;
     }
 }
 //--------------------------------------------------------------------
@@ -432,12 +346,12 @@ void NwSPKLogic::TouchFinished()
 //--------------------------------------------------------------------
 bool NwSPKLogic::IsRoundFinish()
 {
-    if (m_nCurrentTouchIndex >= TouchBtn_Max)
+    if (m_nCurrentTouchIndex >= NwSPKTouch_Max)
     {
         return true;
     }
     //如果是旋风斩，则一次交锋就结束
-    if (m_nMyCmd == CmdBtn_Swoosh || m_nAICmd == CmdBtn_Swoosh)
+    if (m_nMyCmd == NwSPKCmd_XuanFeng || m_nAICmd == NwSPKCmd_XuanFeng)
     {
         return true;
     }
@@ -458,243 +372,231 @@ bool NwSPKLogic::IsFightFinish()
     return false;
 }
 //--------------------------------------------------------------------
-const char* NwSPKLogic::GetMyFinalCmdName()
-{
-    return m_szMyFinalCmdName;
-}
-//--------------------------------------------------------------------
-const char* NwSPKLogic::GetAIFinalCmdName()
-{
-    return m_szAIFinalCmdName;
-}
-//--------------------------------------------------------------------
 void NwSPKLogic::JudgeCmd(int CmdA, int CmdB)
 {
     //定义眩晕状态的枚举值
-    static const int CmdBtn_Dizzy = CmdBtn_Max + 1;
+    static const int CmdBtn_Dizzy = NwSPKCmd_Max + 1;
 
     if (m_kMyHeroData.bDizzy == true)
     {
         CmdA = CmdBtn_Dizzy;
-		m_szMyFinalCmdName = g_strDizzyName.c_str();
         m_kMyHeroData.bDizzy = false;
     }
     if (m_kAIHeroData.bDizzy == true)
     {
         CmdB = CmdBtn_Dizzy;
-		m_szAIFinalCmdName = g_strDizzyName.c_str();
         m_kAIHeroData.bDizzy = false;
     }
     //
-    m_eTouchResult = TouchResult_Draw;
+    m_NwSPKTouchResult = NwSPKTouchResult_Draw;
     //
     switch (CmdA)
     {
-        case CmdBtn_Up:
+        case NwSPKCmd_Up:
         {
             switch (CmdB)
             {
-                case CmdBtn_Up:
+                case NwSPKCmd_Up:
                 {
-                    m_eTouchResult = TouchResult_Draw;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Draw;
                     break;
                 }
-                case CmdBtn_Middle:
+                case NwSPKCmd_Middle:
                 {
-                    m_eTouchResult = TouchResult_Win;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Win;
                     break;
                 }
-                case CmdBtn_Down:
+                case NwSPKCmd_Down:
                 {
-                    m_eTouchResult = TouchResult_Lose;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Lose;
                     break;
                 }
-                case CmdBtn_Defend:
+                case NwSPKCmd_ZhaoJia:
                 {
-                    m_eTouchResult = TouchResult_Win;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Win;
                     break;
                 }
-                case CmdBtn_Dodge:
+                case NwSPKCmd_ShanBi:
                 {
-                    m_eTouchResult = TouchResult_Lose;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Lose;
                     break;
                 }
                 case CmdBtn_Dizzy:
                 {
-                    m_eTouchResult = TouchResult_Win;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Win;
                     break;
                 }
-                case CmdBtn_Swoosh:
+                case NwSPKCmd_XuanFeng:
                 {
-                    m_eTouchResult = TouchResult_Lose;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Lose;
                     break;
                 }
             }
             break;
         }
-        case CmdBtn_Middle:
+        case NwSPKCmd_Middle:
         {
             switch (CmdB)
             {
-                case CmdBtn_Up:
+                case NwSPKCmd_Up:
                 {
-                    m_eTouchResult = TouchResult_Lose;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Lose;
                     break;
                 }
-                case CmdBtn_Middle:
+                case NwSPKCmd_Middle:
                 {
-                    m_eTouchResult = TouchResult_Draw;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Draw;
                     break;
                 }
-                case CmdBtn_Down:
+                case NwSPKCmd_Down:
                 {
-                    m_eTouchResult = TouchResult_Win;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Win;
                     break;
                 }
-                case CmdBtn_Defend:
+                case NwSPKCmd_ZhaoJia:
                 {
-                    m_eTouchResult = TouchResult_Win;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Win;
                     break;
                 }
-                case CmdBtn_Dodge:
+                case NwSPKCmd_ShanBi:
                 {
-                    m_eTouchResult = TouchResult_Lose;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Lose;
                     break;
                 }
                 case CmdBtn_Dizzy:
                 {
-                    m_eTouchResult = TouchResult_Win;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Win;
                     break;
                 }
-                case CmdBtn_Swoosh:
+                case NwSPKCmd_XuanFeng:
                 {
-                    m_eTouchResult = TouchResult_Lose;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Lose;
                     break;
                 }
             }
             break;
         }
-        case CmdBtn_Down:
+        case NwSPKCmd_Down:
         {
             switch (CmdB)
             {
-                case CmdBtn_Up:
+                case NwSPKCmd_Up:
                 {
-                    m_eTouchResult = TouchResult_Win;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Win;
                     break;
                 }
-                case CmdBtn_Middle:
+                case NwSPKCmd_Middle:
                 {
-                    m_eTouchResult = TouchResult_Lose;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Lose;
                     break;
                 }
-                case CmdBtn_Down:
+                case NwSPKCmd_Down:
                 {
-                    m_eTouchResult = TouchResult_Draw;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Draw;
                     break;
                 }
-                case CmdBtn_Defend:
+                case NwSPKCmd_ZhaoJia:
                 {
-                    m_eTouchResult = TouchResult_Win;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Win;
                     break;
                 }
-                case CmdBtn_Dodge:
+                case NwSPKCmd_ShanBi:
                 {
-                    m_eTouchResult = TouchResult_Win;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Win;
                     break;
                 }
                 case CmdBtn_Dizzy:
                 {
-                    m_eTouchResult = TouchResult_Win;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Win;
                     break;
                 }
-                case CmdBtn_Swoosh:
+                case NwSPKCmd_XuanFeng:
                 {
-                    m_eTouchResult = TouchResult_Lose;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Lose;
                     break;
                 }
             }
             break;
         }
-        case CmdBtn_Defend:
+        case NwSPKCmd_ZhaoJia:
         {
             switch (CmdB)
             {
-                case CmdBtn_Up:
+                case NwSPKCmd_Up:
                 {
-                    m_eTouchResult = TouchResult_Lose;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Lose;
                     break;
                 }
-                case CmdBtn_Middle:
+                case NwSPKCmd_Middle:
                 {
-                    m_eTouchResult = TouchResult_Lose;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Lose;
                     break;
                 }
-                case CmdBtn_Down:
+                case NwSPKCmd_Down:
                 {
-                    m_eTouchResult = TouchResult_Lose;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Lose;
                     break;
                 }
-                case CmdBtn_Defend:
+                case NwSPKCmd_ZhaoJia:
                 {
-                    m_eTouchResult = TouchResult_Draw;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Draw;
                     break;
                 }
-                case CmdBtn_Dodge:
+                case NwSPKCmd_ShanBi:
                 {
-                    m_eTouchResult = TouchResult_Draw;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Draw;
                     break;
                 }
                 case CmdBtn_Dizzy:
                 {
-                    m_eTouchResult = TouchResult_Draw;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Draw;
                     break;
                 }
-                case CmdBtn_Swoosh:
+                case NwSPKCmd_XuanFeng:
                 {
-                    m_eTouchResult = TouchResult_Lose;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Lose;
                     break;
                 }
             }
             break;
         }
-        case CmdBtn_Dodge:
+        case NwSPKCmd_ShanBi:
         {
             switch (CmdB)
             {
-                case CmdBtn_Up:
+                case NwSPKCmd_Up:
                 {
-                    m_eTouchResult = TouchResult_Win;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Win;
                     break;
                 }
-                case CmdBtn_Middle:
+                case NwSPKCmd_Middle:
                 {
-                    m_eTouchResult = TouchResult_Win;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Win;
                     break;
                 }
-                case CmdBtn_Down:
+                case NwSPKCmd_Down:
                 {
-                    m_eTouchResult = TouchResult_Lose;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Lose;
                     break;
                 }
-                case CmdBtn_Defend:
+                case NwSPKCmd_ZhaoJia:
                 {
-                    m_eTouchResult = TouchResult_Draw;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Draw;
                     break;
                 }
-                case CmdBtn_Dodge:
+                case NwSPKCmd_ShanBi:
                 {
-                    m_eTouchResult = TouchResult_Draw;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Draw;
                     break;
                 }
                 case CmdBtn_Dizzy:
                 {
-                    m_eTouchResult = TouchResult_Draw;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Draw;
                     break;
                 }
-                case CmdBtn_Swoosh:
+                case NwSPKCmd_XuanFeng:
                 {
-                    m_eTouchResult = TouchResult_Win;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Win;
                     break;
                 }
             }
@@ -704,81 +606,81 @@ void NwSPKLogic::JudgeCmd(int CmdA, int CmdB)
         {
             switch (CmdB)
             {
-                case CmdBtn_Up:
+                case NwSPKCmd_Up:
                 {
-                    m_eTouchResult = TouchResult_Lose;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Lose;
                     break;
                 }
-                case CmdBtn_Middle:
+                case NwSPKCmd_Middle:
                 {
-                    m_eTouchResult = TouchResult_Lose;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Lose;
                     break;
                 }
-                case CmdBtn_Down:
+                case NwSPKCmd_Down:
                 {
-                    m_eTouchResult = TouchResult_Lose;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Lose;
                     break;
                 }
-                case CmdBtn_Defend:
+                case NwSPKCmd_ZhaoJia:
                 {
-                    m_eTouchResult = TouchResult_Draw;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Draw;
                     break;
                 }
-                case CmdBtn_Dodge:
+                case NwSPKCmd_ShanBi:
                 {
-                    m_eTouchResult = TouchResult_Draw;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Draw;
                     break;
                 }
                 case CmdBtn_Dizzy:
                 {
-                    m_eTouchResult = TouchResult_Draw;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Draw;
                     break;
                 }
-                case CmdBtn_Swoosh:
+                case NwSPKCmd_XuanFeng:
                 {
-                    m_eTouchResult = TouchResult_Lose;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Lose;
                     break;
                 }
             }
             break;
         }
-        case CmdBtn_Swoosh:
+        case NwSPKCmd_XuanFeng:
         {
             switch (CmdB)
             {
-                case CmdBtn_Up:
+                case NwSPKCmd_Up:
                 {
-                    m_eTouchResult = TouchResult_Win;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Win;
                     break;
                 }
-                case CmdBtn_Middle:
+                case NwSPKCmd_Middle:
                 {
-                    m_eTouchResult = TouchResult_Win;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Win;
                     break;
                 }
-                case CmdBtn_Down:
+                case NwSPKCmd_Down:
                 {
-                    m_eTouchResult = TouchResult_Win;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Win;
                     break;
                 }
-                case CmdBtn_Defend:
+                case NwSPKCmd_ZhaoJia:
                 {
-                    m_eTouchResult = TouchResult_Win;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Win;
                     break;
                 }
-                case CmdBtn_Dodge:
+                case NwSPKCmd_ShanBi:
                 {
-                    m_eTouchResult = TouchResult_Lose;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Lose;
                     break;
                 }
                 case CmdBtn_Dizzy:
                 {
-                    m_eTouchResult = TouchResult_Win;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Win;
                     break;
                 }
-                case CmdBtn_Swoosh:
+                case NwSPKCmd_XuanFeng:
                 {
-                    m_eTouchResult = TouchResult_Draw;
+                    m_NwSPKTouchResult = NwSPKTouchResult_Draw;
                     break;
                 }
             }
@@ -791,22 +693,22 @@ void NwSPKLogic::CalculateDamage()
 {
     m_nAttackDamage = 0;
     
-    const int result = m_eTouchResult;
+    const int result = m_NwSPKTouchResult;
     switch (result)
     {
-        case TouchResult_Draw:
+        case NwSPKTouchResult_Draw:
         {
             m_nAttackDamage = 0;
             break;
         }
-        case TouchResult_Win:
+        case NwSPKTouchResult_Win:
         {
-            if (m_nMyCmd == CmdBtn_Dodge)
+            if (m_nMyCmd == NwSPKCmd_ShanBi)
             {
                 //我成功使用了闪避，不对敌人施加伤害，使敌人眩晕一个交锋
                 m_nAttackDamage = 0;
             }
-            else if (m_nMyCmd == CmdBtn_Swoosh)
+            else if (m_nMyCmd == NwSPKCmd_XuanFeng)
             {
                 //我成功施放了旋风斩
                 m_nAttackDamage = GetMyAttackDamage() * 3;
@@ -818,7 +720,7 @@ void NwSPKLogic::CalculateDamage()
             //
             if (m_kAIHeroData.bDizzy == false) //对方没有被眩晕
             {
-                if (m_nAICmd == CmdBtn_Defend)
+                if (m_nAICmd == NwSPKCmd_ZhaoJia)
                 {
                     //对方使用了招架，伤害减少
                     m_nAttackDamage = (int)((float)m_nAttackDamage * 0.3f);
@@ -826,14 +728,14 @@ void NwSPKLogic::CalculateDamage()
             }
             break;
         }
-        case TouchResult_Lose:
+        case NwSPKTouchResult_Lose:
         {
-            if (m_nAICmd == CmdBtn_Dodge)
+            if (m_nAICmd == NwSPKCmd_ShanBi)
             {
                 //敌人成功使用了闪避，不对我施加伤害，我眩晕一个交锋
                 m_nAttackDamage = 0;
             }
-            else if (m_nAICmd == CmdBtn_Swoosh)
+            else if (m_nAICmd == NwSPKCmd_XuanFeng)
             {
                 //AI成功施放了旋风斩
                 m_nAttackDamage = GetAIAttackDamage() * 3;
@@ -845,7 +747,7 @@ void NwSPKLogic::CalculateDamage()
             //
             if (m_kMyHeroData.bDizzy == false) //对方没有被眩晕
             {
-                if (m_nMyCmd == CmdBtn_Defend)
+                if (m_nMyCmd == NwSPKCmd_ZhaoJia)
                 {
                     //对方使用了招架，伤害减少
                     m_nAttackDamage = (int)((float)m_nAttackDamage * 0.3f);
@@ -872,35 +774,35 @@ void NwSPKLogic::PrepareAIWaitingCmd()
 {
     for (int i = 0; i < m_kAIHeroData.nCmdUp; ++i)
     {
-        m_vecAIWaitingCmd.push_back(CmdBtn_Up);
+        m_vecAIWaitingCmd.push_back(NwSPKCmd_Up);
     }
     for (int i = 0; i < m_kAIHeroData.nCmdMiddle; ++i)
     {
-        m_vecAIWaitingCmd.push_back(CmdBtn_Middle);
+        m_vecAIWaitingCmd.push_back(NwSPKCmd_Middle);
     }
     for (int i = 0; i < m_kAIHeroData.nCmdDown; ++i)
     {
-        m_vecAIWaitingCmd.push_back(CmdBtn_Down);
+        m_vecAIWaitingCmd.push_back(NwSPKCmd_Down);
     }
     for (int i = 0; i < m_kAIHeroData.nCmdDefend; ++i)
     {
-        m_vecAIWaitingCmd.push_back(CmdBtn_Defend);
+        m_vecAIWaitingCmd.push_back(NwSPKCmd_ZhaoJia);
     }
     for (int i = 0; i < m_kAIHeroData.nCmdDodge; ++i)
     {
-        m_vecAIWaitingCmd.push_back(CmdBtn_Dodge);
+        m_vecAIWaitingCmd.push_back(NwSPKCmd_ShanBi);
     }
     for (int i = 0; i < m_kAIHeroData.nCmdInsight; ++i)
     {
-        m_vecAIWaitingCmd.push_back(CmdBtn_Insight);
+        m_vecAIWaitingCmd.push_back(NwSPKCmd_DongCha);
     }
     for (int i = 0; i < m_kAIHeroData.nCmdSwoosh; ++i)
     {
-        m_vecAIWaitingCmd.push_back(CmdBtn_Swoosh);
+        m_vecAIWaitingCmd.push_back(NwSPKCmd_XuanFeng);
     }
     for (int i = 0; i < m_kAIHeroData.nCmdRevenge; ++i)
     {
-        m_vecAIWaitingCmd.push_back(CmdBtn_Revenge);
+        m_vecAIWaitingCmd.push_back(NwSPKCmd_FanSha);
     }
 }
 //--------------------------------------------------------------------
@@ -908,18 +810,18 @@ void NwSPKLogic::PrepareAIWaitingCmd_Attack()
 {
     m_vecAIWaitingCmd_Attack.clear();
     //
-    for (std::vector<eCmdButton>::iterator it = m_vecAIWaitingCmd.begin();
+    for (std::vector<NwSPKCmdType>::iterator it = m_vecAIWaitingCmd.begin();
          it != m_vecAIWaitingCmd.end();
          ++it)
     {
-        eCmdButton _cmd_ = *it;
+        NwSPKCmdType _cmd_ = *it;
         switch (_cmd_)
         {
-            case CmdBtn_Up:
-            case CmdBtn_Middle:
-            case CmdBtn_Down:
-            case CmdBtn_Swoosh:
-            case CmdBtn_Revenge:
+            case NwSPKCmd_Up:
+            case NwSPKCmd_Middle:
+            case NwSPKCmd_Down:
+            case NwSPKCmd_XuanFeng:
+            case NwSPKCmd_FanSha:
             {
                 m_vecAIWaitingCmd_Attack.push_back(_cmd_);
                 break;
@@ -930,7 +832,7 @@ void NwSPKLogic::PrepareAIWaitingCmd_Attack()
     }
 }
 //--------------------------------------------------------------------
-void NwSPKLogic::RemoveFromAIWaitingCmd(eCmdButton theCmd)
+void NwSPKLogic::RemoveFromAIWaitingCmd(NwSPKCmdType theCmd)
 {
     //除了移除指定的指令，还要移除旋风斩和反杀两个指令，
     //因为这两个指令不能在第二次交锋和第三次交锋中使用。
@@ -942,7 +844,7 @@ void NwSPKLogic::RemoveFromAIWaitingCmd(eCmdButton theCmd)
     for (int i = 0; i < nCount; ++i)
     {
         bFind = false;
-        for (std::vector<eCmdButton>::iterator it = m_vecAIWaitingCmd.begin();
+        for (std::vector<NwSPKCmdType>::iterator it = m_vecAIWaitingCmd.begin();
             it != m_vecAIWaitingCmd.end();
             ++it)
         {
@@ -953,19 +855,19 @@ void NwSPKLogic::RemoveFromAIWaitingCmd(eCmdButton theCmd)
                 bAlreadyRemovedCmd = true;
                 break;
             }
-            else if (*it == CmdBtn_Swoosh)
+            else if (*it == NwSPKCmd_XuanFeng)
             {
                 m_vecAIWaitingCmd.erase(it);
                 bFind = true;
                 break;
             }
-            else if (*it == CmdBtn_Revenge)
+            else if (*it == NwSPKCmd_FanSha)
             {
                 m_vecAIWaitingCmd.erase(it);
                 bFind = true;
                 break;
             }
-            else if (theCmd == CmdBtn_Dodge && *it == CmdBtn_Dodge)
+            else if (theCmd == NwSPKCmd_ShanBi && *it == NwSPKCmd_ShanBi)
             {
                 m_vecAIWaitingCmd.erase(it);
                 bFind = true;

@@ -7,10 +7,14 @@
 class NwActorData
 {
 protected:
+    friend class NwActorDataManager;
     NwActorData();
     ~NwActorData();
+    void ClearAll();
 
 public:
+    //值为-1，表示无效值
+    int m_nActorId;
     //武力，影响攻击力，影响看破对方招数的洞察力
     int m_nWuLi;
     //护甲，护甲高，意味着穿的铠甲重，会导致敏捷变低
@@ -32,10 +36,14 @@ public:
 class NwActorSPKData
 {
 protected:
+    friend class NwActorDataManager;
     NwActorSPKData();
     ~NwActorSPKData();
+    void ClearAll();
 
 public:
+    //值为-1，表示无效值
+    int m_nActorId;
     int m_nWuLi;
     int m_nHuJia;
     int m_nMinJie;

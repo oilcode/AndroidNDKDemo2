@@ -2,8 +2,8 @@
 #include "NwLogicFlowHelp.h"
 #include "GGUIImagesetIO.h"
 #include "NwUIMain.h"
-#include "NwUISPK.h"
 #include "NwUIEffect.h"
+#include "NwSceneSPK.h"
 //----------------------------------------------------------------
 bool NwLogicFlowHelp_Create()
 {
@@ -19,15 +19,17 @@ bool NwLogicFlowHelp_Create()
 		return false;
 	}
 
-	if (NwUISPK::CreateUISPK() == false)
-	{
-		return false;
-	}
-
 	if (NwUIEffect::CreateUIEffect() == false)
 	{
 		return false;
 	}
+
+	if (NwSceneSPK::CreateSceneSPK() == false)
+	{
+		return false;
+	}
+
+    NwSceneSPK::Get()->StartSPK();
 
 	return true;
 }
@@ -36,7 +38,7 @@ void NwLogicFlowHelp_Release()
 {
 	NwUIEffect::ReleaseUIEffect();
 	NwUIMain::ReleaseUIMain();
-	NwUISPK::ReleaseUISPK();
+	NwSceneSPK::ReleaseSceneSPK();
 }
 //----------------------------------------------------------------
 void NwLogicFlowHelp_Update(float fDeltaTime)
@@ -45,9 +47,9 @@ void NwLogicFlowHelp_Update(float fDeltaTime)
 	{
 		NwUIMain::Get()->UpdateUIMain(fDeltaTime);
 	}
-	if (NwUISPK::Get())
+	if (NwSceneSPK::Get())
 	{
-		NwUISPK::Get()->UpdateUISPK(fDeltaTime);
+        NwSceneSPK::Get()->UpdateSceneSPK(fDeltaTime);
 	}
 }
 //----------------------------------------------------------------

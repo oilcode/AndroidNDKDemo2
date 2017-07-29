@@ -21,6 +21,7 @@
 #include <cstring>
 #include <cstdarg>
 #include <string>
+#include <vector>
 #include <map>
 //--------------------------------------------------------------------
 #define SoMalloc malloc

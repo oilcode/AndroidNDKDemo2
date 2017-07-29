@@ -1,12 +1,11 @@
 ﻿//--------------------------------------------------------------------
 #include "NwSPKProcedure.h"
+#include "NwSceneSPK.h"
 #include "NwSPKLogic.h"
 #include "NwUISPK.h"
 //--------------------------------------------------------------------
-NwSPKProcedure::NwSPKProcedure(NwSPKLogic* pSPKLogic, NwUISPK* pUISPK)
-:m_pSPKLogic(pSPKLogic)
-,m_pUISPK(pUISPK)
-,m_CurrentStep(SPKProcedureStep_None)
+NwSPKProcedure::NwSPKProcedure()
+:m_CurrentStep(SPKProcedureStep_None)
 ,m_fCountDownForUnitAnim(-1.0f)
 {
 
@@ -19,6 +18,9 @@ NwSPKProcedure::~NwSPKProcedure()
 //--------------------------------------------------------------------
 void NwSPKProcedure::UpdateSPKProcedure(float fDeltaTime)
 {
+    NwSPKLogic* m_pSPKLogic = NwSceneSPK::Get()->GetSPKLogic();
+    NwUISPK* m_pUISPK = NwSceneSPK::Get()->GetUISPK();
+
     //更新战斗流程。
 	const int nCurrentStep = (int)m_CurrentStep;
     eSPKProcedureStep nNextStep = SPKProcedureStep_Max;
@@ -36,8 +38,13 @@ void NwSPKProcedure::UpdateSPKProcedure(float fDeltaTime)
             m_pSPKLogic->PrepareForRound_MyHero();
             m_pSPKLogic->PrepareForRound_AIHero();
             //根据武将信息，初始化界面
-            m_pUISPK->RefreshLeftByHeroData(m_pSPKLogic->GetMyHeroData());
-            m_pUISPK->RefreshRightByHeroData(m_pSPKLogic->GetAIHeroData());
+            const SPKHeroData* pLeftData = m_pSPKLogic->GetMyHeroData();
+            const SPKHeroData* pRightData = m_pSPKLogic->GetAIHeroData();
+            m_pUISPK->StartSelectCmd2(pLeftData);
+            m_pUISPK->SetHP(NwUISPK::SideLeft, pLeftData->nMaxHP, pLeftData->nCurHP);
+            m_pUISPK->SetHP(NwUISPK::SideRight, pRightData->nMaxHP, pRightData->nCurHP);
+            m_pUISPK->SetMP(NwUISPK::SideLeft, pLeftData->nMaxEnergy, pLeftData->nCurEnergy);
+            m_pUISPK->SetMP(NwUISPK::SideRight, pRightData->nMaxEnergy, pRightData->nCurEnergy);
             //
             nNextStep = SPKProcedureStep_PlayerOption;
             break;
@@ -45,9 +52,9 @@ void NwSPKProcedure::UpdateSPKProcedure(float fDeltaTime)
         case SPKProcedureStep_PostPlayerOption:
         {
             //把玩家选择的指令汇报给 SPKLogic
-            eCmdButton cmd0 = m_pUISPK->GetLeftSelectedCmd(TouchBtn_0);
-            eCmdButton cmd1 = m_pUISPK->GetLeftSelectedCmd(TouchBtn_1);
-            eCmdButton cmd2 = m_pUISPK->GetLeftSelectedCmd(TouchBtn_2);
+            NwSPKCmdType cmd0 = m_pUISPK->GetSelectedCmd(NwSPKTouch_0);
+            NwSPKCmdType cmd1 = m_pUISPK->GetSelectedCmd(NwSPKTouch_1);
+            NwSPKCmdType cmd2 = m_pUISPK->GetSelectedCmd(NwSPKTouch_2);
             m_pSPKLogic->SetPlayerOption(cmd0, cmd1, cmd2);
             //为AI生成战斗指令
             m_pSPKLogic->GenerateCmdForAI();
@@ -59,10 +66,10 @@ void NwSPKProcedure::UpdateSPKProcedure(float fDeltaTime)
         {
             m_pSPKLogic->IncreaseRoundCount();
             //把AI的战斗指令显示在界面上
-            for (int i = 0; i < TouchBtn_Max; ++i)
+            for (int i = 0; i < NwSPKTouch_Max; ++i)
             {
-                eCmdButton theCmd = m_pSPKLogic->GetAITouchCmd(i);
-                m_pUISPK->SetRightSelectedCmd(i, theCmd);
+                NwSPKCmdType theCmd = m_pSPKLogic->GetAITouchCmd(i);
+                m_pUISPK->SetRightSelectedCmd((NwSPKTouchType)i, theCmd);
             }
             nNextStep = SPKProcedureStep_PreTouch;
             break;
@@ -72,34 +79,27 @@ void NwSPKProcedure::UpdateSPKProcedure(float fDeltaTime)
             //判断本次交锋的输赢
             m_pSPKLogic->GenerateCurrentTouchResult();
             //玩家模型做攻击和受击表现
-            eTouchResult theResult = m_pSPKLogic->GetTouchResult();
-            if (theResult == TouchResult_Win)
+            NwSPKTouchResult theResult = m_pSPKLogic->GetTouchResult();
+            if (theResult == NwSPKTouchResult_Win)
             {
-                m_pUISPK->PlayAnim_LeftUnit(0);
-                m_pUISPK->PlayAnim_RightUnit(0);
                 int nDamage = m_pSPKLogic->GetTouchAttackDamage();
                 if (nDamage > 0)
                 {
-                    m_pUISPK->PlayDamageString_RightUnit(nDamage);
+                    //m_pUISPK->PlayDamageString_RightUnit(nDamage);
                 }
             }
-            else if (theResult == TouchResult_Lose)
+            else if (theResult == NwSPKTouchResult_Lose)
             {
-                m_pUISPK->PlayAnim_LeftUnit(0);
-                m_pUISPK->PlayAnim_RightUnit(0);
                 int nDamage = m_pSPKLogic->GetTouchAttackDamage();
                 if (nDamage > 0)
                 {
-                    m_pUISPK->PlayDamageString_LeftUnit(nDamage);
+                    //m_pUISPK->PlayDamageString_LeftUnit(nDamage);
                 }
             }
-            else if (theResult == TouchResult_Draw)
+            else if (theResult == NwSPKTouchResult_Draw)
             {
-                m_pUISPK->PlayAnim_LeftUnit(0);
-                m_pUISPK->PlayAnim_RightUnit(0);
+
             }
-            m_pUISPK->PlayCmdName_LeftUnit(m_pSPKLogic->GetMyFinalCmdName());
-            m_pUISPK->PlayCmdName_RightUnit(m_pSPKLogic->GetAIFinalCmdName());
             m_fCountDownForUnitAnim = 1.0f;
             //
             nNextStep = SPKProcedureStep_Touch;
@@ -115,23 +115,23 @@ void NwSPKProcedure::UpdateSPKProcedure(float fDeltaTime)
                 //把本次交锋的结果应用到玩家数据上
                 m_pSPKLogic->ApplyTouchResult();
                 //把玩家数据显示在界面上
-                eTouchResult theResult = m_pSPKLogic->GetTouchResult();
+                NwSPKTouchResult theResult = m_pSPKLogic->GetTouchResult();
                 const SPKHeroData* pMyData = m_pSPKLogic->GetMyHeroData();
                 const SPKHeroData* pAIData = m_pSPKLogic->GetAIHeroData();
-                if (theResult == TouchResult_Win)
+                if (theResult == NwSPKTouchResult_Win)
                 {
-                    m_pUISPK->RefreshLeftEnergy(pMyData->nMaxEnergy, pMyData->nCurEnergy);
-                    m_pUISPK->RefreshRightBlood(pAIData->nMaxHP, pAIData->nCurHP);
+                    m_pUISPK->SetMP(NwUISPK::SideLeft, pMyData->nMaxEnergy, pMyData->nCurEnergy);
+                    m_pUISPK->SetHP(NwUISPK::SideRight, pAIData->nMaxHP, pAIData->nCurHP);
                 }
-                else if (theResult == TouchResult_Lose)
+                else if (theResult == NwSPKTouchResult_Lose)
                 {
-                    m_pUISPK->RefreshLeftBlood(pMyData->nMaxHP, pMyData->nCurHP);
-                    m_pUISPK->RefreshRightEnergy(pAIData->nMaxEnergy, pAIData->nCurEnergy);
+                    m_pUISPK->SetHP(NwUISPK::SideLeft, pMyData->nMaxHP, pMyData->nCurHP);
+                    m_pUISPK->SetMP(NwUISPK::SideRight, pAIData->nMaxEnergy, pAIData->nCurEnergy);
                 }
                 else
                 {
-                    m_pUISPK->RefreshLeftEnergy(pMyData->nMaxEnergy, pMyData->nCurEnergy);
-                    m_pUISPK->RefreshRightEnergy(pAIData->nMaxEnergy, pAIData->nCurEnergy);
+                    m_pUISPK->SetMP(NwUISPK::SideLeft, pMyData->nMaxEnergy, pMyData->nCurEnergy);
+                    m_pUISPK->SetMP(NwUISPK::SideRight, pAIData->nMaxEnergy, pAIData->nCurEnergy);
                 }
                 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                 m_fCountDownForUnitAnim = 1.0f;
@@ -152,7 +152,7 @@ void NwSPKProcedure::UpdateSPKProcedure(float fDeltaTime)
         {
             //
             m_pSPKLogic->TouchFinished();
-            if (m_pSPKLogic->IsRoundFinish() == true)
+            if (m_pSPKLogic->IsRoundFinish())
             {
                 nNextStep = SPKProcedureStep_PostRound;
             }
@@ -164,7 +164,7 @@ void NwSPKProcedure::UpdateSPKProcedure(float fDeltaTime)
         }
         case SPKProcedureStep_PostRound:
         {
-            if (m_pSPKLogic->IsFightFinish() == true)
+            if (m_pSPKLogic->IsFightFinish())
             {
                 //战斗结束
                 //UISceneSwitch::GoToNextScene(Scene_Logo);
@@ -175,6 +175,8 @@ void NwSPKProcedure::UpdateSPKProcedure(float fDeltaTime)
             }
             break;
         }
+        default:
+            break;
     }
     //
     if (nNextStep != SPKProcedureStep_Max)
