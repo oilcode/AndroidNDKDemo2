@@ -66,7 +66,7 @@ bool GGUIFileGGM::GetNextImageRect(SoTinyString& kName, stImageRect& kRect)
 	const char* szRectName = szLine;
 	const char* szRectData = szLine + nSplitIndex + 1;
 	//
-	kName = SoStrSlim(szRectName);
+    kName = SoStrSlim(szRectName);
 	kRect.left = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "l", 0.0f);
 	kRect.right = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "r", 0.0f);
 	kRect.top = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "t", 0.0f);
@@ -92,7 +92,18 @@ bool GGUIFileGGM::GetNextImageFontRect(SoTinyString& kName, stImageFontRect& kRe
 	const char* szRectName = szLine;
 	const char* szRectData = szLine + nSplitIndex + 1;
 	//
-	kName = SoStrSlim(szRectName);
+    const char* szValue = SoStrSlim(szRectName);
+    //空格符号特殊处理
+    if (szValue[0] == 's' && szValue[1] == 'p')
+    {
+        //是“space”，是空格
+        kName.SetValue(" ");
+    }
+    else
+    {
+        kName.SetValue(szValue);
+    }
+    //
 	kRect.left = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "l", 0.0f);
 	kRect.right = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "r", 0.0f);
 	kRect.top = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "t", 0.0f);

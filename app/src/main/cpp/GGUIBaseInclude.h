@@ -49,7 +49,7 @@ enum GGUIReasonUnvisible
 enum GGUIReasonInputDisable
 {
 	GGUIReasonInputDisable_Self = 0x00000001,
-	GGUIReasonInputDisable_2 = 0x00000002,
+	GGUIReasonInputDisable_Disable = 0x00000002,
 	GGUIReasonInputDisable_3 = 0x00000004,
 	GGUIReasonInputDisable_4 = 0x00000008,
 };

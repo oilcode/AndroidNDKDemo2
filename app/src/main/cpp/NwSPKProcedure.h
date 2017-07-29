@@ -19,6 +19,7 @@ protected:
     {
         //战斗流程尚未开始。
         SPKProcedureStep_None,
+        SPKProcedureStep_PrepareForStart, //预先准备界面
         SPKProcedureStep_PrePlayerOption, //玩家进行本回合操作的准备阶段
         SPKProcedureStep_PlayerOption, //玩家正在进行本回合操作
         SPKProcedureStep_PostPlayerOption, //玩家本回合操作结束，收尾阶段
@@ -26,6 +27,7 @@ protected:
         SPKProcedureStep_PreTouch, //本次交锋前的准备阶段
         SPKProcedureStep_Touch, //交锋中
         SPKProcedureStep_Touch_2, //交锋中，开始刷新血条
+        SPKProcedureStep_Touch_3, //交锋中，开始刷新血条
         SPKProcedureStep_PostTouch, //交锋完毕，收尾阶段
         SPKProcedureStep_PostRound, //本回合结束，收尾阶段
         //

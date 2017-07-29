@@ -108,24 +108,39 @@ void NwSPKLogic::GenerateCmdForAI()
     if (bCmdReady_0 == false)
     {
         //选出第一个指令
-        //如果敌人是眩晕状态，则选出攻击类指令
-        if (m_kMyHeroData.bDizzy == true)
+        //如果我是眩晕状态，选择什么指令都是浪费的，不如选择招架指令
+        if (bCmdReady_0 == false)
         {
-            PrepareAIWaitingCmd_Attack();
-            const int nAttackCount = (int)m_vecAIWaitingCmd_Attack.size();
-            if (nAttackCount > 0)
+            if (m_kAIHeroData.bDizzy == true)
             {
-                nVecIndex = rand() % nAttackCount;
-                m_kAICmdList[0] = m_vecAIWaitingCmd_Attack[nVecIndex];
+                m_kAICmdList[0] = NwSPKCmd_ZhaoJia;
                 bCmdReady_0 = true;
             }
         }
+
+        //如果敌人是眩晕状态，则选出攻击类指令
+        if (bCmdReady_0 == false)
+        {
+            if (m_kMyHeroData.bDizzy == true)
+            {
+                PrepareAIWaitingCmd_Attack();
+                const int nAttackCount = (int)m_vecAIWaitingCmd_Attack.size();
+                if (nAttackCount > 0)
+                {
+                    nVecIndex = rand() % nAttackCount;
+                    m_kAICmdList[0] = m_vecAIWaitingCmd_Attack[nVecIndex];
+                    bCmdReady_0 = true;
+                }
+            }
+        }
+
         if (bCmdReady_0 == false)
         {
             nVecIndex = rand() % m_vecAIWaitingCmd.size();
             m_kAICmdList[0] = m_vecAIWaitingCmd[nVecIndex];
             bCmdReady_0 = true;
         }
+
         //如果第一个指令是旋风斩或者反杀，则需要特殊处理
         if (m_kAICmdList[0] == NwSPKCmd_XuanFeng || m_kAICmdList[0] == NwSPKCmd_FanSha)
         {
@@ -169,18 +184,34 @@ void NwSPKLogic::GenerateCmdForAI()
         //从待选指令中删除第二个指令
         RemoveFromAIWaitingCmd(m_kAICmdList[1]);
         //选出第三个指令
-        //如果前面的指令是闪避，则本指令是攻击类指令
-        if (m_kAICmdList[1] == NwSPKCmd_ShanBi)
+        /*
+        //如果有闪避，优先使用闪避
+        if (bCmdReady_2 == false)
         {
-            PrepareAIWaitingCmd_Attack();
-            const int nAttackCount = (int)m_vecAIWaitingCmd_Attack.size();
-            if (nAttackCount > 0)
+            if (m_kAIHeroData.nCmdDodge + m_kAIHeroData.nDodgeCountInBag > 0)
             {
-                nVecIndex = rand() % nAttackCount;
-                m_kAICmdList[2] = m_vecAIWaitingCmd_Attack[nVecIndex];
+                m_kAICmdList[2] = NwSPKCmd_ShanBi;
                 bCmdReady_2 = true;
             }
         }
+         */
+
+        //如果前面的指令是闪避，则本指令是攻击类指令
+        if (bCmdReady_2 == false)
+        {
+            if (m_kAICmdList[1] == NwSPKCmd_ShanBi)
+            {
+                PrepareAIWaitingCmd_Attack();
+                const int nAttackCount = (int)m_vecAIWaitingCmd_Attack.size();
+                if (nAttackCount > 0)
+                {
+                    nVecIndex = rand() % nAttackCount;
+                    m_kAICmdList[2] = m_vecAIWaitingCmd_Attack[nVecIndex];
+                    bCmdReady_2 = true;
+                }
+            }
+        }
+
         if (bCmdReady_2 == false)
         {
             nVecIndex = rand() % m_vecAIWaitingCmd.size();
@@ -216,6 +247,11 @@ void NwSPKLogic::IncreaseRoundCount()
     m_nCurrentTouchIndex = 0;
 }
 //--------------------------------------------------------------------
+int NwSPKLogic::GetCurrentTouchIndex()
+{
+    return m_nCurrentTouchIndex;
+}
+//--------------------------------------------------------------------
 void NwSPKLogic::GenerateCurrentTouchResult()
 {
     m_nMyCmd = m_kMyCmdList[m_nCurrentTouchIndex];
@@ -228,22 +264,34 @@ void NwSPKLogic::GenerateCurrentTouchResult()
 //--------------------------------------------------------------------
 void NwSPKLogic::ApplyTouchResult()
 {
+    //上一次是眩晕状态的，这一次要解除眩晕
+    bool bOldMyDizzy = m_kMyHeroData.bDizzy;
+    bool bOldAIDizzy = m_kAIHeroData.bDizzy;
+    m_kMyHeroData.bDizzy = false;
+    m_kAIHeroData.bDizzy = false;
+
     if (m_NwSPKTouchResult == NwSPKTouchResult_Win)
     {
         if (m_nMyCmd == NwSPKCmd_ShanBi)
         {
             //对敌人施加一次眩晕
-            m_kAIHeroData.bDizzy = true;
-        }
-        else
-        {
-            //血量减少
-            m_kAIHeroData.nCurHP -= m_nAttackDamage;
-            if (m_kAIHeroData.nCurHP < 0)
+            if (bOldAIDizzy)
             {
-                m_kAIHeroData.nCurHP = 0;
+                //上一次敌人已经是眩晕的，我的闪避没发挥作用，不再施加眩晕
+            }
+            else
+            {
+                m_kAIHeroData.bDizzy = true;
             }
         }
+
+        //血量减少
+        m_kAIHeroData.nCurHP -= m_nAttackDamage;
+        if (m_kAIHeroData.nCurHP < 0)
+        {
+            m_kAIHeroData.nCurHP = 0;
+        }
+
         //增加斗志
         if (m_kMyHeroData.nCurEnergy < m_kMyHeroData.nMaxEnergy)
         {
@@ -261,17 +309,23 @@ void NwSPKLogic::ApplyTouchResult()
         if (m_nAICmd == NwSPKCmd_ShanBi)
         {
             //对敌人施加一次眩晕
-            m_kMyHeroData.bDizzy = true;
-        }
-        else
-        {
-            //血量减少
-            m_kMyHeroData.nCurHP -= m_nAttackDamage;
-            if (m_kMyHeroData.nCurHP < 0)
+            if (bOldMyDizzy)
             {
-                m_kMyHeroData.nCurHP = 0;
+                //上一次敌人已经是眩晕的，我的闪避没发挥作用，不再施加眩晕
+            }
+            else
+            {
+                m_kMyHeroData.bDizzy = true;
             }
         }
+
+        //血量减少
+        m_kMyHeroData.nCurHP -= m_nAttackDamage;
+        if (m_kMyHeroData.nCurHP < 0)
+        {
+            m_kMyHeroData.nCurHP = 0;
+        }
+
         //增加斗志
         if (m_kAIHeroData.nCurEnergy < m_kAIHeroData.nMaxEnergy)
         {
@@ -372,20 +426,30 @@ bool NwSPKLogic::IsFightFinish()
     return false;
 }
 //--------------------------------------------------------------------
+bool NwSPKLogic::IsMainPlayerWin()
+{
+    if (m_kMyHeroData.nCurHP > 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+//--------------------------------------------------------------------
 void NwSPKLogic::JudgeCmd(int CmdA, int CmdB)
 {
     //定义眩晕状态的枚举值
     static const int CmdBtn_Dizzy = NwSPKCmd_Max + 1;
 
-    if (m_kMyHeroData.bDizzy == true)
+    if (m_kMyHeroData.bDizzy)
     {
         CmdA = CmdBtn_Dizzy;
-        m_kMyHeroData.bDizzy = false;
     }
-    if (m_kAIHeroData.bDizzy == true)
+    if (m_kAIHeroData.bDizzy)
     {
         CmdB = CmdBtn_Dizzy;
-        m_kAIHeroData.bDizzy = false;
     }
     //
     m_NwSPKTouchResult = NwSPKTouchResult_Draw;

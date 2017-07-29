@@ -18,12 +18,17 @@
 #define GGUI_ButtonStateHover_ColorG 0.0f
 #define GGUI_ButtonStateHover_ColorB 0.0f
 #define GGUI_ButtonStateHover_ColorA 0.5f
-#define GGUI_ButtonStateHover_DeltaX -1.0f
-#define GGUI_ButtonStateHover_DeltaY -1.0f
 #define GGUI_ButtonStatePush_ColorR 0.0f
 #define GGUI_ButtonStatePush_ColorG 0.0f
 #define GGUI_ButtonStatePush_ColorB 1.0f
 #define GGUI_ButtonStatePush_ColorA 0.5f
+#define GGUI_ButtonStateDisable_ColorR 0.5f
+#define GGUI_ButtonStateDisable_ColorG 0.5f
+#define GGUI_ButtonStateDisable_ColorB 0.5f
+#define GGUI_ButtonStateDisable_ColorA 0.75f
+
+#define GGUI_ButtonStateHover_DeltaX -1.0f
+#define GGUI_ButtonStateHover_DeltaY -1.0f
 
 #if (SoTargetPlatform == SoPlatform_Windows)
 #define GGUI_ButtonStatePush_DeltaX 2.0f

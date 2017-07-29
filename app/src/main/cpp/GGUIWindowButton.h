@@ -46,11 +46,6 @@ inline int GGUIWindowButton::GetImageRectIndex() const
 {
 	return m_nImageRectIndex;
 }
-//----------------------------------------------------------------
-inline void GGUIWindowButton::SetButtonState(GGUIButtonState eState)
-{
-	m_eButtonState = eState;
-}
 //------------------------------------------------------------
 inline GGUIButtonState GGUIWindowButton::GetButtonState() const
 {

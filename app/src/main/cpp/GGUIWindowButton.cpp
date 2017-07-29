@@ -59,6 +59,13 @@ void GGUIWindowButton::RenderWindow()
 		fDeltaX_BtnState = GGUI_ButtonStatePush_DeltaX;
 		fDeltaY_BtnState = GGUI_ButtonStatePush_DeltaY;
 	}
+	else if (m_eButtonState == GGUIButtonState_Disable)
+	{
+        fColorR_BtnState = GGUI_ButtonStateDisable_ColorR;
+        fColorG_BtnState = GGUI_ButtonStateDisable_ColorG;
+        fColorB_BtnState = GGUI_ButtonStateDisable_ColorB;
+        fColorA_BtnState = GGUI_ButtonStateDisable_ColorA;
+	}
 	//
 	GGUIRect kAbsRect(m_kRectInAbsCoord.x + fDeltaX_BtnState, m_kRectInAbsCoord.y + fDeltaY_BtnState, m_kRectInAbsCoord.w, m_kRectInAbsCoord.h);
 	GGUIColor kColor(fColorR_BtnState, fColorG_BtnState, fColorB_BtnState, fColorA_BtnState);
@@ -171,6 +178,25 @@ bool GGUIWindowButton::InputWindow(GGUIInputMsg* pInputMsg)
 void GGUIWindowButton::SetImage(const char* szImage)
 {
 	GGUIFunc_GetImagesetIndexRectIndex(szImage, &m_nImagesetIndex, &m_nImageRectIndex);
+}
+//----------------------------------------------------------------
+void GGUIWindowButton::SetButtonState(GGUIButtonState eState)
+{
+    if (m_eButtonState == eState)
+    {
+        return;
+    }
+
+    if (eState == GGUIButtonState_Disable)
+    {
+        SetInputEnableByReason(GGUIReasonInputDisable_Disable, false);
+    }
+    else if (m_eButtonState == GGUIButtonState_Disable)
+    {
+        SetInputEnableByReason(GGUIReasonInputDisable_Disable, true);
+    }
+
+    m_eButtonState = eState;
 }
 //----------------------------------------------------------------
 void GGUIWindowButton::SetText(const char* szText)

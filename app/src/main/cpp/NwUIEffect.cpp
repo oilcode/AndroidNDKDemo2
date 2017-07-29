@@ -132,7 +132,7 @@ void NwUIEffect::PlayDamageNumber(const stDamageNumberParam& kParam)
     theActionGroup->AddActionLine(pActionLine);
 
     GGUIActionMove* pActionMove = (GGUIActionMove*)GGUIActionFactory::Get()->CreateUIAction(GGUIAction_Move);
-    pActionMove->InitActionMove(0.0f, 200.0f, kParam.fTime);
+    pActionMove->InitActionMove(0.0f, 50.0f, kParam.fTime);
     pActionLine->AddAction(pActionMove);
 
     GGUIActionEvent* pActionEvent = (GGUIActionEvent*)GGUIActionFactory::Get()->CreateUIAction(GGUIAction_Event);

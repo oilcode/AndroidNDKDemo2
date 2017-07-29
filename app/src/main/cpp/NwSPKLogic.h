@@ -19,14 +19,15 @@ public:
     void PrepareForRound_MyHero();
     //一个回合即将开始，为AI武将准备可选的指令
     void PrepareForRound_AIHero();
-    
+
     //设置玩家选择了哪三个战斗指令
     void SetPlayerOption(NwSPKCmdType nCmd_Touch0, NwSPKCmdType nCmd_Touch1, NwSPKCmdType nCmd_Touch2);
     //为AI生成战斗指令
     void GenerateCmdForAI();
     //增加回合的数目
     void IncreaseRoundCount();
-    
+
+    int GetCurrentTouchIndex();
     //计算当前交锋的结果
     void GenerateCurrentTouchResult();
     //把本次交锋的结果应用到玩家数据上
@@ -43,6 +44,8 @@ public:
     bool IsRoundFinish();
     //判断战斗是否结束了，有人血量为0了
     bool IsFightFinish();
+    //战斗结束，判断客户端主角是否赢了
+    bool IsMainPlayerWin();
     
 private:
     //判断两个指令的大小
