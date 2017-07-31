@@ -1,10 +1,12 @@
 package com.ggui.swoosh.fidemo;
 
 import android.app.Activity;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Message;
 import android.util.Log;
+import android.view.Display;
 
 public class MainActivity extends Activity
 {
@@ -44,7 +46,11 @@ public class MainActivity extends Activity
             Log.i("Android", "ExternalPath : none");
         }
 
-        Cpp2JavaLibNative.AndroidAdepterOnActivityCreate();
+        //
+        Point kScreenSize = new Point(960, 540);
+        Display display = getWindowManager().getDefaultDisplay();
+        display.getRealSize(kScreenSize);
+        Cpp2JavaLibNative.AndroidAdepterOnActivityCreate(kScreenSize.x, kScreenSize.y);
         Log.i("Android", "MainActivity.onCreate : end");
     }
 

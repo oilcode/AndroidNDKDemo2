@@ -19,6 +19,10 @@ bool GLShaderManager::CreateShaderManager()
             br = false;
         }
     }
+    else
+    {
+        ms_pInstance->ReCreateGLResource();
+    }
     return br;
 }
 //--------------------------------------------------------------------------------------------------
@@ -47,7 +51,9 @@ GLShaderManager::~GLShaderManager()
 bool GLShaderManager::InitShaderManager()
 {
     m_pShaderList[GLShader_Standard] = new GLShaderStandard;
+    m_pShaderList[GLShader_Standard]->ReCreateGLResource();
     m_pShaderList[GLShader_GGUI] = new GLShaderGGUI;
+    m_pShaderList[GLShader_GGUI]->ReCreateGLResource();
     return true;
 }
 //--------------------------------------------------------------------------------------------------
@@ -59,6 +65,17 @@ void GLShaderManager::ClearShaderManager()
         {
             delete m_pShaderList[i];
             m_pShaderList[i] = 0;
+        }
+    }
+}
+//--------------------------------------------------------------------------------------------------
+void GLShaderManager::ReCreateGLResource()
+{
+    for (int i = 0; i < GLShader_Max; ++i)
+    {
+        if (m_pShaderList[i])
+        {
+            m_pShaderList[i]->ReCreateGLResource();
         }
     }
 }

@@ -21,6 +21,7 @@ class GLShaderStandard : public GLShaderBase
 public:
     GLShaderStandard();
     ~GLShaderStandard();
+    void ReCreateGLResource();
     void ProcessRender(void* pParam) const;
 
 private:

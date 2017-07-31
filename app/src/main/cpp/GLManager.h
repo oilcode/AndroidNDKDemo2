@@ -14,21 +14,15 @@ public:
     void BeginRender();
     void EndRender();
 
-    void SetResolution(int newWidth, int newHeight);
-    void GetResolution(int* pWidth, int* pHeight);
-    float GetResolutionWidth();
-    float GetResolutionHeight();
-
 private:
     GLManager();
     ~GLManager();
     bool InitGLManager();
     void ClearGLManager();
+    void ReInitGLResource();
 
 private:
     static GLManager* ms_pInstance;
-    int m_nResolutionWidth;
-    int m_nResolutionHeight;
 };
 //--------------------------------------------------------------------------------------------------
 inline GLManager* GLManager::Get()
@@ -36,14 +30,16 @@ inline GLManager* GLManager::Get()
     return ms_pInstance;
 }
 //--------------------------------------------------------------------------------------------------
-inline float GLManager::GetResolutionWidth()
+inline void GLManager::BeginRender()
 {
-    return (float)m_nResolutionWidth;
+    //清除后台缓冲区。
+    //用背景色填充颜色缓冲区，用默认深度值填充深度缓冲区。
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 //--------------------------------------------------------------------------------------------------
-inline float GLManager::GetResolutionHeight()
+inline void GLManager::EndRender()
 {
-    return (float)m_nResolutionHeight;
+
 }
 //--------------------------------------------------------------------------------------------------
 #endif //_GLManager_h_

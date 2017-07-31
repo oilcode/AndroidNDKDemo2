@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------------------------------
 #include "GLModelCube.h"
-#include "GLManager.h"
+#include "GLFuncHelp.h"
 #include "GLShaderManager.h"
 #include "GLTextureManager.h"
 //--------------------------------------------------------------------------------------------------
@@ -56,11 +56,9 @@ void GLModelCube::ModelProcessInputMsg(AnInputMsgInfo* kMsgInfo)
         float fDeltaY = kMsgInfo->fDeltaY;
         if (fDeltaX < -1.0f || fDeltaX > 1.0f || fDeltaY < -1.0f || fDeltaY > 1.0f)
         {
-            int nWidth = 0;
-            int nHeight = 0;
-            GLManager::Get()->GetResolution(&nWidth, &nHeight);
-            const float width = (float)nWidth;
-            const float height = (float)nHeight;
+            float width = 0.0f;
+            float height = 0.0f;
+            GLFunc_GetResolution(&width, &height);
             SetDeltaPitchYaw(fDeltaY/height, fDeltaX/width);
 
             //GLCamera::Get()->SetDeltaPitchYaw(fDeltaY/height, fDeltaX/width);

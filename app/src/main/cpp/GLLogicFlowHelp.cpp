@@ -1,5 +1,6 @@
 //--------------------------------------------------------------------------------------------------
 #include "GLLogicFlowHelp.h"
+#include "GLFuncHelp.h"
 #include "GLManager.h"
 #include "GLTextureManager.h"
 #include "GLShaderManager.h"
@@ -11,22 +12,14 @@
 //GLModelCube* g_pModelCube = 0;
 //GLModelRect* g_pModelRect = 0;
 //--------------------------------------------------------------------------------------------------
-bool GLLogicFlowHelpCreateBase()
+bool GLLogicFlowHelpCreate()
 {
-    SoIDEOutputLogInfo("GLLogicFlowHelpCreateBase : begin");
+    SoIDEOutputLogInfo("GLLogicFlowHelpCreate : begin");
     GLManager::CreateGLManager();
-    SoIDEOutputLogInfo("GLLogicFlowHelpCreateBase : end");
-    return true;
-}
-//--------------------------------------------------------------------------------------------------
-bool GLLogicFlowHelpCreateOther()
-{
-    SoIDEOutputLogInfo("GLLogicFlowHelpCreateOther : begin");
     GLTextureManager::CreateTextureManager();
     GLShaderManager::CreateShaderManager();
     GLCamera::CreateCamera();
     GLCameraUI::CreateCameraUI();
-
 
     //g_pModelCube = SoNew GLModelCube;
 
@@ -49,7 +42,17 @@ bool GLLogicFlowHelpCreateOther()
     }
     */
 
-    SoIDEOutputLogInfo("GLLogicFlowHelpCreateOther : end");
+    SoIDEOutputLogInfo("GLLogicFlowHelpCreate : end");
+    return true;
+}
+//--------------------------------------------------------------------------------------------------
+bool GLLogicFlowHelpReCreateGLResource()
+{
+    SoIDEOutputLogInfo("GLLogicFlowHelpReCreateGLResource : begin");
+    GLManager::CreateGLManager();
+    GLTextureManager::CreateTextureManager();
+    GLShaderManager::CreateShaderManager();
+    SoIDEOutputLogInfo("GLLogicFlowHelpReCreateGLResource : end");
     return true;
 }
 //--------------------------------------------------------------------------------------------------
@@ -118,11 +121,23 @@ void GLLogicFlowHelpRender()
     GLManager::Get()->EndRender();
 }
 //--------------------------------------------------------------------------------------------------
-void GLLogicFlowHelpResolutionChanged(int width, int height)
+void GLLogicFlowHelpSetResolution(int width, int height)
 {
-    SoIDEOutputLogInfo("GLLogicFlowHelpResolutionChanged : begin width[%d] height[%d]", width, height);
-    GLManager::Get()->SetResolution(width, height);
-    SoIDEOutputLogInfo("GLLogicFlowHelpResolutionChanged : end");
+    GLFunc_SetResolution((float)width, (float)height);
+}
+//--------------------------------------------------------------------------------------------------
+bool GLLogicFlowHelpShouldReCreateGLResource()
+{
+    if (GLManager::Get() == NULL)
+    {
+        //刚刚启动，执行初始化流程，不需要重建GL资源。
+        return false;
+    }
+    else
+    {
+        //应用程序已经初始化过了，需要重建GL资源。
+        return true;
+    }
 }
 //--------------------------------------------------------------------------------------------------
 void GLLogicFlowHelpDispatchInputMsg(AnInputMsgInfo* pMsgInfo)

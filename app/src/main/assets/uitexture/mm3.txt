@@ -1,2 +1,0 @@
-Texture = uitexture/uitex3.png
-Name1 = { l = 0; r = 1; t = 0; b = 1; }

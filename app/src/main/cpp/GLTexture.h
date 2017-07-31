@@ -21,8 +21,10 @@ public:
 protected:
     GLTexture();
     ~GLTexture();
-    void InitTexture(int nID, GLuint uiResourceID, const char* pFileName, int nWidth, int nHeight);
+    bool InitTexture(int nID, const char* pFileName, bool bGenerateMipMap);
     void ClearTexture();
+    bool ReCreateGLResource();
+    GLuint LoadGLTexResource(const char* pszFileName, bool bGenerateMipMap, int* pWidth, int* pHeight);
 
 private:
     const char* m_pFileName;
@@ -31,16 +33,8 @@ private:
     int m_nWidth;
     int m_nHeight;
     int m_nRefCount;
+    bool m_bGenerateMipMap;
 };
-//------------------------------------------------------------
-inline void GLTexture::InitTexture(int nID, GLuint uiResourceID, const char* pFileName, int nWidth, int nHeight)
-{
-    m_pFileName = pFileName;
-    m_nTextureID = nID;
-    m_uiResourceID = uiResourceID;
-    m_nWidth = nWidth;
-    m_nHeight = nHeight;
-}
 //------------------------------------------------------------
 inline int GLTexture::GetTextureID() const
 {

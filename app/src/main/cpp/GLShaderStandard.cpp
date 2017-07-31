@@ -11,6 +11,27 @@ GLShaderStandard::GLShaderStandard()
 ,m_uiMatProjectViewID(0)
 ,m_uiTexSamplerID(0)
 {
+
+}
+//--------------------------------------------------------------------------------------------------
+GLShaderStandard::~GLShaderStandard()
+{
+    if (m_uiProgramID)
+    {
+        glDeleteProgram(m_uiProgramID);
+        m_uiProgramID = 0;
+    }
+}
+//--------------------------------------------------------------------------------------------------
+void GLShaderStandard::ReCreateGLResource()
+{
+    m_uiProgramID = 0;
+    m_uiVertexID = 0;
+    m_uiUVID = 0;
+    m_uiMatWorldID = 0;
+    m_uiMatProjectViewID = 0;
+    m_uiTexSamplerID = 0;
+
     const char* VertexShader = "";
     SoFile* pVSFile = SoFileHelp::CreateFileAsset("shader/standard_vs.txt");
     if (pVSFile)
@@ -38,20 +59,11 @@ GLShaderStandard::GLShaderStandard()
 
     if (m_uiProgramID)
     {
-        m_uiVertexID = glGetAttribLocation(m_uiProgramID, "myVertex");
-        m_uiUVID = glGetAttribLocation(m_uiProgramID, "myUV");
-        m_uiMatWorldID = glGetUniformLocation(m_uiProgramID, "g_matWorld");
-        m_uiMatProjectViewID = glGetUniformLocation(m_uiProgramID, "g_matProjectView");
-        m_uiTexSamplerID = glGetUniformLocation(m_uiProgramID, "g_Texture");
-    }
-}
-//--------------------------------------------------------------------------------------------------
-GLShaderStandard::~GLShaderStandard()
-{
-    if (m_uiProgramID)
-    {
-        glDeleteProgram(m_uiProgramID);
-        m_uiProgramID = 0;
+        m_uiVertexID = (GLuint)glGetAttribLocation(m_uiProgramID, "myVertex");
+        m_uiUVID = (GLuint)glGetAttribLocation(m_uiProgramID, "myUV");
+        m_uiMatWorldID = (GLuint)glGetUniformLocation(m_uiProgramID, "g_matWorld");
+        m_uiMatProjectViewID = (GLuint)glGetUniformLocation(m_uiProgramID, "g_matProjectView");
+        m_uiTexSamplerID = (GLuint)glGetUniformLocation(m_uiProgramID, "g_Texture");
     }
 }
 //--------------------------------------------------------------------------------------------------

@@ -22,9 +22,9 @@ JNIEXPORT void JNICALL JNI_OnUnload(JavaVM* vm, void* reserved)
 //--------------------------------------------------------------------------------------------------
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_ggui_swoosh_fidemo_Cpp2JavaLibNative_AndroidAdepterOnActivityCreate(JNIEnv *env, jobject obj)
+Java_com_ggui_swoosh_fidemo_Cpp2JavaLibNative_AndroidAdepterOnActivityCreate(JNIEnv *env, jobject obj, int nScreenWidth, int nScreenHeight)
 {
-    AndroidAdepter::onActivityCreate();
+    AndroidAdepter::onActivityCreate(nScreenWidth, nScreenHeight);
 }
 //--------------------------------------------------------------------------------------------------
 extern "C"

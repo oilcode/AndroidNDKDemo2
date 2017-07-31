@@ -1,5 +1,6 @@
 //--------------------------------------------------------------------------------------------------
 #include "GLManager.h"
+#include "GLFuncHelp.h"
 //--------------------------------------------------------------------------------------------------
 GLManager* GLManager::ms_pInstance = 0;
 //--------------------------------------------------------------------------------------------------
@@ -19,6 +20,10 @@ bool GLManager::CreateGLManager()
             br = false;
         }
     }
+    else
+    {
+        ms_pInstance->ReInitGLResource();
+    }
     return br;
 }
 //--------------------------------------------------------------------------------------------------
@@ -32,8 +37,6 @@ void GLManager::ReleaseGLManager()
 }
 //--------------------------------------------------------------------------------------------------
 GLManager::GLManager()
-:m_nResolutionWidth(0)
-,m_nResolutionHeight(0)
 {
 
 }
@@ -44,6 +47,17 @@ GLManager::~GLManager()
 }
 //--------------------------------------------------------------------------------------------------
 bool GLManager::InitGLManager()
+{
+    ReInitGLResource();
+    return true;
+}
+//--------------------------------------------------------------------------------------------------
+void GLManager::ClearGLManager()
+{
+
+}
+//--------------------------------------------------------------------------------------------------
+void GLManager::ReInitGLResource()
 {
     //开启剔除功能。
     glEnable(GL_CULL_FACE);
@@ -71,37 +85,12 @@ bool GLManager::InitGLManager()
     //设置颜色混合的规则。
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    return true;
-}
-//--------------------------------------------------------------------------------------------------
-void GLManager::ClearGLManager()
-{
-
-}
-//--------------------------------------------------------------------------------------------------
-void GLManager::BeginRender()
-{
-    //清除后台缓冲区。
-    //用背景色填充颜色缓冲区，用默认深度值填充深度缓冲区。
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-//--------------------------------------------------------------------------------------------------
-void GLManager::EndRender()
-{
-
-}
-//--------------------------------------------------------------------------------------------------
-void GLManager::SetResolution(int newWidth, int newHeight)
-{
-    m_nResolutionWidth = newWidth;
-    m_nResolutionHeight = newHeight;
     //设置视口。
-    glViewport(0, 0, newWidth, newHeight);
-}
-//--------------------------------------------------------------------------------------------------
-void GLManager::GetResolution(int* pWidth, int* pHeight)
-{
-    *pWidth = m_nResolutionWidth;
-    *pHeight = m_nResolutionHeight;
+    float fWidth = 0.0f;
+    float fHeight = 0.0f;
+    GLFunc_GetResolution(&fWidth, &fHeight);
+    GLsizei nW = (GLsizei)(fWidth + 0.5f);
+    GLsizei nH = (GLsizei)(fHeight + 0.5f);
+    glViewport(0, 0, nW, nH);
 }
 //--------------------------------------------------------------------------------------------------

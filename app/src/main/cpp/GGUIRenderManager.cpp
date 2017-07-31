@@ -1,6 +1,6 @@
 //----------------------------------------------------------------
 #include "GGUIRenderManager.h"
-#include "GLManager.h"
+#include "GLFuncHelp.h"
 #include "GLShaderManager.h"
 #include "GGUIUserDefine.h"
 //----------------------------------------------------------------
@@ -82,10 +82,8 @@ bool GGUIRenderManager::InitUIRenderManager()
 		return false;
 	}
 
-    int nScreenW = 0;
-    int nScreenH = 0;
-    GLManager::Get()->GetResolution(&nScreenW, &nScreenH);
-    m_fScreenHeight = (float)nScreenH;
+    float fScreenW = 0.0f;
+    GLFunc_GetResolution(&fScreenW, &m_fScreenHeight);
 
 	return true;
 }

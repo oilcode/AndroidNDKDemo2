@@ -1,22 +1,18 @@
 //--------------------------------------------------------------------------------------------------
-#ifndef _GLShaderBase_h_
-#define _GLShaderBase_h_
+#include "GLFuncHelp.h"
 //--------------------------------------------------------------------------------------------------
-#include "GLBaseInclude.h"
+float g_fGLResolutionWidth = 960.0f;
+float g_fGLResolutionHeight = 480.0f;
 //--------------------------------------------------------------------------------------------------
-class GLShaderBase
+void GLFunc_SetResolution(float fWidth, float fHeight)
 {
-public:
-    GLShaderBase();
-    virtual ~GLShaderBase();
-    virtual void ReCreateGLResource();
-    virtual void ProcessRender(void* pParam) const;
-
-public:
-    static GLuint CreateProgram(const char* szVertexSource, const char* szFragmentSource);
-    static GLuint CompileShader(GLenum eShaderType, const char* szSource);
-
-};
+    g_fGLResolutionWidth = fWidth;
+    g_fGLResolutionHeight = fHeight;
+}
 //--------------------------------------------------------------------------------------------------
-#endif //_GLShaderBase_h_
+void GLFunc_GetResolution(float* pWidth, float* pHeight)
+{
+    *pWidth = g_fGLResolutionWidth;
+    *pHeight = g_fGLResolutionHeight;
+}
 //--------------------------------------------------------------------------------------------------

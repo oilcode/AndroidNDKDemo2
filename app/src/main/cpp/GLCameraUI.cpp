@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------
 #include "GLCameraUI.h"
-#include "GLManager.h"
+#include "GLFuncHelp.h"
 //-----------------------------------------------------------------------
 GLCameraUI* GLCameraUI::ms_pInstance = NULL;
 //-----------------------------------------------------------------------
@@ -51,15 +51,13 @@ bool GLCameraUI::InitCameraUI()
 	SoMathMatrix4 kMatView;
 	kMatView.MakeLookTo(kPos, kForward, kRight, kUp);
 
-	int nWidth = 0;
-	int nHeight = 0;
-	GLManager::Get()->GetResolution(&nWidth, &nHeight);
-    float fw = (float)nWidth;
-    float fh = (float)nHeight;
+	float fWidth = 0;
+	float fHeight = 0;
+	GLFunc_GetResolution(&fWidth, &fHeight);
     float fnear = 0.0f;
     float ffar = 10000.0f;
 	SoMathMatrix4 kMatProj;
-	kMatProj.MakeOrtho2DOpenGL(0.0f, fw, 0.0f, fh, fnear, ffar);
+	kMatProj.MakeOrtho2DOpenGL(0.0f, fWidth, 0.0f, fHeight, fnear, ffar);
 
 	m_matProjView = kMatProj * kMatView;
 	return true;

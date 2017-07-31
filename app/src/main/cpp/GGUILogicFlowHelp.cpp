@@ -5,14 +5,15 @@
 #include "GGUIWindowFactory.h"
 #include "GGUIPanelManager.h"
 #include "GGUIActionFactory.h"
-#include "GLManager.h"
+#include "GLFuncHelp.h"
 //----------------------------------------------------------------
 bool GGUILogicFlowHelp_Create()
 {
-	if (GLManager::Get())
-	{
-		GGUIFunc_OnResolutionChanged(GLManager::Get()->GetResolutionWidth(), GLManager::Get()->GetResolutionHeight());
-	}
+    float fWidth = 0.0f;
+    float fHeight = 0.0f;
+    GLFunc_GetResolution(&fWidth, &fHeight);
+    GGUIFunc_OnResolutionChanged(fWidth, fHeight);
+    //
 	if (GGUIRenderManager::CreateUIRenderManager() == false)
 	{
 		return false;

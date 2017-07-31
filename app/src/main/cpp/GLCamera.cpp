@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------
 #include "GLCamera.h"
-#include "GLManager.h"
+#include "GLFuncHelp.h"
 //-----------------------------------------------------------------------
 GLCamera* GLCamera::ms_pInstance = NULL;
 //-----------------------------------------------------------------------
@@ -52,12 +52,10 @@ GLCamera::~GLCamera()
 //-----------------------------------------------------------------------
 bool GLCamera::InitCamera()
 {
-	int nWidth = 0;
-	int nHeight = 0;
-	GLManager::Get()->GetResolution(&nWidth, &nHeight);
-	const float width = (float)nWidth;
-	const float height = (float)nHeight;
-	SetFrustumFov(SoMath_PI*0.25f, width/height, 1.0f, 1000000.0f);
+	float fWidth = 0;
+	float fHeight = 0;
+	GLFunc_GetResolution(&fWidth, &fHeight);
+	SetFrustumFov(SoMath_PI*0.25f, fWidth/fHeight, 1.0f, 1000000.0f);
 	//
 	SetPosition(-70.0f, -70.0f, -70.0f);
 	SetPitchYaw(0.7f, -0.7f);

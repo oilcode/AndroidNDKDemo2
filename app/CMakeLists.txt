@@ -32,6 +32,7 @@ add_library( # Sets the name of the library.
              src/main/cpp/GLCamera.cpp
              src/main/cpp/GLCameraBase.cpp
 			 src/main/cpp/GLCameraUI.cpp
+			 src/main/cpp/GLFuncHelp.cpp
              src/main/cpp/GLLogicFlowHelp.cpp
              src/main/cpp/GLManager.cpp
              src/main/cpp/GLModelCube.cpp

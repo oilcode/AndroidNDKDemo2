@@ -7,7 +7,7 @@
 class AndroidAdepter
 {
 public:
-    static void onActivityCreate();
+    static void onActivityCreate(int nScreenWidth, int nScreenHeight);
     static void onActivityPause();
     static void onActivityResume();
 

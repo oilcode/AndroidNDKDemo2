@@ -8,9 +8,10 @@
 #include "GGUILogicFlowHelp.h"
 #include "NwLogicFlowHelp.h"
 //--------------------------------------------------------------------------------------------------
-void AndroidAdepter::onActivityCreate()
+void AndroidAdepter::onActivityCreate(int nScreenWidth, int nScreenHeight)
 {
-
+    AnInputMsgDispatch::InitInputMsgDispatch();
+    GLLogicFlowHelpSetResolution(nScreenWidth, nScreenHeight);
 }
 //--------------------------------------------------------------------------------------------------
 void AndroidAdepter::onActivityPause()
@@ -40,16 +41,21 @@ void AndroidAdepter::onViewTouchUp(float fx, float fy)
 //--------------------------------------------------------------------------------------------------
 void AndroidAdepter::onRenderSurfaceCreated()
 {
-    AnInputMsgDispatch::InitInputMsgDispatch();
-    GLLogicFlowHelpCreateBase();
+    if (GLLogicFlowHelpShouldReCreateGLResource())
+    {
+        GLLogicFlowHelpReCreateGLResource();
+    }
+    else
+    {
+        GLLogicFlowHelpCreate();
+        GGUILogicFlowHelp_Create();
+        NwLogicFlowHelp_Create();
+    }
 }
 //--------------------------------------------------------------------------------------------------
 void AndroidAdepter::onRenderSurfaceChanged(int width, int height)
 {
-    GLLogicFlowHelpResolutionChanged(width, height);
-    GLLogicFlowHelpCreateOther();
-    GGUILogicFlowHelp_Create();
-    NwLogicFlowHelp_Create();
+
 }
 //--------------------------------------------------------------------------------------------------
 void AndroidAdepter::onRenderDrawFrame()

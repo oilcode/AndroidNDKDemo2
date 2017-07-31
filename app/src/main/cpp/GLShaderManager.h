@@ -26,6 +26,7 @@ private:
     ~GLShaderManager();
     bool InitShaderManager();
     void ClearShaderManager();
+    void ReCreateGLResource();
 
 private:
     static GLShaderManager* ms_pInstance;

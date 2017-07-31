@@ -9,7 +9,7 @@ public class Cpp2JavaLibNative
         System.loadLibrary("native-lib");
     }
 
-    public static native void AndroidAdepterOnActivityCreate();
+    public static native void AndroidAdepterOnActivityCreate(int nScreenWidth, int nScreenHeight);
     public static native void AndroidAdepterOnActivityPause();
     public static native void AndroidAdepterOnActivityResume();
     public static native void AndroidAdepterOnViewTouchDown(float fx, float fy);

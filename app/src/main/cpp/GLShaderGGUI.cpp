@@ -11,6 +11,27 @@ GLShaderGGUI::GLShaderGGUI()
 ,m_uiMatProjectViewID(0)
 ,m_uiTexSamplerID(0)
 {
+
+}
+//--------------------------------------------------------------------------------------------------
+GLShaderGGUI::~GLShaderGGUI()
+{
+    if (m_uiProgramID)
+    {
+        glDeleteProgram(m_uiProgramID);
+        m_uiProgramID = 0;
+    }
+}
+//--------------------------------------------------------------------------------------------------
+void GLShaderGGUI::ReCreateGLResource()
+{
+    m_uiProgramID = 0;
+    m_uiVertexID = 0;
+    m_uiUVID = 0;
+    m_uiColorID = 0;
+    m_uiMatProjectViewID = 0;
+    m_uiTexSamplerID = 0;
+
     const char* VertexShader = "";
     SoFile* pVSFile = SoFileHelp::CreateFileAsset("shader/ggui_vs.txt");
     if (pVSFile)
@@ -38,25 +59,16 @@ GLShaderGGUI::GLShaderGGUI()
 
     if (m_uiProgramID)
     {
-        m_uiVertexID = glGetAttribLocation(m_uiProgramID, "myVertex");
-        m_uiUVID = glGetAttribLocation(m_uiProgramID, "myUV_TexIndex");
-        m_uiColorID = glGetAttribLocation(m_uiProgramID, "myColor");
-        m_uiMatProjectViewID = glGetUniformLocation(m_uiProgramID, "g_matProjectView");
-        m_uiTexSamplerID = glGetUniformLocation(m_uiProgramID, "g_TextureList");
+        m_uiVertexID = (GLuint)glGetAttribLocation(m_uiProgramID, "myVertex");
+        m_uiUVID = (GLuint)glGetAttribLocation(m_uiProgramID, "myUV_TexIndex");
+        m_uiColorID = (GLuint)glGetAttribLocation(m_uiProgramID, "myColor");
+        m_uiMatProjectViewID = (GLuint)glGetUniformLocation(m_uiProgramID, "g_matProjectView");
+        m_uiTexSamplerID = (GLuint)glGetUniformLocation(m_uiProgramID, "g_TextureList");
     }
 
     for (int i = 0; i < GLShaderGGUI_MaxTexSamplerCount; ++i)
     {
         m_kSamplerUnitList[i] = i;
-    }
-}
-//--------------------------------------------------------------------------------------------------
-GLShaderGGUI::~GLShaderGGUI()
-{
-    if (m_uiProgramID)
-    {
-        glDeleteProgram(m_uiProgramID);
-        m_uiProgramID = 0;
     }
 }
 //--------------------------------------------------------------------------------------------------

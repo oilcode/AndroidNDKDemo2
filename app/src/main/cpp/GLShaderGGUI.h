@@ -24,6 +24,7 @@ class GLShaderGGUI : public GLShaderBase
 public:
     GLShaderGGUI();
     ~GLShaderGGUI();
+    void ReCreateGLResource();
     void ProcessRender(void* pParam) const;
 
 private:

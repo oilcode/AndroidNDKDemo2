@@ -23,7 +23,7 @@ private:
 	~GLTextureManager();
 	bool InitTextureManager();
 	void ClearTextureManager();
-    GLuint LoadGLTexResource(const char* pszFileName, bool bGenerateMipMap, int* pWidth, int* pHeight);
+	void ReCreateGLResource();
 
 private:
 	typedef std::map<std::string, int> mapName2TextureID;
