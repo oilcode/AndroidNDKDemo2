@@ -382,22 +382,22 @@ void NwUISPK::SetAllButtonEnableFlag(bool bEnable)
 //--------------------------------------------------------------------
 void NwUISPK::CreateWindows()
 {
-    GGUIFullRect kFullRect;
-    kFullRect.fDeltaX = 0.0f;
-    kFullRect.fDeltaY = 0.0f;
-    kFullRect.fDeltaW = GGUIFunc_GetResolutionWidth();
-    kFullRect.fDeltaH = GGUIFunc_GetResolutionHeight();
-    SetFullRect(kFullRect);
+    float fStandardWidth = 960.0f;
+    float fStandardHeight = 540.0f;
+    SetStandardWidthHeight(fStandardWidth, fStandardHeight);
     SetInputEnable(true);
     SetDragEnable(false); //本Panel是全屏窗口，不能拖拽。
     SetSpaceType(GGUIPanelSpace_Normal);
 
     GGUIWindowButton* pUIButton = NULL;
+    GGUIFullRect kFullRect;
 
-    kFullRect.fDeltaX = 100.0f;
-    kFullRect.fDeltaY = 400.0f;
-    kFullRect.fDeltaW = 126.0f;
-    kFullRect.fDeltaH = 50.0f;
+    kFullRect.eHorzAttachType = GGUIWindowHorzAttach_Center;
+    kFullRect.eVertAttachType = GGUIWindowVertAttach_Bottom;
+    kFullRect.fScaleX = 100.0f / fStandardWidth;
+    kFullRect.fScaleY = 400.0f / fStandardHeight;
+    kFullRect.fScaleW = 126.0f / fStandardWidth;
+    kFullRect.fScaleH = 50.0f / fStandardHeight;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
     pUIButton->SetImage(g_CmdBtnTexture[NwSPKCmd_Up]);
@@ -406,10 +406,7 @@ void NwUISPK::CreateWindows()
     AddChild(pUIButton);
     m_pBtnCmdList[NwSPKCmd_Up] = pUIButton;
 
-    kFullRect.fDeltaX = 250.0f;
-    kFullRect.fDeltaY = 400.0f;
-    kFullRect.fDeltaW = 126.0f;
-    kFullRect.fDeltaH = 50.0f;
+    kFullRect.fScaleX = 250.0f / fStandardWidth;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
     pUIButton->SetImage(g_CmdBtnTexture[NwSPKCmd_Middle]);
@@ -418,10 +415,7 @@ void NwUISPK::CreateWindows()
     AddChild(pUIButton);
     m_pBtnCmdList[NwSPKCmd_Middle] = pUIButton;
 
-    kFullRect.fDeltaX = 400.0f;
-    kFullRect.fDeltaY = 400.0f;
-    kFullRect.fDeltaW = 126.0f;
-    kFullRect.fDeltaH = 50.0f;
+    kFullRect.fScaleX = 400.0f / fStandardWidth;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
     pUIButton->SetImage(g_CmdBtnTexture[NwSPKCmd_Down]);
@@ -430,10 +424,7 @@ void NwUISPK::CreateWindows()
     AddChild(pUIButton);
     m_pBtnCmdList[NwSPKCmd_Down] = pUIButton;
 
-    kFullRect.fDeltaX = 550.0f;
-    kFullRect.fDeltaY = 400.0f;
-    kFullRect.fDeltaW = 126.0f;
-    kFullRect.fDeltaH = 50.0f;
+    kFullRect.fScaleX = 550.0f / fStandardWidth;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
     pUIButton->SetImage(g_CmdBtnTexture[NwSPKCmd_ZhaoJia]);
@@ -443,10 +434,8 @@ void NwUISPK::CreateWindows()
     m_pBtnCmdList[NwSPKCmd_ZhaoJia] = pUIButton;
 
 
-    kFullRect.fDeltaX = 100.0f;
-    kFullRect.fDeltaY = 470.0f;
-    kFullRect.fDeltaW = 126.0f;
-    kFullRect.fDeltaH = 50.0f;
+    kFullRect.fScaleX = 100.0f / fStandardWidth;
+    kFullRect.fScaleY = 470.0f / fStandardHeight;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
     pUIButton->SetImage(g_CmdBtnTexture[NwSPKCmd_ShanBi]);
@@ -455,10 +444,7 @@ void NwUISPK::CreateWindows()
     AddChild(pUIButton);
     m_pBtnCmdList[NwSPKCmd_ShanBi] = pUIButton;
 
-    kFullRect.fDeltaX = 250.0f;
-    kFullRect.fDeltaY = 470.0f;
-    kFullRect.fDeltaW = 126.0f;
-    kFullRect.fDeltaH = 50.0f;
+    kFullRect.fScaleX = 250.0f / fStandardWidth;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
     pUIButton->SetImage(g_CmdBtnTexture[NwSPKCmd_DongCha]);
@@ -467,10 +453,7 @@ void NwUISPK::CreateWindows()
     AddChild(pUIButton);
     m_pBtnCmdList[NwSPKCmd_DongCha] = pUIButton;
 
-    kFullRect.fDeltaX = 400.0f;
-    kFullRect.fDeltaY = 470.0f;
-    kFullRect.fDeltaW = 126.0f;
-    kFullRect.fDeltaH = 50.0f;
+    kFullRect.fScaleX = 400.0f / fStandardWidth;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
     pUIButton->SetImage(g_CmdBtnTexture[NwSPKCmd_XuanFeng]);
@@ -479,10 +462,7 @@ void NwUISPK::CreateWindows()
     AddChild(pUIButton);
     m_pBtnCmdList[NwSPKCmd_XuanFeng] = pUIButton;
 
-    kFullRect.fDeltaX = 550.0f;
-    kFullRect.fDeltaY = 470.0f;
-    kFullRect.fDeltaW = 126.0f;
-    kFullRect.fDeltaH = 50.0f;
+    kFullRect.fScaleX = 550.0f / fStandardWidth;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
     pUIButton->SetImage(g_CmdBtnTexture[NwSPKCmd_FanSha]);
@@ -492,10 +472,12 @@ void NwUISPK::CreateWindows()
     m_pBtnCmdList[NwSPKCmd_FanSha] = pUIButton;
 
     //---------------------------------------------------
-    kFullRect.fDeltaX = 320.0f;
-    kFullRect.fDeltaY = 50.0f;
-    kFullRect.fDeltaW = 126.0f;
-    kFullRect.fDeltaH = 50.0f;
+    kFullRect.eHorzAttachType = GGUIWindowHorzAttach_Center;
+    kFullRect.eVertAttachType = GGUIWindowVertAttach_Top;
+    kFullRect.fScaleX = 320.0f / fStandardWidth;
+    kFullRect.fScaleY = 50.0f / fStandardHeight;
+    kFullRect.fScaleW = 126.0f / fStandardWidth;
+    kFullRect.fScaleH = 50.0f / fStandardHeight;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
     pUIButton->SetImage(g_CmdBtnEmptyTex);
@@ -504,10 +486,7 @@ void NwUISPK::CreateWindows()
     AddChild(pUIButton);
     m_pBtnTouchList[SideLeft][NwSPKTouch_0] = pUIButton;
 
-    kFullRect.fDeltaX = 320.0f;
-    kFullRect.fDeltaY = 110.0f;
-    kFullRect.fDeltaW = 126.0f;
-    kFullRect.fDeltaH = 50.0f;
+    kFullRect.fScaleY = 110.0f / fStandardHeight;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
     pUIButton->SetImage(g_CmdBtnEmptyTex);
@@ -516,10 +495,7 @@ void NwUISPK::CreateWindows()
     AddChild(pUIButton);
     m_pBtnTouchList[SideLeft][NwSPKTouch_1] = pUIButton;
 
-    kFullRect.fDeltaX = 320.0f;
-    kFullRect.fDeltaY = 170.0f;
-    kFullRect.fDeltaW = 126.0f;
-    kFullRect.fDeltaH = 50.0f;
+    kFullRect.fScaleY = 170.0f / fStandardHeight;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
     pUIButton->SetImage(g_CmdBtnEmptyTex);
@@ -529,10 +505,8 @@ void NwUISPK::CreateWindows()
     m_pBtnTouchList[SideLeft][NwSPKTouch_2] = pUIButton;
 
     //---------------------------------------------------
-    kFullRect.fDeltaX = 500.0f;
-    kFullRect.fDeltaY = 50.0f;
-    kFullRect.fDeltaW = 126.0f;
-    kFullRect.fDeltaH = 50.0f;
+    kFullRect.fScaleX = 500.0f / fStandardWidth;
+    kFullRect.fScaleY = 50.0f / fStandardHeight;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
     pUIButton->SetImage(g_CmdBtnEmptyTex);
@@ -541,10 +515,7 @@ void NwUISPK::CreateWindows()
     AddChild(pUIButton);
     m_pBtnTouchList[SideRight][NwSPKTouch_0] = pUIButton;
 
-    kFullRect.fDeltaX = 500.0f;
-    kFullRect.fDeltaY = 110.0f;
-    kFullRect.fDeltaW = 126.0f;
-    kFullRect.fDeltaH = 50.0f;
+    kFullRect.fScaleY = 110.0f / fStandardHeight;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
     pUIButton->SetImage(g_CmdBtnEmptyTex);
@@ -553,10 +524,7 @@ void NwUISPK::CreateWindows()
     AddChild(pUIButton);
     m_pBtnTouchList[SideRight][NwSPKTouch_1] = pUIButton;
 
-    kFullRect.fDeltaX = 500.0f;
-    kFullRect.fDeltaY = 170.0f;
-    kFullRect.fDeltaW = 126.0f;
-    kFullRect.fDeltaH = 50.0f;
+    kFullRect.fScaleY = 170.0f / fStandardHeight;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
     pUIButton->SetImage(g_CmdBtnEmptyTex);
@@ -569,10 +537,12 @@ void NwUISPK::CreateWindows()
     //---------------------------------------------------
     GGUIWindowProcessBar* pProcessBar = NULL;
 
-    kFullRect.fDeltaX = 20.0f;
-    kFullRect.fDeltaY = 30.0f;
-    kFullRect.fDeltaW = 260.0f;
-    kFullRect.fDeltaH = 30.0f;
+    kFullRect.eHorzAttachType = GGUIWindowHorzAttach_Left;
+    kFullRect.eVertAttachType = GGUIWindowVertAttach_Top;
+    kFullRect.fScaleX = 20.0f / fStandardWidth;
+    kFullRect.fScaleY = 30.0f / fStandardHeight;
+    kFullRect.fScaleW = 260.0f / fStandardWidth;
+    kFullRect.fScaleH = 30.0f / fStandardHeight;
     pProcessBar = (GGUIWindowProcessBar*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_ProcessBar);
     pProcessBar->SetFullRect(kFullRect);
     pProcessBar->SetInputEnable(true);
@@ -580,21 +550,7 @@ void NwUISPK::CreateWindows()
     AddChild(pProcessBar);
     m_pHPList[SideLeft] = pProcessBar;
 
-    kFullRect.fDeltaX = 690.0f;
-    kFullRect.fDeltaY = 30.0f;
-    kFullRect.fDeltaW = 260.0f;
-    kFullRect.fDeltaH = 30.0f;
-    pProcessBar = (GGUIWindowProcessBar*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_ProcessBar);
-    pProcessBar->SetFullRect(kFullRect);
-    pProcessBar->SetInputEnable(true);
-    pProcessBar->SetDragEnable(true);
-    AddChild(pProcessBar);
-    m_pHPList[SideRight] = pProcessBar;
-
-    kFullRect.fDeltaX = 20.0f;
-    kFullRect.fDeltaY = 70.0f;
-    kFullRect.fDeltaW = 260.0f;
-    kFullRect.fDeltaH = 30.0f;
+    kFullRect.fScaleY = 70.0f / fStandardHeight;
     pProcessBar = (GGUIWindowProcessBar*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_ProcessBar);
     pProcessBar->SetFullRect(kFullRect);
     pProcessBar->SetInputEnable(true);
@@ -602,10 +558,18 @@ void NwUISPK::CreateWindows()
     AddChild(pProcessBar);
     m_pMPList[SideLeft] = pProcessBar;
 
-    kFullRect.fDeltaX = 690.0f;
-    kFullRect.fDeltaY = 70.0f;
-    kFullRect.fDeltaW = 260.0f;
-    kFullRect.fDeltaH = 30.0f;
+    kFullRect.eHorzAttachType = GGUIWindowHorzAttach_Right;
+    kFullRect.eVertAttachType = GGUIWindowVertAttach_Top;
+    kFullRect.fScaleX = 690.0f / fStandardWidth;
+    kFullRect.fScaleY = 30.0f / fStandardHeight;
+    pProcessBar = (GGUIWindowProcessBar*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_ProcessBar);
+    pProcessBar->SetFullRect(kFullRect);
+    pProcessBar->SetInputEnable(true);
+    pProcessBar->SetDragEnable(true);
+    AddChild(pProcessBar);
+    m_pHPList[SideRight] = pProcessBar;
+
+    kFullRect.fScaleY = 70.0f / fStandardHeight;
     pProcessBar = (GGUIWindowProcessBar*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_ProcessBar);
     pProcessBar->SetFullRect(kFullRect);
     pProcessBar->SetInputEnable(true);
@@ -616,10 +580,12 @@ void NwUISPK::CreateWindows()
 
     GGUIWindowImage* pImage = NULL;
 
-    kFullRect.fDeltaX = 300.0f;
-    kFullRect.fDeltaY = 230.0f;
-    kFullRect.fDeltaW = 130.0f;
-    kFullRect.fDeltaH = 95.0f;
+    kFullRect.eHorzAttachType = GGUIWindowHorzAttach_Center;
+    kFullRect.eVertAttachType = GGUIWindowVertAttach_Center;
+    kFullRect.fScaleX = 300.0f / fStandardWidth;
+    kFullRect.fScaleY = 230.0f / fStandardHeight;
+    kFullRect.fScaleW = 130.0f / fStandardWidth;
+    kFullRect.fScaleH = 95.0f / fStandardHeight;
     pImage = (GGUIWindowImage*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Image);
     pImage->SetFullRect(kFullRect);
     pImage->SetImage(g_HeroTexture1);
@@ -629,10 +595,10 @@ void NwUISPK::CreateWindows()
     AddChild(pImage);
     m_pHeroList[SideLeft] = pImage;
 
-    kFullRect.fDeltaX = 480.0f;
-    kFullRect.fDeltaY = 220.0f;
-    kFullRect.fDeltaW = 93.0f;
-    kFullRect.fDeltaH = 125.0f;
+    kFullRect.fScaleX = 480.0f / fStandardWidth;
+    kFullRect.fScaleY = 220.0f / fStandardHeight;
+    kFullRect.fScaleW = 93.0f / fStandardWidth;
+    kFullRect.fScaleH = 125.0f / fStandardHeight;
     pImage = (GGUIWindowImage*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Image);
     pImage->SetFullRect(kFullRect);
     pImage->SetImage(g_HeroTexture2);
@@ -642,11 +608,12 @@ void NwUISPK::CreateWindows()
     m_pHeroList[SideRight] = pImage;
 
 
-
-    kFullRect.fDeltaX = 240.0f;
-    kFullRect.fDeltaY = 230.0f;
-    kFullRect.fDeltaW = 56.0f;
-    kFullRect.fDeltaH = 32.0f;
+    kFullRect.eHorzAttachType = GGUIWindowHorzAttach_Center;
+    kFullRect.eVertAttachType = GGUIWindowVertAttach_Center;
+    kFullRect.fScaleX = 240.0f / fStandardWidth;
+    kFullRect.fScaleY = 230.0f / fStandardHeight;
+    kFullRect.fScaleW = 56.0f / fStandardWidth;
+    kFullRect.fScaleH = 32.0f / fStandardHeight;
     pImage = (GGUIWindowImage*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Image);
     pImage->SetFullRect(kFullRect);
     pImage->SetImage(g_XuanYunTexture);
@@ -654,10 +621,10 @@ void NwUISPK::CreateWindows()
     AddChild(pImage);
     m_pImgXuanYunList[SideLeft] = pImage;
 
-    kFullRect.fDeltaX = 630.0f;
-    kFullRect.fDeltaY = 220.0f;
-    kFullRect.fDeltaW = 56.0f;
-    kFullRect.fDeltaH = 32.0f;
+    kFullRect.fScaleX = 630.0f / fStandardWidth;
+    kFullRect.fScaleY = 220.0f / fStandardHeight;
+    kFullRect.fScaleW = 56.0f / fStandardWidth;
+    kFullRect.fScaleH = 32.0f / fStandardHeight;
     pImage = (GGUIWindowImage*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Image);
     pImage->SetFullRect(kFullRect);
     pImage->SetImage(g_XuanYunTexture);
@@ -665,10 +632,10 @@ void NwUISPK::CreateWindows()
     AddChild(pImage);
     m_pImgXuanYunList[SideRight] = pImage;
 
-    kFullRect.fDeltaX = 200.0f;
-    kFullRect.fDeltaY = 20.0f;
-    kFullRect.fDeltaW = 512.0f;
-    kFullRect.fDeltaH = 512.0f;
+    kFullRect.fScaleX = 200.0f / fStandardWidth;
+    kFullRect.fScaleY = 20.0f / fStandardHeight;
+    kFullRect.fScaleW = 512.0f / fStandardWidth;
+    kFullRect.fScaleH = 512.0f / fStandardHeight;
     pImage = (GGUIWindowImage*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Image);
     pImage->SetFullRect(kFullRect);
     pImage->SetImage(g_WinTexture);

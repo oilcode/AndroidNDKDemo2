@@ -47,13 +47,10 @@ NwUIEffect::~NwUIEffect()
 //--------------------------------------------------------------------------------------------------
 bool NwUIEffect::InitUIEffect()
 {
-    GGUIFullRect kFullRect;
-    kFullRect.fDeltaX = 0.0f;
-    kFullRect.fDeltaY = 0.0f;
-    kFullRect.fDeltaW = GGUIFunc_GetResolutionWidth();
-    kFullRect.fDeltaH = GGUIFunc_GetResolutionHeight();
-    SetFullRect(kFullRect);
-    SetInputEnable(true);
+	float fStandardWidth = 960.0f;
+	float fStandardHeight = 540.0f;
+	SetStandardWidthHeight(fStandardWidth, fStandardHeight);
+    SetInputEnable(false);
     SetDragEnable(false); //本Panel是全屏窗口，不能拖拽。
     SetSpaceType(GGUIPanelSpace_Effect);
     //

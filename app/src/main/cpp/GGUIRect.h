@@ -39,14 +39,35 @@ inline bool GGUIRect::IsInside(float fPointX, float fPointY) const
 //------------------------------------------------------------
 extern const GGUIRect GGUIRect_Empty;
 //------------------------------------------------------------
+//------------------------------------------------------------
+//------------------------------------------------------------
+//------------------------------------------------------------
+enum GGUIWindowHorzAttachType
+{
+	GGUIWindowHorzAttach_Left,
+	GGUIWindowHorzAttach_Center,
+	GGUIWindowHorzAttach_Right,
+};
+//------------------------------------------------------------
+enum GGUIWindowVertAttachType
+{
+	GGUIWindowVertAttach_Top,
+	GGUIWindowVertAttach_Center,
+	GGUIWindowVertAttach_Bottom,
+};
+//------------------------------------------------------------
 class GGUIFullRect
 {
 public:
-	GGUIFullRect() : fScaleX(0.0f), fDeltaX(0.0f), fScaleY(0.0f), fDeltaY(0.0f)
+	GGUIFullRect() : eHorzAttachType(GGUIWindowHorzAttach_Left), eVertAttachType(GGUIWindowVertAttach_Top)
+                   , fScaleX(0.0f), fDeltaX(0.0f), fScaleY(0.0f), fDeltaY(0.0f)
 				   , fScaleW(0.0f), fDeltaW(0.0f), fScaleH(0.0f), fDeltaH(0.0f) { }
 	void Clear();
 
 public:
+	GGUIWindowHorzAttachType eHorzAttachType;
+	GGUIWindowVertAttachType eVertAttachType;
+	//
 	float fScaleX;
 	float fDeltaX;
 	//
@@ -62,6 +83,8 @@ public:
 //------------------------------------------------------------
 inline void GGUIFullRect::Clear()
 {
+	eHorzAttachType = GGUIWindowHorzAttach_Left;
+	eVertAttachType = GGUIWindowVertAttach_Top;
 	fScaleX = 0.0f;
 	fDeltaX = 0.0f;
 	fScaleY = 0.0f;

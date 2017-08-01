@@ -3,6 +3,7 @@
 #include "GGUIWindowFactory.h"
 //------------------------------------------------------------
 GGUIWindowContainer::GGUIWindowContainer()
+:m_bAdjustChildRectWhenAddChild(true)
 {
 	m_eType = GGUIWindow_Container;
 	m_kWindowArray.InitArray(sizeof(GGUIWindowBase*), 10, 10);
@@ -116,9 +117,12 @@ void GGUIWindowContainer::AddChild(GGUIWindowBase* pChild)
 	//
 	m_kWindowArray.PushBack(&pChild);
 	pChild->SetParentID(m_nID);
-	pChild->OnParentRectChanged(m_kRectInAbsCoord);
 	pChild->SetVisibleByReason(GGUIReasonUnvisible_Parent, GetVisible());
 	pChild->SetUIEventHandler(m_pUIEventHandler);
+    if (m_bAdjustChildRectWhenAddChild)
+    {
+        pChild->OnParentRectChanged(m_kRectInAbsCoord);
+    }
 }
 //------------------------------------------------------------
 void GGUIWindowContainer::RemoveChildByIndex(int nIndex)

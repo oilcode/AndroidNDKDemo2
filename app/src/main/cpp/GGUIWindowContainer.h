@@ -7,7 +7,7 @@
 class GGUIWindowContainer : public GGUIWindowBase
 {
 public:
-	void AddChild(GGUIWindowBase* pChild);
+	virtual void AddChild(GGUIWindowBase* pChild);
 	void RemoveChildByIndex(int nIndex);
 	void RemoveChildByID(int nWindowID);
 	void RemoveAllChild();
@@ -50,11 +50,12 @@ protected:
 	virtual void ClearWindow();
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	void DoRemoveChild(GGUIWindowBase* pChild);
-	void Notify_ParentRectChanged() const;
+	virtual void Notify_ParentRectChanged() const;
 	void Notify_ParentVisibleChanged() const;
 
-private:
+protected:
 	SoArray m_kWindowArray;
+	bool m_bAdjustChildRectWhenAddChild;
 };
 //----------------------------------------------------------------
 inline int GGUIWindowContainer::GetChildCount() const
