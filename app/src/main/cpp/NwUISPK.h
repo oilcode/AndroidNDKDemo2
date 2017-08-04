@@ -10,27 +10,20 @@ class NwActorSPKData;
 class NwUISPK : public GGUIWindowPanel
 {
 public:
-    enum eSideType
-    {
-        SideLeft,
-        SideRight,
-        SideMax,
-    };
-
-public:
+    void PrepareForStart();
     //开始选择指令阶段
-    void PrepareForStart(const SPKHeroData* pSPKData);
-    void StartSelectCmd(const SPKHeroData* pSPKData);
+    void StartSelectCmd();
+    void RefreshUIWithHeroData(const NwSPKHeroData* pSPKData, NwSPKSideType theSide);
     //更新血条
-    void SetHP(eSideType theSide, int nMax, int nCur);
-    void SetMP(eSideType theSide, int nMax, int nCur);
-    void SetXuanYun(eSideType theSide, bool bXuanYun);
+    void SetHP(NwSPKSideType theSide, int nMax, int nCur);
+    void SetMP(NwSPKSideType theSide, int nMax, int nCur);
+    void SetXuanYun(NwSPKSideType theSide, bool bXuanYun);
     //设置右方武将选择的指令
     void SetRightSelectedCmd(NwSPKTouchType theTouchIndex, NwSPKCmdType theCmd);
     //获取左方武将选择的指令
     NwSPKCmdType GetSelectedCmd(NwSPKTouchType theTouchIndex);
     //获取武将图片的矩形范围
-    const GGUIRect& GetHeroRect(eSideType theSide);
+    const GGUIRect& GetHeroRect(NwSPKSideType theSide);
     //做交锋的提示动画
     void PlayTouchBtnEffect(NwSPKTouchType theTouchIndex);
     //显示PK结果
@@ -48,6 +41,7 @@ protected:
     void OnBtnCmd(int nCmdIndex);
     void OnBtnTouch(int nTouchIndex);
     void RefreshCmdBtn();
+    void RefreshCmdCount();
     void RefreshTouchBtn();
     //寻找空的指令槽，如果找不到则返回 NwSPKTouch_Max
     NwSPKTouchType FindEmptyTouchBtn();
@@ -58,11 +52,11 @@ protected:
 
 private:
     GGUIWindowButton* m_pBtnCmdList[NwSPKCmd_Max];
-    GGUIWindowButton* m_pBtnTouchList[SideMax][NwSPKTouch_Max];
-    GGUIWindowProcessBar* m_pHPList[SideMax];
-    GGUIWindowProcessBar* m_pMPList[SideMax];
-    GGUIWindowImage* m_pHeroList[SideMax];
-    GGUIWindowImage* m_pImgXuanYunList[SideMax];
+    GGUIWindowButton* m_pBtnTouchList[NwSPKSide_Max][NwSPKTouch_Max];
+    GGUIWindowProcessBar* m_pHPList[NwSPKSide_Max];
+    GGUIWindowProcessBar* m_pMPList[NwSPKSide_Max];
+    GGUIWindowImage* m_pHeroList[NwSPKSide_Max];
+    GGUIWindowImage* m_pImgXuanYunList[NwSPKSide_Max];
     GGUIWindowImage* m_pImgSPKResult;
     //记录客户端主角拥有的指令的个数
     int m_kOwnCmdCount[NwSPKCmd_Max];

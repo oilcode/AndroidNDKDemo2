@@ -2,9 +2,16 @@
 #ifndef _NwSPKDefine_h_
 #define _NwSPKDefine_h_
 //--------------------------------------------------------------------------------------------------
+//多少个撞衫点数能够兑换一个闪避
+#define NwSPK_SamePointPerShanBi 3
+//中了闪避之后，眩晕几个交锋
+//值为2表示眩晕1个交锋，值为3表示眩晕2个交锋
+#define NwSPK_XuanYunTouchCount 2
+//--------------------------------------------------------------------------------------------------
 //指令
 enum NwSPKCmdType
 {
+    NwSPKCmd_Invalid = -1,
     NwSPKCmd_Up, //上劈
     NwSPKCmd_Middle, //中砍
     NwSPKCmd_Down, //下刺
@@ -33,29 +40,110 @@ enum NwSPKTouchResult
     NwSPKTouchResult_Draw, //平手
 };
 //--------------------------------------------------------------------------------------------------
-struct SPKHeroData
+enum NwSPKBuffType
+{
+    NwSPKBuff_Invalid = -1,
+    NwSPKBuff_XuanYun, //眩晕
+    NwSPKBuff_Max,
+};
+//--------------------------------------------------------------------------------------------------
+enum NwSPKSideType
+{
+    NwSPKSide_Invalid = -1,
+    NwSPKSide_Left,
+    NwSPKSide_Right,
+    NwSPKSide_Max,
+};
+//--------------------------------------------------------------------------------------------------
+struct NwSPKBuffData
+{
+    NwSPKBuffType theType; //buff类型
+    int nRemainTouchCount; //还剩多少个交锋，buff就结束
+
+    NwSPKBuffData() : theType(NwSPKBuff_Invalid), nRemainTouchCount(0)
+    {
+
+    }
+
+    bool IsEnable() const
+    {
+        return (nRemainTouchCount > 0);
+    }
+};
+//--------------------------------------------------------------------------------------------------
+struct NwSPKResultSingle;
+struct NwSPKHeroData
 {
     int nWuLi; //武力值
     int nMaxHP; //最大血量
     int nCurHP; //当前血量
     int nMaxEnergy; //最大斗志
     int nCurEnergy; //当前斗志
-    int nCmdUp; //当前有多少个指令
-    int nCmdMiddle;
-    int nCmdDown;
-    int nCmdDefend;
-    int nCmdDodge; //当前一共有多少个该指令，包括背包中的道具。
-    int nCmdInsight;
-    int nCmdSwoosh;
-    int nCmdRevenge;
-    int nDodgeCountInBag; //背包中有多少个闪避
-    int nInsightCountInBag; //背包中有多少个洞察
-    int nSwooshCountInBag; //背包中有多少个旋风斩
-    int nRevengeCountInBag; //背包中有多少个反杀
-    bool bDizzy; //是否眩晕了
+    int nAccSamePoint; //当前累积的撞衫点数
+    int kCmdCountList[NwSPKCmd_Max]; //当前拥有的指令的个数
+    NwSPKBuffData kBuffList[NwSPKBuff_Max]; //Buff列表
 
-    SPKHeroData();
-    void IncreaseCmdCount(NwSPKCmdType theCmd, int nDelta);
+    NwSPKHeroData();
+    void ClearHeroData();
+    int GetCmdCount(NwSPKCmdType theCmd) const;
+    bool IsBuffEnable(NwSPKBuffType theBuff) const;
+    //把一次交锋的结果应用到结构体中
+    void ProcessSPKResult(const NwSPKResultSingle* pResult);
+    //处理一次交锋结束的事件
+    void ProcessTouchFinished();
+};
+//--------------------------------------------------------------------------------------------------
+struct NwSPKSelectedCmd
+{
+    NwSPKCmdType kCmdList[NwSPKTouch_Max];
+
+    NwSPKSelectedCmd();
+    void ClearSelectedCmd();
+};
+//--------------------------------------------------------------------------------------------------
+struct NwSPKResultCmdChange
+{
+    int nCmdType;
+    int nDeltaCount;
+};
+//--------------------------------------------------------------------------------------------------
+struct NwSPKResultBuffChange
+{
+    int nBuffType;
+    int nDeltaTouchCount;
+};
+//--------------------------------------------------------------------------------------------------
+#define NwSPKResult_MaxCmdChange 4
+#define NwSPKResult_MaxBuffChange 4
+//--------------------------------------------------------------------------------------------------
+struct NwSPKResultSingle
+{
+    NwSPKTouchResult theResult;
+    int nDeltaHP;
+    int nDeltaMP;
+    int nDeltaSamePoint;
+    NwSPKResultCmdChange kCmdChangeList[NwSPKResult_MaxCmdChange];
+    NwSPKResultBuffChange kBuffChangeList[NwSPKResult_MaxBuffChange];
+
+    NwSPKResultSingle();
+    void ClearResultSingle();
+    void AddBuff(int nBuffType, int nDeltaTouchCount);
+};
+//--------------------------------------------------------------------------------------------------
+struct NwSPKResultTouch
+{
+    NwSPKResultSingle kSideList[NwSPKSide_Max];
+
+    NwSPKResultTouch();
+    void ClearResultTouch();
+};
+//--------------------------------------------------------------------------------------------------
+struct NwSPKResultRound
+{
+    NwSPKResultTouch kTouchList[NwSPKTouch_Max];
+
+    NwSPKResultRound();
+    void ClearResultRound();
 };
 //--------------------------------------------------------------------------------------------------
 #endif //_NwSPKDefine_h_

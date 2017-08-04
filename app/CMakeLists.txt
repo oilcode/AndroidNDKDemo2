@@ -139,7 +139,9 @@ add_library( NwCode
              src/main/cpp/NwBaseInclude.cpp
              src/main/cpp/NwLogicFlowHelp.cpp
              src/main/cpp/NwSceneSPK.cpp
+             src/main/cpp/NwSPKData.cpp
              src/main/cpp/NwSPKDefine.cpp
+             src/main/cpp/NwSPKJudge.cpp
              src/main/cpp/NwSPKLogic.cpp
              src/main/cpp/NwSPKProcedure.cpp
              src/main/cpp/NwUIEffect.cpp
