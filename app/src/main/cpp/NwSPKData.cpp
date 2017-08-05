@@ -27,14 +27,14 @@ void NwSPKData::ResetSPKData()
     m_kLeftHeroData.nWuLi = 80;
     m_kLeftHeroData.nMaxHP = 1000;
     m_kLeftHeroData.nCurHP = 1000;
-    m_kLeftHeroData.nMaxEnergy = 100;
-    m_kLeftHeroData.nCurEnergy = 0;
+    m_kLeftHeroData.nMaxMP = 100;
+    m_kLeftHeroData.nCurMP = 0;
     //
     m_kRightHeroData.nWuLi = 80;
     m_kRightHeroData.nMaxHP = 1000;
     m_kRightHeroData.nCurHP = 1000;
-    m_kRightHeroData.nMaxEnergy = 100;
-    m_kRightHeroData.nCurEnergy = 0;
+    m_kRightHeroData.nMaxMP = 100;
+    m_kRightHeroData.nCurMP = 0;
 }
 //--------------------------------------------------------------------------------------------------
 NwSPKHeroData* NwSPKData::GetLeftHeroData()

@@ -4,6 +4,8 @@
 //--------------------------------------------------------------------------------------------------
 //多少个撞衫点数能够兑换一个闪避
 #define NwSPK_SamePointPerShanBi 3
+//多少能量激活一个旋风斩
+#define NwSPK_MPCountPerXuanFeng 100
 //中了闪避之后，眩晕几个交锋
 //值为2表示眩晕1个交锋，值为3表示眩晕2个交锋
 #define NwSPK_XuanYunTouchCount 2
@@ -77,8 +79,8 @@ struct NwSPKHeroData
     int nWuLi; //武力值
     int nMaxHP; //最大血量
     int nCurHP; //当前血量
-    int nMaxEnergy; //最大斗志
-    int nCurEnergy; //当前斗志
+    int nMaxMP; //最大斗志
+    int nCurMP; //当前斗志
     int nAccSamePoint; //当前累积的撞衫点数
     int kCmdCountList[NwSPKCmd_Max]; //当前拥有的指令的个数
     NwSPKBuffData kBuffList[NwSPKBuff_Max]; //Buff列表

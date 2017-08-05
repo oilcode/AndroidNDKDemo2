@@ -12,8 +12,8 @@ void NwSPKHeroData::ClearHeroData()
     nWuLi = 0;
     nMaxHP = 0;
     nCurHP = 0;
-    nMaxEnergy = 0;
-    nCurEnergy = 0;
+    nMaxMP = 0;
+    nCurMP = 0;
     nAccSamePoint = 0;
     for (int i = 0; i < NwSPKCmd_Max; ++i)
     {
@@ -63,14 +63,14 @@ void NwSPKHeroData::ProcessSPKResult(const NwSPKResultSingle* pResult)
         nCurHP = nMaxHP;
     }
 
-    nCurEnergy += pResult->nDeltaMP;
-    if (nCurEnergy < 0)
+    nCurMP += pResult->nDeltaMP;
+    if (nCurMP < 0)
     {
-        nCurEnergy = 0;
+        nCurMP = 0;
     }
-    else if (nCurEnergy > nMaxEnergy)
+    else if (nCurMP > nMaxMP)
     {
-        nCurEnergy = nMaxEnergy;
+        nCurMP = nMaxMP;
     }
 
     nAccSamePoint += pResult->nDeltaSamePoint;
@@ -99,6 +99,9 @@ void NwSPKHeroData::ProcessSPKResult(const NwSPKResultSingle* pResult)
         nAccSamePoint -= NwSPK_SamePointPerShanBi;
         kCmdCountList[NwSPKCmd_ShanBi] += 1;
     }
+
+    //判断旋风斩是否被激活
+    kCmdCountList[NwSPKCmd_XuanFeng] = nCurMP / NwSPK_MPCountPerXuanFeng;
 }
 //--------------------------------------------------------------------------------------------------
 void NwSPKHeroData::ProcessTouchFinished()

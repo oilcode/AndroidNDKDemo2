@@ -71,6 +71,16 @@ void NwSPKJudge::JudgeTouch(int nTouchIndex, NwSPKCmdType theLeftCmd, NwSPKCmdTy
     NwSPKResultSingle& kLeftResultSingle = m_kResult.kTouchList[nTouchIndex].kSideList[NwSPKSide_Left];
     NwSPKResultSingle& kRightResultSingle = m_kResult.kTouchList[nTouchIndex].kSideList[NwSPKSide_Right];
 
+    //只要施放旋风斩，必定消耗MP
+    if (theLeftCmd == NwSPKCmd_XuanFeng)
+    {
+        kLeftResultSingle.nDeltaMP -= NwSPK_MPCountPerXuanFeng;
+    }
+    if (theRightCmd == NwSPKCmd_XuanFeng)
+    {
+        kRightResultSingle.nDeltaMP -= NwSPK_MPCountPerXuanFeng;
+    }
+
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     //首先处理buff对战斗结果的影响
     bool bLeftIsXuanYun = pLeftHeroData->IsBuffEnable(NwSPKBuff_XuanYun);

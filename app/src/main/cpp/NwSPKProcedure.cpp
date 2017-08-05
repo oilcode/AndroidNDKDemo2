@@ -127,6 +127,10 @@ void NwSPKProcedure::UpdateSPKProcedure(float fDeltaTime)
         case SPKProcedureStep_PostTouch:
         {
             bool bRoundFinish = pSPKData->OnTouchFinished();
+            //把玩家数据显示在界面上，主要目的是刷新buff状态
+            pUISPK->RefreshUIWithHeroData(pSPKData->GetLeftHeroData(), NwSPKSide_Left);
+            pUISPK->RefreshUIWithHeroData(pSPKData->GetRightHeroData(), NwSPKSide_Right);
+            //
             if (bRoundFinish)
             {
                 nNextStep = SPKProcedureStep_PostRound;

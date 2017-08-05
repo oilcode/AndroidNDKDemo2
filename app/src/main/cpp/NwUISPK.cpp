@@ -3,26 +3,26 @@
 #include "NwSceneSPK.h"
 #include "NwSPKProcedure.h"
 //----------------------------------------------------------------
-const char* g_CmdBtnTexture[NwSPKCmd_Max] =
-{
-    "uitexture/mm1:hud_31",
-    "uitexture/mm1:hud_32",
-    "uitexture/mm1:hud_33",
-    "uitexture/mm1:hud_34",
-    "uitexture/mm1:hud_35",
-    "uitexture/mm1:hud_36",
-    "uitexture/mm1:hud_37",
-    "uitexture/mm1:hud_38",
-};
+const char* g_CmdBtnTexture[NwSPKCmd_Max] = {0};
 const char* g_CmdBtnEmptyTex = "uitexture/mm1:hud_30";
 const char* g_HeroTexture1 = "uitexture/mm1:soldier011";
 const char* g_HeroTexture2 = "uitexture/mm1:soldier012";
-const char* g_XuanYunTexture = "uitexture/mm1:state_01";
+const char* g_XuanYunTexture = "uitexture/mm1:hud_39";
+const char* g_BuffXuanYunTexture = "uitexture/mm1:state_01";
 const char* g_LoseTexture = "uitexture/mm7:Name1";
 const char* g_WinTexture = "uitexture/mm8:Name1";
 //----------------------------------------------------------------
 NwUISPK::NwUISPK()
 {
+    g_CmdBtnTexture[NwSPKCmd_Up] = "uitexture/mm1:hud_31";
+    g_CmdBtnTexture[NwSPKCmd_Middle] = "uitexture/mm1:hud_32";
+    g_CmdBtnTexture[NwSPKCmd_Down] = "uitexture/mm1:hud_33";
+    g_CmdBtnTexture[NwSPKCmd_ZhaoJia] = "uitexture/mm1:hud_34";
+    g_CmdBtnTexture[NwSPKCmd_ShanBi] = "uitexture/mm1:hud_35";
+    g_CmdBtnTexture[NwSPKCmd_DongCha] = "uitexture/mm1:hud_36";
+    g_CmdBtnTexture[NwSPKCmd_XuanFeng] = "uitexture/mm1:hud_37";
+    g_CmdBtnTexture[NwSPKCmd_FanSha] = "uitexture/mm1:hud_38";
+    //
     for (int i = 0; i < NwSPKCmd_Max; ++i)
     {
         m_pBtnCmdList[i] = NULL;
@@ -92,6 +92,11 @@ void NwUISPK::StartSelectCmd()
     {
         m_kSelectedCmdList[i] = NwSPKCmd_Max;
     }
+    if (m_bXuanYun)
+    {
+        //处于眩晕状态，不能选择第一个指令，填成默认值
+        m_kSelectedCmdList[0] = NwSPKCmd_ZhaoJia;
+    }
     SetAllButtonEnableFlag(true);
     RefreshTouchBtn();
     RefreshCmdBtn();
@@ -100,7 +105,7 @@ void NwUISPK::StartSelectCmd()
 void NwUISPK::RefreshUIWithHeroData(const NwSPKHeroData* pSPKData, NwSPKSideType theSide)
 {
     SetHP(theSide, pSPKData->nMaxHP, pSPKData->nCurHP);
-    SetMP(theSide, pSPKData->nMaxEnergy, pSPKData->nCurEnergy);
+    SetMP(theSide, pSPKData->nMaxMP, pSPKData->nCurMP);
 
     //目前只刷新眩晕buff
     bool bXuanYun = pSPKData->kBuffList[NwSPKBuff_XuanYun].IsEnable();
@@ -302,12 +307,13 @@ void NwUISPK::RefreshCmdBtn()
             m_pBtnCmdList[i]->SetButtonState(GGUIButtonState_Disable);
             m_pBtnCmdList[i]->SetText("     0");
         }
+    }
 
-        if (m_bXuanYun && i == NwSPKCmd_XuanFeng)
-        {
-            //眩晕中不能施放旋风斩。
-            m_pBtnCmdList[i]->SetButtonState(GGUIButtonState_Disable);
-        }
+    if (m_bXuanYun)
+    {
+        //眩晕中不能施放旋风斩，不能施放反杀。
+        m_pBtnCmdList[NwSPKCmd_XuanFeng]->SetButtonState(GGUIButtonState_Disable);
+        m_pBtnCmdList[NwSPKCmd_FanSha]->SetButtonState(GGUIButtonState_Disable);
     }
 }
 //--------------------------------------------------------------------
@@ -448,20 +454,20 @@ void NwUISPK::CreateWindows()
     kFullRect.fScaleX = 250.0f / fStandardWidth;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetImage(g_CmdBtnTexture[NwSPKCmd_DongCha]);
-    pUIButton->SetInputEnable(true);
-    pUIButton->SetDragEnable(false);
-    AddChild(pUIButton);
-    m_pBtnCmdList[NwSPKCmd_DongCha] = pUIButton;
-
-    kFullRect.fScaleX = 400.0f / fStandardWidth;
-    pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
-    pUIButton->SetFullRect(kFullRect);
     pUIButton->SetImage(g_CmdBtnTexture[NwSPKCmd_XuanFeng]);
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(false);
     AddChild(pUIButton);
     m_pBtnCmdList[NwSPKCmd_XuanFeng] = pUIButton;
+
+    kFullRect.fScaleX = 400.0f / fStandardWidth;
+    pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
+    pUIButton->SetFullRect(kFullRect);
+    pUIButton->SetImage(g_CmdBtnTexture[NwSPKCmd_DongCha]);
+    pUIButton->SetInputEnable(true);
+    pUIButton->SetDragEnable(false);
+    AddChild(pUIButton);
+    m_pBtnCmdList[NwSPKCmd_DongCha] = pUIButton;
 
     kFullRect.fScaleX = 550.0f / fStandardWidth;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
@@ -617,7 +623,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fScaleH = 32.0f / fStandardHeight;
     pImage = (GGUIWindowImage*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Image);
     pImage->SetFullRect(kFullRect);
-    pImage->SetImage(g_XuanYunTexture);
+    pImage->SetImage(g_BuffXuanYunTexture);
     pImage->SetInputEnable(false);
     AddChild(pImage);
     m_pImgXuanYunList[NwSPKSide_Left] = pImage;
@@ -628,7 +634,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fScaleH = 32.0f / fStandardHeight;
     pImage = (GGUIWindowImage*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Image);
     pImage->SetFullRect(kFullRect);
-    pImage->SetImage(g_XuanYunTexture);
+    pImage->SetImage(g_BuffXuanYunTexture);
     pImage->SetInputEnable(false);
     AddChild(pImage);
     m_pImgXuanYunList[NwSPKSide_Right] = pImage;
