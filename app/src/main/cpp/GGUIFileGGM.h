@@ -28,6 +28,8 @@ private:
 	int m_nFileSize;
 	//读操作的光标位置。
 	int m_nReadPointer;
+	float m_fTexWidth;
+	float m_fTexHeight;
 };
 //----------------------------------------------------------------
 #endif //_GGUIFileGGM_h_

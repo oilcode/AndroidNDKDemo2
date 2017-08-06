@@ -6,6 +6,8 @@ GGUIFileGGM::GGUIFileGGM()
 ,m_pFileBuff(0)
 ,m_nFileSize(0)
 ,m_nReadPointer(0)
+,m_fTexWidth(256.0f)
+,m_fTexHeight(256.0f)
 {
 
 }
@@ -40,6 +42,8 @@ bool GGUIFileGGM::GetTextureName(std::string& strTextureName)
 	if (szFirstLine)
 	{
 		strTextureName = SoCmdLineHelp::GetValueByKey(szFirstLine, -1, "Texture");
+        m_fTexWidth = (float)SoCmdLineHelp::GetIntByKey(szFirstLine, -1, "TexWidth", 256);
+        m_fTexHeight = (float)SoCmdLineHelp::GetIntByKey(szFirstLine, -1, "TexHeight", 256);
 		return true;
 	}
 	else
@@ -94,7 +98,7 @@ bool GGUIFileGGM::GetNextImageFontRect(SoTinyString& kName, stImageFontRect& kRe
 	//
     const char* szValue = SoStrSlim(szRectName);
     //空格符号特殊处理
-    if (szValue[0] == 's' && szValue[1] == 'p')
+    if (szValue[0] == 's' && szValue[1] == 'p' && szValue[2] == 'a' && szValue[3] == 'c' && szValue[4] == 'e')
     {
         //是“space”，是空格
         kName.SetValue(" ");
@@ -104,13 +108,17 @@ bool GGUIFileGGM::GetNextImageFontRect(SoTinyString& kName, stImageFontRect& kRe
         kName.SetValue(szValue);
     }
     //
-	kRect.left = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "l", 0.0f);
-	kRect.right = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "r", 0.0f);
-	kRect.top = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "t", 0.0f);
-	kRect.bottom = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "b", 0.0f);
-	kRect.offsetX = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "ox", 0.0f);
-	kRect.offsetY = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "oy", 0.0f);
-	kRect.advanceX = SoCmdLineHelp::GetFloatByKey(szRectData, -1, "ax", 0.0f);
+    float fX = (float)SoCmdLineHelp::GetIntByKey(szRectData, -1, "x", 0);
+    float fY = (float)SoCmdLineHelp::GetIntByKey(szRectData, -1, "y", 0);
+    float fW = (float)SoCmdLineHelp::GetIntByKey(szRectData, -1, "w", 0);
+    float fH = (float)SoCmdLineHelp::GetIntByKey(szRectData, -1, "h", 0);
+    kRect.left = fX / m_fTexWidth;
+    kRect.right = (fX + fW) / m_fTexWidth;
+    kRect.top = fY / m_fTexHeight;
+    kRect.bottom = (fY + fH) / m_fTexHeight;
+	kRect.offsetX = (float)SoCmdLineHelp::GetIntByKey(szRectData, -1, "ox", 0);
+	kRect.offsetY = (float)SoCmdLineHelp::GetIntByKey(szRectData, -1, "oy", 0);
+	kRect.advanceX = (float)SoCmdLineHelp::GetIntByKey(szRectData, -1, "ax", 0);
 	return true;
 }
 //----------------------------------------------------------------

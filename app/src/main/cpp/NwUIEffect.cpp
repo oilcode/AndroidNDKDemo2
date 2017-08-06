@@ -77,7 +77,7 @@ void NwUIEffect::CreateWindow_DamageNumber()
     	GGUIWindowText* pUIText = (GGUIWindowText*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Text);
     	pUIText->SetFullRect(kFullRect);
     	pUIText->SetColor(GGUIColor_Red);
-    	pUIText->SetFont("uitexture/mm6");
+    	pUIText->SetFont("uitexture/nwfont");
     	pUIText->SetInputEnable(false);
     	pUIText->SetDragEnable(false);
     	pUIText->SetVisible(false);

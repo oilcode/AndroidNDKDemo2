@@ -8,7 +8,7 @@
 bool NwLogicFlowHelp_Create()
 {
     GGUIImagesetIO::Read("uitexture/mm1.txt", GGUIImagesetType_Normal);
-	GGUIImagesetIO::Read("uitexture/mm6.txt", GGUIImagesetType_Font);
+	GGUIImagesetIO::Read("uitexture/nwfont.ggm", GGUIImagesetType_Font);
 	GGUIImagesetIO::Read("uitexture/mm7.txt", GGUIImagesetType_Normal);
 	GGUIImagesetIO::Read("uitexture/mm8.txt", GGUIImagesetType_Normal);
 
