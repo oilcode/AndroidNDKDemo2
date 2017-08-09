@@ -5,6 +5,7 @@
 GGUIWindowImage::GGUIWindowImage()
 :m_nImagesetIndex(-1)
 ,m_nImageRectIndex(-1)
+,m_kColor(GGUIColor_Empty)
 ,m_bSwapX(false)
 ,m_bSwapY(false)
 {
@@ -19,6 +20,7 @@ GGUIWindowImage::~GGUIWindowImage()
 void GGUIWindowImage::ClearWindow()
 {
 	GGUIWindowBase::ClearWindow();
+	m_kColor = GGUIColor_Empty;
 	m_nImagesetIndex = -1;
 	m_nImageRectIndex = -1;
 }
@@ -33,7 +35,7 @@ void GGUIWindowImage::RenderWindow()
 	{
 		return;
 	}
-	GGUIRenderHelp_SimpleImage(m_nImagesetIndex, m_nImageRectIndex, m_kRectInAbsCoord, GGUIColor_Empty, m_bSwapX, m_bSwapY);
+	GGUIRenderHelp_SimpleImage(m_nImagesetIndex, m_nImageRectIndex, m_kRectInAbsCoord, m_kColor, m_bSwapX, m_bSwapY);
 }
 //----------------------------------------------------------------
 void GGUIWindowImage::SetImage(const char* szImage)

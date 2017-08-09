@@ -4,24 +4,34 @@
 #include "NwSPKProcedure.h"
 //----------------------------------------------------------------
 const char* g_CmdBtnTexture[NwSPKCmd_Max] = {0};
-const char* g_CmdBtnEmptyTex = "uitexture/mm1:hud_30";
-const char* g_HeroTexture1 = "uitexture/mm1:soldier011";
-const char* g_HeroTexture2 = "uitexture/mm1:soldier012";
-const char* g_XuanYunTexture = "uitexture/mm1:hud_39";
-const char* g_BuffXuanYunTexture = "uitexture/mm1:state_01";
-const char* g_LoseTexture = "uitexture/mm7:Name1";
-const char* g_WinTexture = "uitexture/mm8:Name1";
+const char* g_CmdName[NwSPKCmd_Max] = {0};
+const char* g_CmdBtnEmptyTex = "mm1:hud_30";
+const char* g_HeroTexture1 = "mm1:soldier011";
+const char* g_HeroTexture2 = "mm1:soldier012";
+const char* g_BuffXuanYunTexture = "mm1:state_01";
+const char* g_BuffXuanYunName = "眩晕";
+const char* g_LoseTexture = "mm7:Name1";
+const char* g_WinTexture = "mm8:Name1";
 //----------------------------------------------------------------
 NwUISPK::NwUISPK()
 {
-    g_CmdBtnTexture[NwSPKCmd_Up] = "uitexture/mm1:hud_31";
-    g_CmdBtnTexture[NwSPKCmd_Middle] = "uitexture/mm1:hud_32";
-    g_CmdBtnTexture[NwSPKCmd_Down] = "uitexture/mm1:hud_33";
-    g_CmdBtnTexture[NwSPKCmd_ZhaoJia] = "uitexture/mm1:hud_34";
-    g_CmdBtnTexture[NwSPKCmd_ShanBi] = "uitexture/mm1:hud_35";
-    g_CmdBtnTexture[NwSPKCmd_DongCha] = "uitexture/mm1:hud_36";
-    g_CmdBtnTexture[NwSPKCmd_XuanFeng] = "uitexture/mm1:hud_37";
-    g_CmdBtnTexture[NwSPKCmd_FanSha] = "uitexture/mm1:hud_38";
+    g_CmdBtnTexture[NwSPKCmd_Up] = "mm1:hud_31";
+    g_CmdBtnTexture[NwSPKCmd_Middle] = "mm1:hud_32";
+    g_CmdBtnTexture[NwSPKCmd_Down] = "mm1:hud_33";
+    g_CmdBtnTexture[NwSPKCmd_ZhaoJia] = "mm1:hud_34";
+    g_CmdBtnTexture[NwSPKCmd_ShanBi] = "mm1:hud_35";
+    g_CmdBtnTexture[NwSPKCmd_DongCha] = "mm1:hud_36";
+    g_CmdBtnTexture[NwSPKCmd_XuanFeng] = "mm1:hud_37";
+    g_CmdBtnTexture[NwSPKCmd_FanSha] = "mm1:hud_38";
+    //
+    g_CmdName[NwSPKCmd_Up] = "上劈";
+    g_CmdName[NwSPKCmd_Middle] = "中砍";
+    g_CmdName[NwSPKCmd_Down] = "下刺";
+    g_CmdName[NwSPKCmd_ZhaoJia] = "招架";
+    g_CmdName[NwSPKCmd_ShanBi] = "闪避";
+    g_CmdName[NwSPKCmd_DongCha] = "洞察";
+    g_CmdName[NwSPKCmd_XuanFeng] = "旋风斩";
+    g_CmdName[NwSPKCmd_FanSha] = "反杀";
     //
     for (int i = 0; i < NwSPKCmd_Max; ++i)
     {
@@ -35,6 +45,8 @@ NwUISPK::NwUISPK()
         }
         m_pHPList[i] = NULL;
         m_pMPList[i] = NULL;
+        m_pHPText[i] = NULL;
+        m_pMPText[i] = NULL;
         m_pHeroList[i] = NULL;
         m_pImgXuanYunList[i] = NULL;
     }
@@ -125,13 +137,21 @@ void NwUISPK::RefreshUIWithHeroData(const NwSPKHeroData* pSPKData, NwSPKSideType
 void NwUISPK::SetHP(NwSPKSideType theSide, int nMax, int nCur)
 {
     float fValue = (float)nCur / (float)nMax;
-    m_pHPList[theSide]->SetProcessValue(fValue);
+    m_pHPList[theSide]->FlashProcessValue(fValue);
+    //
+    int nPercent = ceilf(fValue * 100);
+    const char* text = SoStrFmt("血量 %d%%", nPercent);
+    m_pHPText[theSide]->SetText(text);
 }
 //----------------------------------------------------------------
 void NwUISPK::SetMP(NwSPKSideType theSide, int nMax, int nCur)
 {
     float fValue = (float)nCur / (float)nMax;
-    m_pMPList[theSide]->SetProcessValue(fValue);
+    m_pMPList[theSide]->FlashProcessValue(fValue);
+    //
+    int nPercent = ceilf(fValue * 100);
+    const char* text = SoStrFmt("看破 %d", nPercent);
+    m_pMPText[theSide]->SetText(text);
 }
 //----------------------------------------------------------------
 void NwUISPK::SetXuanYun(NwSPKSideType theSide, bool bXuanYun)
@@ -141,7 +161,7 @@ void NwUISPK::SetXuanYun(NwSPKSideType theSide, bool bXuanYun)
 //----------------------------------------------------------------
 void NwUISPK::SetRightSelectedCmd(NwSPKTouchType theTouchIndex, NwSPKCmdType theCmd)
 {
-    m_pBtnTouchList[NwSPKSide_Right][theTouchIndex]->SetImage(g_CmdBtnTexture[theCmd]);
+    m_pBtnTouchList[NwSPKSide_Right][theTouchIndex]->SetText(g_CmdName[theCmd]);
 }
 //----------------------------------------------------------------
 NwSPKCmdType NwUISPK::GetSelectedCmd(NwSPKTouchType theTouchIndex)
@@ -184,6 +204,23 @@ void NwUISPK::PlayTouchBtnEffect(NwSPKTouchType theTouchIndex)
     pActionMove = (GGUIActionMove*)GGUIActionFactory::Get()->CreateUIAction(GGUIAction_Move);
     pActionMove->InitActionMove(30.0f, 00.0f, 0.5f);
     pActionLine->AddAction(pActionMove);
+}
+//----------------------------------------------------------------
+void NwUISPK::PlayHeroEffect(NwSPKSideType theSide, float fDeltaScale)
+{
+    GGUIActionGroup* theActionGroup = m_pHeroList[theSide]->CreateActionGroup();
+    theActionGroup->SetActionEventHandler(this);
+
+    GGUIActionLine* pActionLine = (GGUIActionLine*)GGUIActionFactory::Get()->CreateUIAction(GGUIAction_Line);;
+    theActionGroup->AddActionLine(pActionLine);
+
+    GGUIActionScale* pActionScale = (GGUIActionScale*)GGUIActionFactory::Get()->CreateUIAction(GGUIAction_Scale);
+    pActionScale->InitActionScale(fDeltaScale, fDeltaScale, 0.35f);
+    pActionLine->AddAction(pActionScale);
+
+    pActionScale = (GGUIActionScale*)GGUIActionFactory::Get()->CreateUIAction(GGUIAction_Scale);
+    pActionScale->InitActionScale(-fDeltaScale, -fDeltaScale, 0.35f);
+    pActionLine->AddAction(pActionScale);
 }
 //----------------------------------------------------------------
 void NwUISPK::ShowPKResult(bool bWin)
@@ -300,13 +337,13 @@ void NwUISPK::RefreshCmdBtn()
         if (m_kOwnCmdCount[i] > 0)
         {
             m_pBtnCmdList[i]->SetButtonState(GGUIButtonState_Normal);
-            m_pBtnCmdList[i]->SetText(SoStrFmt("     %d", m_kOwnCmdCount[i]));
         }
         else
         {
             m_pBtnCmdList[i]->SetButtonState(GGUIButtonState_Disable);
-            m_pBtnCmdList[i]->SetText("     0");
         }
+        const char* text = SoStrFmt("%s%d", g_CmdName[i], m_kOwnCmdCount[i]);
+        m_pBtnCmdList[i]->SetText(text);
     }
 
     if (m_bXuanYun)
@@ -321,7 +358,8 @@ void NwUISPK::RefreshCmdCount()
 {
     for (int i = 0; i < NwSPKCmd_Max; ++i)
     {
-        m_pBtnCmdList[i]->SetText(SoStrFmt("     %d", m_kOwnCmdCount[i]));
+        const char* text = SoStrFmt("%s%d", g_CmdName[i], m_kOwnCmdCount[i]);
+        m_pBtnCmdList[i]->SetText(text);
     }
 }
 //--------------------------------------------------------------------
@@ -331,22 +369,22 @@ void NwUISPK::RefreshTouchBtn()
     {
         if (m_bXuanYun && i == 0)
         {
-            m_pBtnTouchList[NwSPKSide_Left][i]->SetImage(g_XuanYunTexture);
+            m_pBtnTouchList[NwSPKSide_Left][i]->SetText(g_BuffXuanYunName);
         }
         else
         {
             NwSPKCmdType theCmd = m_kSelectedCmdList[i];
             if (theCmd == NwSPKCmd_Max)
             {
-                m_pBtnTouchList[NwSPKSide_Left][i]->SetImage(g_CmdBtnEmptyTex);
+                m_pBtnTouchList[NwSPKSide_Left][i]->SetText("");
             }
             else
             {
-                m_pBtnTouchList[NwSPKSide_Left][i]->SetImage(g_CmdBtnTexture[theCmd]);
+                m_pBtnTouchList[NwSPKSide_Left][i]->SetText(g_CmdName[theCmd]);
             }
         }
         //
-        m_pBtnTouchList[NwSPKSide_Right][i]->SetImage(g_CmdBtnEmptyTex);
+        m_pBtnTouchList[NwSPKSide_Right][i]->SetText("");
     }
 }
 //--------------------------------------------------------------------
@@ -407,7 +445,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fScaleH = 50.0f / fStandardHeight;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetImage(g_CmdBtnTexture[NwSPKCmd_Up]);
+    pUIButton->SetImage(g_CmdBtnEmptyTex);
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(false);
     AddChild(pUIButton);
@@ -416,7 +454,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fScaleX = 250.0f / fStandardWidth;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetImage(g_CmdBtnTexture[NwSPKCmd_Middle]);
+    pUIButton->SetImage(g_CmdBtnEmptyTex);
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(false);
     AddChild(pUIButton);
@@ -425,7 +463,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fScaleX = 400.0f / fStandardWidth;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetImage(g_CmdBtnTexture[NwSPKCmd_Down]);
+    pUIButton->SetImage(g_CmdBtnEmptyTex);
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(false);
     AddChild(pUIButton);
@@ -434,7 +472,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fScaleX = 550.0f / fStandardWidth;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetImage(g_CmdBtnTexture[NwSPKCmd_ZhaoJia]);
+    pUIButton->SetImage(g_CmdBtnEmptyTex);
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(false);
     AddChild(pUIButton);
@@ -445,7 +483,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fScaleY = 470.0f / fStandardHeight;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetImage(g_CmdBtnTexture[NwSPKCmd_ShanBi]);
+    pUIButton->SetImage(g_CmdBtnEmptyTex);
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(false);
     AddChild(pUIButton);
@@ -454,7 +492,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fScaleX = 250.0f / fStandardWidth;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetImage(g_CmdBtnTexture[NwSPKCmd_XuanFeng]);
+    pUIButton->SetImage(g_CmdBtnEmptyTex);
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(false);
     AddChild(pUIButton);
@@ -463,7 +501,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fScaleX = 400.0f / fStandardWidth;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetImage(g_CmdBtnTexture[NwSPKCmd_DongCha]);
+    pUIButton->SetImage(g_CmdBtnEmptyTex);
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(false);
     AddChild(pUIButton);
@@ -472,7 +510,7 @@ void NwUISPK::CreateWindows()
     kFullRect.fScaleX = 550.0f / fStandardWidth;
     pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
     pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetImage(g_CmdBtnTexture[NwSPKCmd_FanSha]);
+    pUIButton->SetImage(g_CmdBtnEmptyTex);
     pUIButton->SetInputEnable(true);
     pUIButton->SetDragEnable(false);
     AddChild(pUIButton);
@@ -481,7 +519,7 @@ void NwUISPK::CreateWindows()
     //---------------------------------------------------
     kFullRect.eHorzAttachType = GGUIWindowHorzAttach_Center;
     kFullRect.eVertAttachType = GGUIWindowVertAttach_Top;
-    kFullRect.fScaleX = 320.0f / fStandardWidth;
+    kFullRect.fScaleX = 330.0f / fStandardWidth;
     kFullRect.fScaleY = 50.0f / fStandardHeight;
     kFullRect.fScaleW = 126.0f / fStandardWidth;
     kFullRect.fScaleH = 50.0f / fStandardHeight;
@@ -542,55 +580,105 @@ void NwUISPK::CreateWindows()
 
 
     //---------------------------------------------------
+    GGUIWindowText* pText = NULL;
     GGUIWindowProcessBar* pProcessBar = NULL;
+    stUIProcessBarStyle kProcessBarStyle;
+    kProcessBarStyle.szTextureBG = "mm1:hud_11";
+    kProcessBarStyle.szTextureBar = "mm1:hud_10";
+    kProcessBarStyle.fDeltaLeft = 4.0f;
+    kProcessBarStyle.fDeltaRight = 4.0f;
+    kProcessBarStyle.fDeltaTop = 2.0f;
+    kProcessBarStyle.fDeltaBottom = 2.0f;
 
     kFullRect.eHorzAttachType = GGUIWindowHorzAttach_Left;
     kFullRect.eVertAttachType = GGUIWindowVertAttach_Top;
     kFullRect.fScaleX = 20.0f / fStandardWidth;
-    kFullRect.fScaleY = 30.0f / fStandardHeight;
+    kFullRect.fScaleY = 10.0f / fStandardHeight;
     kFullRect.fScaleW = 260.0f / fStandardWidth;
     kFullRect.fScaleH = 30.0f / fStandardHeight;
+    pText = (GGUIWindowText*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Text);
+    pText->SetFullRect(kFullRect);
+    pText->SetInputEnable(false);
+    pText->SetDragEnable(false);
+    AddChild(pText);
+    m_pHPText[NwSPKSide_Left] = pText;
+
+    kFullRect.fScaleY = 40.0f / fStandardHeight;
     pProcessBar = (GGUIWindowProcessBar*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_ProcessBar);
     pProcessBar->SetFullRect(kFullRect);
     pProcessBar->SetInputEnable(true);
     pProcessBar->SetDragEnable(false);
     AddChild(pProcessBar);
+    pProcessBar->SetProcessBarStyle(&kProcessBarStyle);
     m_pHPList[NwSPKSide_Left] = pProcessBar;
 
     kFullRect.fScaleY = 70.0f / fStandardHeight;
+    pText = (GGUIWindowText*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Text);
+    pText->SetFullRect(kFullRect);
+    pText->SetInputEnable(false);
+    pText->SetDragEnable(false);
+    AddChild(pText);
+    m_pMPText[NwSPKSide_Left] = pText;
+
+
+    kFullRect.fScaleY = 100.0f / fStandardHeight;
     pProcessBar = (GGUIWindowProcessBar*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_ProcessBar);
     pProcessBar->SetFullRect(kFullRect);
     pProcessBar->SetInputEnable(true);
     pProcessBar->SetDragEnable(false);
     AddChild(pProcessBar);
+    pProcessBar->SetProcessBarStyle(&kProcessBarStyle);
     m_pMPList[NwSPKSide_Left] = pProcessBar;
 
+    //--------------------------
     kFullRect.eHorzAttachType = GGUIWindowHorzAttach_Right;
     kFullRect.eVertAttachType = GGUIWindowVertAttach_Top;
-    kFullRect.fScaleX = 690.0f / fStandardWidth;
-    kFullRect.fScaleY = 30.0f / fStandardHeight;
+    kFullRect.fScaleX = 680.0f / fStandardWidth;
+    kFullRect.fScaleY = 10.0f / fStandardHeight;
+    kFullRect.fScaleW = 260.0f / fStandardWidth;
+    kFullRect.fScaleH = 30.0f / fStandardHeight;
+    pText = (GGUIWindowText*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Text);
+    pText->SetFullRect(kFullRect);
+    pText->SetInputEnable(false);
+    pText->SetDragEnable(false);
+    AddChild(pText);
+    m_pHPText[NwSPKSide_Right] = pText;
+
+    kFullRect.fScaleY = 40.0f / fStandardHeight;
     pProcessBar = (GGUIWindowProcessBar*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_ProcessBar);
     pProcessBar->SetFullRect(kFullRect);
     pProcessBar->SetInputEnable(true);
     pProcessBar->SetDragEnable(false);
     AddChild(pProcessBar);
+    pProcessBar->SetProcessBarStyle(&kProcessBarStyle);
     m_pHPList[NwSPKSide_Right] = pProcessBar;
 
     kFullRect.fScaleY = 70.0f / fStandardHeight;
+    pText = (GGUIWindowText*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Text);
+    pText->SetFullRect(kFullRect);
+    pText->SetInputEnable(false);
+    pText->SetDragEnable(false);
+    AddChild(pText);
+    m_pMPText[NwSPKSide_Right] = pText;
+
+
+    kFullRect.fScaleY = 100.0f / fStandardHeight;
     pProcessBar = (GGUIWindowProcessBar*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_ProcessBar);
     pProcessBar->SetFullRect(kFullRect);
     pProcessBar->SetInputEnable(true);
     pProcessBar->SetDragEnable(false);
     AddChild(pProcessBar);
+    pProcessBar->SetProcessBarStyle(&kProcessBarStyle);
     m_pMPList[NwSPKSide_Right] = pProcessBar;
 
 
+    //-----------------------------
     GGUIWindowImage* pImage = NULL;
 
     kFullRect.eHorzAttachType = GGUIWindowHorzAttach_Center;
     kFullRect.eVertAttachType = GGUIWindowVertAttach_Center;
-    kFullRect.fScaleX = 300.0f / fStandardWidth;
-    kFullRect.fScaleY = 230.0f / fStandardHeight;
+    kFullRect.fScaleX = 320.0f / fStandardWidth;
+    kFullRect.fScaleY = 280.0f / fStandardHeight;
     kFullRect.fScaleW = 130.0f / fStandardWidth;
     kFullRect.fScaleH = 95.0f / fStandardHeight;
     pImage = (GGUIWindowImage*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Image);
@@ -602,8 +690,8 @@ void NwUISPK::CreateWindows()
     AddChild(pImage);
     m_pHeroList[NwSPKSide_Left] = pImage;
 
-    kFullRect.fScaleX = 480.0f / fStandardWidth;
-    kFullRect.fScaleY = 220.0f / fStandardHeight;
+    kFullRect.fScaleX = 540.0f / fStandardWidth;
+    kFullRect.fScaleY = 250.0f / fStandardHeight;
     kFullRect.fScaleW = 93.0f / fStandardWidth;
     kFullRect.fScaleH = 125.0f / fStandardHeight;
     pImage = (GGUIWindowImage*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Image);

@@ -9,6 +9,7 @@ class GGUIWindowImage : public GGUIWindowBase
 public:
 	//--szImage "ImagesetName:RectName"
 	void SetImage(const char* szImage);
+	void SetColor(const GGUIColor& kColor);
     void SetSwapX(bool bSwapX);
     void SetSwapY(bool bSwapY);
 
@@ -28,6 +29,7 @@ protected:
 private:
 	int m_nImagesetIndex;
 	int m_nImageRectIndex;
+	GGUIColor m_kColor;
     bool m_bSwapX;
     bool m_bSwapY;
 };
@@ -40,6 +42,11 @@ inline int GGUIWindowImage::GetImagesetIndex() const
 inline int GGUIWindowImage::GetImageRectIndex() const
 {
 	return m_nImageRectIndex;
+}
+//----------------------------------------------------------------
+inline void GGUIWindowImage::SetColor(const GGUIColor& kColor)
+{
+	m_kColor = kColor;
 }
 //----------------------------------------------------------------
 inline void GGUIWindowImage::SetSwapX(bool bSwapX)

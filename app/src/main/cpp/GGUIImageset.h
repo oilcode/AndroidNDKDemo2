@@ -6,6 +6,21 @@
 //----------------------------------------------------------------
 class GLTexture;
 //----------------------------------------------------------------
+struct stImagesetParam
+{
+	//Imageset的名字。
+	SoTinyString kName;
+	//贴图对象。
+	GLTexture* pTexture;
+	//预分配多少个GGUIRect。
+	int nInitRectCount;
+
+	stImagesetParam() : pTexture(NULL), nInitRectCount(4)
+	{
+
+	}
+};
+//----------------------------------------------------------------
 class GGUIImageset : public GGUIImagesetBase
 {
 public:
@@ -22,11 +37,8 @@ protected:
 	friend class GGUIImagesetManager;
 	GGUIImageset();
 	~GGUIImageset();
-	//初始化函数。
-	//--nInitRectCount 预分配多少个GGUIRect。
-	bool InitImageset(int nInitRectCount);
+	bool InitImageset(const stImagesetParam* pParam);
 	void ClearImageset();
-	void SetTexture(GLTexture* pTexture);
 
 private:
 	typedef std::map<SoTinyString, int> mapName2ID;

@@ -8,7 +8,6 @@ class GGUIComponentText;
 //----------------------------------------------------------------
 void GGUIRenderHelp_SimpleImage(int nImagesetId, int nImageRectId, const GGUIRect& kAbsRect, const GGUIColor& kColor, bool bSwapX, bool bSwapY);
 void GGUIRenderHelp_SimpleText(const char* szText, const GGUIRect& kAbsRect, GGUITextAlignX eAlignX, GGUITextAlignY eAlignY, const SoTinyString& kFontName, const GGUIColor& kColor);
-void GGUIRenderHelp_ComponetText(const GGUIComponentText* pCompText);
 //----------------------------------------------------------------
 #endif //_GGUIRenderHelp_h_
 //----------------------------------------------------------------

@@ -5,28 +5,6 @@
 #include "GGUIImageset.h"
 #include "GGUIImagesetFont.h"
 //----------------------------------------------------------------
-class GLTexture;
-//----------------------------------------------------------------
-struct stImagesetParam
-{
-	//Imageset的名字。
-	SoTinyString kName;
-	//预分配多少个GGUIRect。
-	int nInitRectCount;
-	//贴图对象。
-	GLTexture* pTexture;
-};
-//----------------------------------------------------------------
-struct stImagesetFontParam
-{
-	//Imageset的名字。
-	SoTinyString kName;
-	//预分配多少个Rect。
-	int nInitRectCount;
-	//贴图对象。
-	GLTexture* pTexture;
-};
-//----------------------------------------------------------------
 class GGUIImagesetManager
 {
 public:
@@ -35,9 +13,9 @@ public:
 	static GGUIImagesetManager* Get();
 
 	//创建一个新的Imageset对象。
-    GGUIImageset* CreateImageset(const stImagesetParam& kParam);
+    GGUIImageset* CreateImageset(const stImagesetParam* pParam);
 	//创建一个新的ImagesetFont对象。
-    GGUIImagesetFont* CreateImagesetFont(const stImagesetFontParam& kParam);
+    GGUIImagesetFont* CreateImagesetFont(const stImagesetFontParam* pParam);
 
 	int GetImagesetIDByName(const SoTinyString &kName);
 	GGUIImagesetBase* GetImagesetByID(int nImagesetID);

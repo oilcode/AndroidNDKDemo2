@@ -11,9 +11,15 @@
 #include "SoStringHelp.h"
 //--------------------------------------------------------------------
 #define SoStringHelp_MaxStringSize 0x3FFFFFFF
-//本模块使用的缓存
+//本模块使用的缓存。
+//窄字节字符串和宽字节字符串使用的是同一份缓存。
 char g_StrHelpBuff[SoStringHelp_GlobalBuffSize] = {0};
 wchar_t* g_WStrHelpBuff = (wchar_t*)g_StrHelpBuff;
+//--------------------------------------------------------------------
+char* SoStrGetBuff()
+{
+	return g_StrHelpBuff;
+}
 //--------------------------------------------------------------------
 int SoStrLen(const char* szString)
 {
@@ -91,6 +97,7 @@ int SoWStrCpy(wchar_t* DestBuff, const int nDestBuffSize, const wchar_t* szSourc
 	return nLen;
 }
 //--------------------------------------------------------------------
+#if (SoTargetPlatform == SoPlatform_Windows)
 char* SoStrFmt(const char* szFormat, ...)
 {
 	va_list klist;
@@ -120,6 +127,7 @@ void SoStrFmtSelfByVaList(char* Buff, const int nBuffSize, const char* szFormat,
 	va_list* pList = (va_list*)pValist;
 	vsnprintf(Buff, nBuffSize, szFormat, *pList);
 }
+#endif
 //--------------------------------------------------------------------
 int SoStrCmp(const char* s1, const char* s2)
 {
@@ -574,13 +582,13 @@ char* SoGetOneCharacterFromUtf8String(const char* pszUtf8Str, const int nUtf8Str
 {
 	g_StrHelpBuff[0] = 0;
 	int nByteCountOfTheCharacter = 0;
-	if (pByteCountOfTheCharacter)
-	{
-		*pByteCountOfTheCharacter = 0;
-	}
 	//
 	if (nStartIndex >= nUtf8StrLen)
 	{
+		if (pByteCountOfTheCharacter)
+		{
+			*pByteCountOfTheCharacter = nByteCountOfTheCharacter;
+		}
 		return g_StrHelpBuff;
 	}
 	//

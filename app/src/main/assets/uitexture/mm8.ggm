@@ -1,0 +1,2 @@
+Texture = mm8.png; TexWidth = 512; TexHeight = 512;
+Name1 = { x=0; y=0; w=512; h=512; }

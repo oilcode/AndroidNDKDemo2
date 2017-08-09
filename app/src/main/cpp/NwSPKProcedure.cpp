@@ -203,6 +203,9 @@ void NwSPKProcedure::ProcessStepTouch()
             NwUIEffect::Get()->PlayDamageNumber(kParam);
             bPlayDamageNum = true;
         }
+
+        pUISPK->PlayHeroEffect(NwSPKSide_Left, 0.35f);
+        pUISPK->PlayHeroEffect(NwSPKSide_Right, -0.35f);
     }
     else if (theLeftResult == NwSPKTouchResult_Lose)
     {
@@ -218,6 +221,9 @@ void NwSPKProcedure::ProcessStepTouch()
             NwUIEffect::Get()->PlayDamageNumber(kParam);
             bPlayDamageNum = true;
         }
+
+        pUISPK->PlayHeroEffect(NwSPKSide_Left, -0.35f);
+        pUISPK->PlayHeroEffect(NwSPKSide_Right, 0.35f);
     }
     else if (theLeftResult == NwSPKTouchResult_Draw)
     {

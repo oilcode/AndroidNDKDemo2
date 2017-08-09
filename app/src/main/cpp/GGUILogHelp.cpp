@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 #include "GGUILogHelp.h"
-#include "GGUIBaseInclude.h"
 //-----------------------------------------------------------------------------
+/*
 void GGUILogHelp::Print(const char* szDesc)
 {
     SoIDEOutputLogInfo("%s", szDesc);
@@ -17,4 +17,5 @@ void GGUILogHelp::Printf(const char* szFormat, ...)
 	SoIDEOutputLogInfo("%s", szDesc);
 	SoMessageBox("GGUI", szDesc);
 }
+*/
 //-----------------------------------------------------------------------------

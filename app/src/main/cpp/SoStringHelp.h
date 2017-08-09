@@ -6,6 +6,9 @@
 //--------------------------------------------------------------------
 #define SoStringHelp_GlobalBuffSize 2048
 //--------------------------------------------------------------------
+//获取公共字符串缓存。
+char* SoStrGetBuff();
+
 //计算字符串长度。
 //字符串长度不能大于0x3FFFFFFF（1G多）。
 //这里设置最大值的目的是，防止用户传入了一个没有以0结尾的字符串而陷入死循环。
@@ -17,6 +20,13 @@ int SoWStrLen(const wchar_t* szString);
 int SoStrCpy(char* DestBuff, const int nDestBuffSize, const char* szSourceString);
 int SoWStrCpy(wchar_t* DestBuff, const int nDestBuffSize, const wchar_t* szSourceString);
 
+
+//2017-08-08，在安卓平台，使用 char* SoStrFmt(const char* szFormat, ...); 函数会带来
+//字符串丢失的问题，例如，你预期得到的结果字符串是"招架2"，实际上得到的可能是空字符串，可能是"架"等残缺的字符串。
+//经过尝试，发现使用 __VA_ARGS__ 宏却是正常的，不会有字符串丢失的问题。
+//所以针对不同平台，使用不同实现。
+#if (SoTargetPlatform == SoPlatform_Windows)
+
 //字符串格式化，使用本模块提供的字符串缓存。
 //返回值不是const char*，是可以修改的字符串缓存，用意是外界可以对字符串做一些修改。
 char* SoStrFmt(const char* szFormat, ...);
@@ -24,6 +34,16 @@ char* SoStrFmt(const char* szFormat, ...);
 void SoStrFmtSelf(char* Buff, const int nBuffSize, const char* szFormat, ...);
 char* SoStrFmtByVaList(const char* szFormat, const void* pValist);
 void SoStrFmtSelfByVaList(char* Buff, const int nBuffSize, const char* szFormat, const void* pValist);
+
+#elif (SoTargetPlatform == SoPlatform_Android)
+
+//在安卓平台，正确的使用方法是 const char* szResult = SoStrFmt();
+//不能这样使用 pWindow->SetText(SoStrFmt());
+#define SoStrFmt(...)  SoStrGetBuff(); snprintf(SoStrGetBuff(), SoStringHelp_GlobalBuffSize, __VA_ARGS__);
+#define SoStrFmtSelf(Buff, nBuffSize, ...)  SoStrGetBuff(); snprintf(Buff, nBuffSize, __VA_ARGS__);
+
+#endif
+
 
 //比较两个字符串
 int SoStrCmp(const char* s1, const char* s2);

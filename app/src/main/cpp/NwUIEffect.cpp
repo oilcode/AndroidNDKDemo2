@@ -77,7 +77,7 @@ void NwUIEffect::CreateWindow_DamageNumber()
     	GGUIWindowText* pUIText = (GGUIWindowText*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Text);
     	pUIText->SetFullRect(kFullRect);
     	pUIText->SetColor(GGUIColor_Red);
-    	pUIText->SetFont("uitexture/nwfont");
+    	pUIText->SetFont("nwfont");
     	pUIText->SetInputEnable(false);
     	pUIText->SetDragEnable(false);
     	pUIText->SetVisible(false);
@@ -118,11 +118,10 @@ void NwUIEffect::PlayDamageNumber(const stDamageNumberParam& kParam)
 
 	pText->SetVisible(true);
 	pText->SetFullRectDeltaPos(kParam.fStartPosX, kParam.fStartPosY);
-	pText->SetText(SoStrFmt("%d", kParam.nNumber));
+	const char* szNumber = SoStrFmt("%d", kParam.nNumber);
+	pText->SetText(szNumber);
 
     GGUIActionGroup* theActionGroup = pText->CreateActionGroup();
-    //theActionGroup->RemoveAllAction();
-    //theActionGroup->SetDestWindow(pText);
 	theActionGroup->SetActionEventHandler(this);
 
     GGUIActionLine* pActionLine = (GGUIActionLine*)GGUIActionFactory::Get()->CreateUIAction(GGUIAction_Line);;

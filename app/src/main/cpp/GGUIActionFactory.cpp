@@ -135,7 +135,7 @@ GGUIActionBase* GGUIActionFactory::CreateUIAction(GGUIActionType eType)
         } break;
         default:
         {
-            GGUILogf("GGUIActionFactory::CreateUIAction : Unknown ActionType [%d]", eType);
+            GGUILogErrorf("GGUIActionFactory::CreateUIAction : Unknown ActionType [%d]", eType);
         } break;
     }
     if (pAction)

@@ -20,7 +20,7 @@ bool GGUIImagesetIO::Read(const char* szImagesetName, GGUIImagesetType eType)
 	}
 
 	GGUIFileGGM kFile;
-	if (kFile.ReadFcfFile(szImagesetName) == false)
+	if (kFile.ReadGgmFile(szImagesetName) == false)
 	{
 		return false;
 	}
@@ -37,7 +37,8 @@ bool GGUIImagesetIO::Read(const char* szImagesetName, GGUIImagesetType eType)
 		return false;
 	}
 
-	GLTexture* pTexture = GLTextureManager::Get()->CreateUITextureFromFile(strTextureName.c_str());
+    const char* szFullImageName = SoStrFmt("uitexture/%s", strTextureName.c_str());
+	GLTexture* pTexture = GLTextureManager::Get()->CreateUITextureFromFile(szFullImageName);
 	if (pTexture == 0)
 	{
 		return false;
@@ -46,16 +47,17 @@ bool GGUIImagesetIO::Read(const char* szImagesetName, GGUIImagesetType eType)
 	GGUIImageset* pImageset = NULL;
 	GGUIImagesetFont* pImagesetFont = NULL;
 
-	const int nDotIndex = SoStrRChr(szImagesetName, '.');
+	const int nDotIndex = SoStrRChr(strTextureName.c_str(), '.');
+    const char* szShortName = SoSubStr(strTextureName.c_str(), 0, nDotIndex-1);
 
 	if (eType == GGUIImagesetType_Normal)
 	{
 		stImagesetParam kParam;
-		kParam.kName = SoSubStr(szImagesetName, 0, nDotIndex-1);
+		kParam.kName = szShortName;
 		kParam.nInitRectCount = nRectCount;
 		kParam.pTexture = pTexture;
 
-		pImageset = GGUIImagesetManager::Get()->CreateImageset(kParam);
+		pImageset = GGUIImagesetManager::Get()->CreateImageset(&kParam);
 		if (pImageset == NULL)
 		{
 			return false;
@@ -64,11 +66,13 @@ bool GGUIImagesetIO::Read(const char* szImagesetName, GGUIImagesetType eType)
 	else
 	{
 		stImagesetFontParam kParam;
-		kParam.kName = SoSubStr(szImagesetName, 0, nDotIndex-1);
+		kParam.kName = szShortName;
 		kParam.nInitRectCount = nRectCount;
 		kParam.pTexture = pTexture;
+        kParam.fFontSize = kFile.GetFontSize();
+        kParam.fFontHeight = kFile.GetFontHeight();
 
-		pImagesetFont = GGUIImagesetManager::Get()->CreateImagesetFont(kParam);
+		pImagesetFont = GGUIImagesetManager::Get()->CreateImagesetFont(&kParam);
 		if (pImagesetFont == NULL)
 		{
 			return false;

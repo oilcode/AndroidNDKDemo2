@@ -256,10 +256,31 @@ void GGUIWindowBase::CalculateRectInAbsCoord(bool bOnlyScaleChanged)
         m_kOriginalRectInAbsCoord.w = m_kParentRectInAbsCoord.w * m_kFullRect.fScaleW + m_kFullRect.fDeltaW;
         m_kOriginalRectInAbsCoord.h = m_kParentRectInAbsCoord.h * m_kFullRect.fScaleH + m_kFullRect.fDeltaH;
     }
-    m_kRectInAbsCoord.x = floorf(m_kOriginalRectInAbsCoord.x + 0.5f);
-    m_kRectInAbsCoord.y = floorf(m_kOriginalRectInAbsCoord.y + 0.5f);
-    m_kRectInAbsCoord.w = floorf(m_kOriginalRectInAbsCoord.w * m_fScaleX + 0.5f);
-    m_kRectInAbsCoord.h = floorf(m_kOriginalRectInAbsCoord.h * m_fScaleY + 0.5f);
+
+    //以中心点为锚点
+	if (SoMath_IsFloatZero(m_fScaleX-1.0f))
+	{
+        m_kRectInAbsCoord.x = floorf(m_kOriginalRectInAbsCoord.x + 0.5f);
+        m_kRectInAbsCoord.w = floorf(m_kOriginalRectInAbsCoord.w + 0.5f);
+	}
+    else
+    {
+        float fDelta = (m_fScaleX - 1.0f) * m_kOriginalRectInAbsCoord.w * 0.5f;
+        m_kRectInAbsCoord.x = floorf(m_kOriginalRectInAbsCoord.x - fDelta + 0.5f);
+        m_kRectInAbsCoord.w = floorf(m_kOriginalRectInAbsCoord.w + fDelta + 0.5f);
+    }
+
+    if (SoMath_IsFloatZero(m_fScaleY - 1.0f))
+    {
+        m_kRectInAbsCoord.y = floorf(m_kOriginalRectInAbsCoord.y + 0.5f);
+        m_kRectInAbsCoord.h = floorf(m_kOriginalRectInAbsCoord.h + 0.5f);
+    }
+    else
+    {
+        float fDelta = (m_fScaleY - 1.0f) * m_kOriginalRectInAbsCoord.h * 0.5f;
+        m_kRectInAbsCoord.y = floorf(m_kOriginalRectInAbsCoord.y - fDelta + 0.5f);
+        m_kRectInAbsCoord.h = floorf(m_kOriginalRectInAbsCoord.h + fDelta + 0.5f);
+    }
 }
 //----------------------------------------------------------------
 bool GGUIWindowBase::InputDragLogic(GGUIInputMsg* pInputMsg)

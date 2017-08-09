@@ -13,11 +13,17 @@ GGUIImageset::~GGUIImageset()
 	ClearImageset();
 }
 //----------------------------------------------------------------
-bool GGUIImageset::InitImageset(int nInitRectCount)
+bool GGUIImageset::InitImageset(const stImagesetParam* pParam)
 {
-	if (m_kRectArray.InitArray(sizeof(stImageRect), nInitRectCount, 10) == false)
+	if (m_kRectArray.InitArray(sizeof(stImageRect), pParam->nInitRectCount, 10) == false)
 	{
 		return false;
+	}
+
+	m_pTexture = pParam->pTexture;
+	if (m_pTexture)
+	{
+		m_pTexture->TextureAddRef();
 	}
 	return true;
 }
@@ -37,7 +43,7 @@ void GGUIImageset::AddRect(const SoTinyString& kName, const stImageRect& kRect)
 {
 	if (GetRectID(kName) != -1)
 	{
-		GGUILogf("GGUIImageset::AddRect : kName[%s] is already exist!", kName.GetValue());
+		GGUILogErrorf("GGUIImageset::AddRect : kName[%s] is already exist!", kName.GetValue());
 		return;
 	}
 
@@ -101,7 +107,8 @@ float GGUIImageset::GetTextureWidth() const
 	}
 	else
 	{
-		return 0.0f;
+		//可能会作为除数；除数不能是0。
+		return 1.0f;
 	}
 }
 //----------------------------------------------------------------
@@ -113,21 +120,8 @@ float GGUIImageset::GetTextureHeight() const
 	}
 	else
 	{
-		return 0.0f;
-	}
-}
-//----------------------------------------------------------------
-void GGUIImageset::SetTexture(GLTexture* pTexture)
-{
-	if (m_pTexture)
-	{
-		m_pTexture->TextureRemoveRef();
-		m_pTexture = 0;
-	}
-	m_pTexture = pTexture;
-	if (m_pTexture)
-	{
-		m_pTexture->TextureAddRef();
+		//可能会作为除数；除数不能是0。
+		return 1.0f;
 	}
 }
 //----------------------------------------------------------------

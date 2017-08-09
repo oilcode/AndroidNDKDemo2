@@ -91,7 +91,7 @@ void GGUIWindowScrollBar::InitScrollBar()
 	kFullRect.fDeltaH = 0.0f;
 	pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
 	pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetImage("uitexture/mm3:Name1");
+    pUIButton->SetImage("mm3:Name1");
 	pUIButton->SetDragEnable(false);
 	AddChild(pUIButton);
 	m_pBtnLeft = pUIButton;
@@ -106,7 +106,7 @@ void GGUIWindowScrollBar::InitScrollBar()
 	kFullRect.fDeltaH = 0.0f;
 	pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
 	pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetImage("uitexture/mm3:Name1");
+    pUIButton->SetImage("mm3:Name1");
 	pUIButton->SetDragEnable(false);
 	AddChild(pUIButton);
 	m_pBtnRight = pUIButton;
@@ -121,7 +121,7 @@ void GGUIWindowScrollBar::InitScrollBar()
 	kFullRect.fDeltaH = 0.0f;
 	pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
 	pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetImage("uitexture/mm3:Name1");
+    pUIButton->SetImage("mm3:Name1");
 	pUIButton->SetDragEnable(true);
 	AddChild(pUIButton);
 	m_pBtnCenter = pUIButton;
@@ -171,7 +171,8 @@ void GGUIWindowScrollBar::AdjustCenterBtnPos()
 		fCurValue = m_fRangeMinValue + fDelta * m_fRangeValueDeltaPerPixel;
 	}
 	m_fRangeCurValue = fCurValue;
-	m_pBtnCenter->SetText(SoStrFmt("%.2f", fCurValue));
+    const char* szText = SoStrFmt("%.2f", fCurValue);
+	m_pBtnCenter->SetText(szText);
 
 	//抛出消息。
 	GGUIEventParam_ScrollBar_PosChanged kParam;
@@ -187,7 +188,7 @@ void GGUIWindowScrollBar::SetRange(float fMin, float fMax, float fStep)
 	if (fMin >= fMax)
 	{
 		fMin = fMax - 1.0f;
-		GGUILogf("GGUIWindowScrollBar::SetRange : Invalid Param; fMin[%.2f] fMax[%.2f]", fMin, fMax);
+		GGUILogErrorf("GGUIWindowScrollBar::SetRange : Invalid Param; fMin[%.2f] fMax[%.2f]", fMin, fMax);
 	}
 	m_fRangeMinValue = fMin;
 	m_fRangeMaxValue = fMax;
@@ -201,7 +202,7 @@ void GGUIWindowScrollBar::SetRange(float fMin, float fMax, float fStep)
 	{
 		//除数不能是0
 		fPosLength = 1.0f;
-		GGUILog("GGUIWindowScrollBar::SetRange : wrong pos");
+		GGUILogError("GGUIWindowScrollBar::SetRange : wrong pos");
 	}
 	m_fRangePosDeltaPerStep = fPosLength / (fMax - fMin) * fStep;
 	m_fRangeValueDeltaPerPixel = (fMax - fMin) / fPosLength;

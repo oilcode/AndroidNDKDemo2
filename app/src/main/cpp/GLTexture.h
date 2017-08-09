@@ -30,6 +30,7 @@ private:
     const char* m_pFileName;
     int m_nTextureID;
     GLuint m_uiResourceID;
+    //宽高值可能会作为除数，除数不能是0，所以宽高的默认值是1.
     int m_nWidth;
     int m_nHeight;
     int m_nRefCount;

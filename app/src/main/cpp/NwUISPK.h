@@ -20,6 +20,8 @@ public:
     const GGUIRect& GetHeroRect(NwSPKSideType theSide);
     //做交锋的提示动画
     void PlayTouchBtnEffect(NwSPKTouchType theTouchIndex);
+    //武将做动画
+    void PlayHeroEffect(NwSPKSideType theSide, float fDeltaScale);
     //显示PK结果
     void ShowPKResult(bool bWin);
 
@@ -53,6 +55,8 @@ private:
     GGUIWindowButton* m_pBtnTouchList[NwSPKSide_Max][NwSPKTouch_Max];
     GGUIWindowProcessBar* m_pHPList[NwSPKSide_Max];
     GGUIWindowProcessBar* m_pMPList[NwSPKSide_Max];
+    GGUIWindowText* m_pHPText[NwSPKSide_Max];
+    GGUIWindowText* m_pMPText[NwSPKSide_Max];
     GGUIWindowImage* m_pHeroList[NwSPKSide_Max];
     GGUIWindowImage* m_pImgXuanYunList[NwSPKSide_Max];
     GGUIWindowImage* m_pImgSPKResult;

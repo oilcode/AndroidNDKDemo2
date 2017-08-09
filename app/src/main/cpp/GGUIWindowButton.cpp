@@ -201,7 +201,7 @@ void GGUIWindowButton::SetButtonState(GGUIButtonState eState)
 //----------------------------------------------------------------
 void GGUIWindowButton::SetText(const char* szText)
 {
-	if (szText)
+	if (szText && szText[0] != 0)
 	{
 		m_strText = szText;
 	}

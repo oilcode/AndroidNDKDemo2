@@ -40,6 +40,10 @@
 //----------------------------------------------------------------
 extern SoTinyString g_GGUI_ButtonText_Font;
 extern GGUIColor g_GGUI_ButtonText_Color;
+extern const char* g_GGUI_ProcessBar_ImageBG;
+extern const char* g_GGUI_ProcessBar_ImageBar;
+extern GGUIColor g_GGUI_ProcessBar_FlashColor;
+#define GGUI_ProcessBar_FalshTime 0.2f
 //----------------------------------------------------------------
 #define GGUI_ComponentText_TextChunkAddCount 4
 #define GGUI_ComponentText_NewChunkCountPrePause 2

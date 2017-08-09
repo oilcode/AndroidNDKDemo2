@@ -112,7 +112,7 @@ GGUIAnimFrameset* GGUIAnimation::CreateFrameset(int nAnimId, int nInitFrameCount
     pSet = GetFrameset(nAnimId);
     if (pSet != NULL)
     {
-        GGUILogf("GGUIAnimation::CreateFrameset : AnimId[%s] is already exist!", nAnimId);
+        GGUILogErrorf("GGUIAnimation::CreateFrameset : AnimId[%d] is already exist!", nAnimId);
         return pSet;
     }
 

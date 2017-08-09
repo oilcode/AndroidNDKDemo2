@@ -78,11 +78,11 @@ void GGUIRenderHelp_SimpleText(const char* szText, const GGUIRect& kAbsRect, GGU
 		return;
 	}
 
-	const int nWCharCount = SoStrLen(szText);
+	const int nCharCount = SoStrLen(szText);
 	//
 	float fStringWidth = 0.0f;
 	float fStringHeight = 0.0f;
-	pImageset->CalculateStringGlyphSize(szText, nWCharCount, &fStringWidth, &fStringHeight);
+	pImageset->CalculateStringGlyphSize(szText, nCharCount, &fStringWidth, &fStringHeight);
 	if (fStringWidth < 1.0f || fStringHeight < 1.0f)
 	{
 		//字符串宽度或者高度小于1个像素，不需要绘制。
@@ -126,99 +126,43 @@ void GGUIRenderHelp_SimpleText(const char* szText, const GGUIRect& kAbsRect, GGU
 		break;
 	}
 	//
-	char szRectName[2] = {0};
 	float fCurRectLeft = fAbsStartPosX;
 	float fCurRectTop = fAbsStartPosY;
-	const float fTexWidth = pImageset->GetTextureWidth();
-	const float fTexHeight = pImageset->GetTextureHeight();
-	for (int i = 0; i < nWCharCount; ++i)
-	{
-		szRectName[0] = szText[i];
-        const stImageFontRect* imageRect = pImageset->GetRect(szRectName);
-		if (imageRect == NULL)
-		{
-			continue;
-		}
-		//
-		g_kUnit.fRectLeft = fCurRectLeft + imageRect->offsetX;
-        g_kUnit.fRectRight = g_kUnit.fRectLeft + (imageRect->right-imageRect->left) * fTexWidth;
-		g_kUnit.fRectTop = fCurRectTop + imageRect->offsetY;
-        g_kUnit.fRectBottom = g_kUnit.fRectTop + (imageRect->bottom-imageRect->top) * fTexHeight;
-		g_kUnit.fTexCoordLeft = imageRect->left;
-        g_kUnit.fTexCoordRight = imageRect->right;
-		g_kUnit.fTexCoordTop = imageRect->top;
-		g_kUnit.fTexCoordBottom = imageRect->bottom;
-		g_kUnit.uiTexResourceId = pImageset->GetTexResourceID();
-		g_kUnit.fColorR = kColor.r;
-		g_kUnit.fColorG = kColor.g;
-		g_kUnit.fColorB = kColor.b;
-		g_kUnit.fColorA = kColor.a;
-		pRenderManager->AddRnederUnit(&g_kUnit);
-		//
-		fCurRectLeft += imageRect->advanceX;
-	}
-}
-//----------------------------------------------------------------
-void GGUIRenderHelp_ComponetText(const GGUIComponentText* pCompText)
-{
-	/*
-	const int nCount = pCompText->GetTextChunkCount();
-	if (nCount == 0)
-	{
-		return;
-	}
 
-	SoTinyString kRectName;
-	wchar_t wRectName[2] = {0};
-	//
-	for (int i = 0; i < nCount; ++i)
-	{
-		const GGUITextChunk* pChunk = pCompText->GetTextChunk(i);
-		if (pChunk == 0)
-		{
-			continue;
-		}
-		const GGUIImageset* pImageset = (GGUIImageset*)GGUIImagesetManager::Get()->GetImagesetByID(pChunk->FontImagesetID);
-		if (pImageset == 0)
-		{
-			continue;
-		}
-		//
-		const float fTexWidth = pImageset->GetTextureWidth();
-		const float fTexHeight = pImageset->GetTextureHeight();
-		//
-		float fCurRectLeft = pChunk->kRect.x;
-		float fCurRectTop = pChunk->kRect.y;
-		const int nCharCount = pChunk->TextCount;
-		for (int j = 0; j < nCharCount; ++j)
-		{
-			wRectName[0] = pChunk->szText[j];
-			kRectName = (char*)wRectName;
-			const int nRectIndex = pImageset->GetRectID(kRectName);
-			if (nRectIndex == -1)
-			{
-				continue;
-			}
-			//
-			const GGUIRect& imageRect = pImageset->GetRect(nRectIndex);
-			g_kUnit.fRectLeft = fCurRectLeft;
-			g_kUnit.fRectTop = fCurRectTop;
-			g_kUnit.fRectWidth = imageRect.w * fTexWidth;
-			g_kUnit.fRectHeight = imageRect.h * fTexHeight;
-			g_kUnit.fTexCoordLeft = imageRect.x;
-			g_kUnit.fTexCoordTop = imageRect.y;
-			g_kUnit.fTexCoordWidth = imageRect.w;
-			g_kUnit.fTexCoordHeight = imageRect.h;
-			g_kUnit.uiTexResourceId = pImageset->GetTexResourceID();
-			g_kUnit.fColorR = pChunk->kColor.r;
-			g_kUnit.fColorG = pChunk->kColor.g;
-			g_kUnit.fColorB = pChunk->kColor.b;
-			g_kUnit.fColorA = pChunk->kColor.a;
-			GGUIRenderManager::Get()->AddRnederUnit(&g_kUnit);
-			//
-			fCurRectLeft += g_kUnit.fRectWidth;
-		}
-	}
-	*/
+    int nAccIndex = 0;
+    int nSingleWordCharCount = 0;
+    const char* szSingleWord = "";
+    while (true)
+    {
+    	szSingleWord = SoGetOneCharacterFromUtf8String(szText, nCharCount, nAccIndex, &nSingleWordCharCount);
+    	if (nSingleWordCharCount == 0)
+    	{
+    		break;
+    	}
+
+        const stImageFontRect* imageRect = pImageset->GetRect(szSingleWord);
+        if (imageRect)
+        {
+            g_kUnit.fRectLeft = fCurRectLeft + imageRect->offsetX;
+            g_kUnit.fRectRight = g_kUnit.fRectLeft + imageRect->width;
+            g_kUnit.fRectTop = fCurRectTop + imageRect->offsetY;
+            g_kUnit.fRectBottom = g_kUnit.fRectTop + imageRect->height;
+            g_kUnit.fTexCoordLeft = imageRect->left;
+            g_kUnit.fTexCoordRight = imageRect->right;
+            g_kUnit.fTexCoordTop = imageRect->top;
+            g_kUnit.fTexCoordBottom = imageRect->bottom;
+            g_kUnit.uiTexResourceId = pImageset->GetTexResourceID();
+            g_kUnit.fColorR = kColor.r;
+            g_kUnit.fColorG = kColor.g;
+            g_kUnit.fColorB = kColor.b;
+            g_kUnit.fColorA = kColor.a;
+            pRenderManager->AddRnederUnit(&g_kUnit);
+            //
+            fCurRectLeft += imageRect->advanceX;
+        }
+        //
+        nAccIndex += nSingleWordCharCount;
+        nSingleWordCharCount = 0;
+    }
 }
 //----------------------------------------------------------------

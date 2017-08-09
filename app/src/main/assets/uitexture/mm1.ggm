@@ -1,0 +1,7 @@
+Texture = mm1.png; TexWidth = 256; TexHeight = 256;
+hud_10 = { x=0; y=24; w=161; h=18; }
+hud_11 = { x=0; y=0; w=170; h=22; }
+hud_30 = { x=0; y=141; w=122; h=48; }
+soldier011 = { x=0; y=44; w=130; h=95; }
+soldier012 = { x=132; y=44; w=93; h=125; }
+state_01 = { x=0; y=191; w=60; h=30; }

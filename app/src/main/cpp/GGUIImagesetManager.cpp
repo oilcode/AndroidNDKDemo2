@@ -65,12 +65,12 @@ void GGUIImagesetManager::ClearUIImagesetManager()
 	m_kName2IndexMap.clear();
 }
 //----------------------------------------------------------------
-GGUIImageset* GGUIImagesetManager::CreateImageset(const stImagesetParam& kParam)
+GGUIImageset* GGUIImagesetManager::CreateImageset(const stImagesetParam* pParam)
 {
-	int nImagesetID = GetImagesetIDByName(kParam.kName);
+	int nImagesetID = GetImagesetIDByName(pParam->kName);
 	if (nImagesetID != -1)
 	{
-		GGUILogf("GGUIImagesetManager::CreateImageset : kName[%s] is already exist!", kParam.kName.GetValue());
+		GGUILogErrorf("GGUIImagesetManager::CreateImageset : kName[%s] is already exist!", pParam->kName.GetValue());
 		return (GGUIImageset*)GetImagesetByID(nImagesetID);
 	}
 
@@ -80,19 +80,18 @@ GGUIImageset* GGUIImagesetManager::CreateImageset(const stImagesetParam& kParam)
 		return NULL;
 	}
 
-	pImageset->InitImageset(kParam.nInitRectCount);
-	pImageset->SetTexture(kParam.pTexture);
+	pImageset->InitImageset(pParam);
 	nImagesetID = m_kImagesetArray.FillAt(-1, &pImageset);
-	m_kName2IndexMap.insert(std::make_pair(kParam.kName, nImagesetID));
+	m_kName2IndexMap.insert(std::make_pair(pParam->kName, nImagesetID));
 	return pImageset;
 }
 //----------------------------------------------------------------
-GGUIImagesetFont* GGUIImagesetManager::CreateImagesetFont(const stImagesetFontParam& kParam)
+GGUIImagesetFont* GGUIImagesetManager::CreateImagesetFont(const stImagesetFontParam* pParam)
 {
-	int nImagesetID = GetImagesetIDByName(kParam.kName);
+	int nImagesetID = GetImagesetIDByName(pParam->kName);
 	if (nImagesetID != -1)
 	{
-		GGUILogf("GGUIImagesetManager::CreateImagesetFont : kName[%s] is already exist!", kParam.kName.GetValue());
+		GGUILogErrorf("GGUIImagesetManager::CreateImagesetFont : kName[%s] is already exist!", pParam->kName.GetValue());
 		return (GGUIImagesetFont*)GetImagesetByID(nImagesetID);
 	}
 
@@ -102,10 +101,9 @@ GGUIImagesetFont* GGUIImagesetManager::CreateImagesetFont(const stImagesetFontPa
 		return NULL;
 	}
 
-	pImageset->InitImagesetFont(kParam.nInitRectCount);
-	pImageset->SetTexture(kParam.pTexture);
+	pImageset->InitImagesetFont(pParam);
 	nImagesetID = m_kImagesetArray.FillAt(-1, &pImageset);
-	m_kName2IndexMap.insert(std::make_pair(kParam.kName, nImagesetID));
+	m_kName2IndexMap.insert(std::make_pair(pParam->kName, nImagesetID));
 	return pImageset;
 }
 //----------------------------------------------------------------

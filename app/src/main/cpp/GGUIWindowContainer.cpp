@@ -6,7 +6,7 @@ GGUIWindowContainer::GGUIWindowContainer()
 :m_bAdjustChildRectWhenAddChild(true)
 {
 	m_eType = GGUIWindow_Container;
-	m_kWindowArray.InitArray(sizeof(GGUIWindowBase*), 10, 10);
+	m_kWindowArray.InitArray(sizeof(GGUIWindowBase*), 10, 30);
 }
 //------------------------------------------------------------
 GGUIWindowContainer::~GGUIWindowContainer()

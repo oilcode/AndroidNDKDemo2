@@ -10,16 +10,18 @@ public:
 	GGUIFileGGM();
 	~GGUIFileGGM();
 
-	bool ReadFcfFile(const char* szFileName);
+	bool ReadGgmFile(const char *szFileName);
 	bool GetTextureName(std::string& strTextureName);
 	bool GetNextImageRect(SoTinyString& kName, stImageRect& kRect);
 	bool GetNextImageFontRect(SoTinyString& kName, stImageFontRect& kRect);
 	int GetImageRectCount();
 
-	void CloseFcfFile();
+    float GetFontSize();
+    float GetFontHeight();
 
 private:
 	char* ReadNextFileLine();
+    void CloseGgmFile();
 
 private:
 	SoFile* m_pFile;
@@ -28,8 +30,11 @@ private:
 	int m_nFileSize;
 	//读操作的光标位置。
 	int m_nReadPointer;
+    //
 	float m_fTexWidth;
 	float m_fTexHeight;
+	float m_fFontSize;
+	float m_fFontHeight;
 };
 //----------------------------------------------------------------
 #endif //_GGUIFileGGM_h_

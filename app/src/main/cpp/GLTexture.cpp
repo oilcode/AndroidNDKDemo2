@@ -5,8 +5,8 @@ GLTexture::GLTexture()
 :m_pFileName("")
 ,m_nTextureID(-1)
 ,m_uiResourceID(0)
-,m_nWidth(0)
-,m_nHeight(0)
+,m_nWidth(1)
+,m_nHeight(1)
 ,m_nRefCount(0)
 ,m_bGenerateMipMap(false)
 {
@@ -47,8 +47,8 @@ void GLTexture::ClearTexture()
     m_pFileName = "";
     m_nTextureID = -1;
     m_uiResourceID = 0;
-    m_nWidth = 0;
-    m_nHeight = 0;
+    m_nWidth = 1;
+    m_nHeight = 1;
     m_nRefCount = 0;
     m_bGenerateMipMap = false;
 }
