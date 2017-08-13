@@ -64,7 +64,13 @@ add_library( # Sets the name of the library.
 			 src/main/cpp/SoTinyString.cpp
 			 src/main/cpp/SoStringHelp.cpp
 			 src/main/cpp/SoCmdLineHelp.cpp
-
+			 src/main/cpp/SoAudio.cpp
+			 src/main/cpp/SoAudioFileWave.cpp
+			 src/main/cpp/SoAudioOpenslManager.cpp
+			 src/main/cpp/SoAudioOpenslPlayer.cpp
+			 src/main/cpp/SoAudioProcessEndEvent.cpp
+			 src/main/cpp/SoAudioResource.cpp
+			 src/main/cpp/SoAudioResourceMgr.cpp
             )
 
 
@@ -184,4 +190,5 @@ target_link_libraries( # Specifies the target library.
                        android
                        GLESv2
                        z           # zlib
+                       OpenSLES
                       )

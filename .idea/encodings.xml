@@ -3,8 +3,6 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIAnimation.h" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIBaseInclude.h" charset="GB2312" />
-    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIComponentText.cpp" charset="GB2312" />
-    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIComponentText.h" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIEvent.cpp" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIEvent.h" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIFileGGM.h" charset="GB2312" />
@@ -33,8 +31,16 @@
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/NwUIMain.cpp" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/SoArrayUID.cpp" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/SoArrayUID.h" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/SoAudioBuffer.h" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/SoAudioBufferMgr.h" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/SoAudioFileWave.cpp" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/SoAudioFileWave.h" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/SoAudioResource.h" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/SoAudioResourceMgr.h" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/SoFile.cpp" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/SoFile.h" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/SoFileWave.cpp" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/SoFileWave.h" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/SoStringHelp.cpp" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/SoStringHelp.h" charset="GB2312" />
   </component>

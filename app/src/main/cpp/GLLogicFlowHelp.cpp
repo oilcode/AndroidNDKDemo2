@@ -6,11 +6,13 @@
 #include "GLShaderManager.h"
 #include "GLCamera.h"
 #include "GLCameraUI.h"
+#include "SoAudio.h"
 #include "GLModelCube.h"
 #include "GLModelRect.h"
 //--------------------------------------------------------------------------------------------------
 //GLModelCube* g_pModelCube = 0;
 //GLModelRect* g_pModelRect = 0;
+int g_nAudioId = -1;
 //--------------------------------------------------------------------------------------------------
 bool GLLogicFlowHelpCreate()
 {
@@ -20,6 +22,9 @@ bool GLLogicFlowHelpCreate()
     GLShaderManager::CreateShaderManager();
     GLCamera::CreateCamera();
     GLCameraUI::CreateCameraUI();
+    SoAudioCreate();
+    SoAudioPreloadResource("audio/mono.wav");
+    g_nAudioId = SoAudioPlay("audio/mono.wav", true, true);
 
     //g_pModelCube = SoNew GLModelCube;
 
@@ -71,7 +76,7 @@ void GLLogicFlowHelpRelease()
     //}
 
 
-
+    SoAudioRelease();
     GLCameraUI::ReleaseCameraUI();
     GLCamera::ReleaseCamera();
     GLShaderManager::ReleaseShaderManager();
@@ -83,12 +88,16 @@ void GLLogicFlowHelpRelease()
 void GLLogicFlowHelpPause()
 {
     SoIDEOutputLogInfo("GLLogicFlowHelpPause : begin");
+    //停止播放任何音频
+    SoAudioStop(g_nAudioId);
     SoIDEOutputLogInfo("GLLogicFlowHelpPause : end");
 }
 //--------------------------------------------------------------------------------------------------
 void GLLogicFlowHelpResume()
 {
     SoIDEOutputLogInfo("GLLogicFlowHelpResume : begin");
+    //开始播放背景音乐
+    g_nAudioId = SoAudioPlay("audio/mono.wav", true, true);
     SoIDEOutputLogInfo("GLLogicFlowHelpResume : end");
 }
 //--------------------------------------------------------------------------------------------------

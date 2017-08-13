@@ -2,6 +2,7 @@
 #include "NwUISPK.h"
 #include "NwSceneSPK.h"
 #include "NwSPKProcedure.h"
+#include "SoAudio.h"
 //----------------------------------------------------------------
 const char* g_CmdBtnTexture[NwSPKCmd_Max] = {0};
 const char* g_CmdName[NwSPKCmd_Max] = {0};
@@ -328,6 +329,7 @@ void NwUISPK::OnBtnTouch(int nTouchIndex)
     ++(m_kOwnCmdCount[oldCmd]);
     RefreshCmdBtn();
     RefreshTouchBtn();
+    SoAudioPlay("audio/mono.wav", true, true);
 }
 //--------------------------------------------------------------------
 void NwUISPK::RefreshCmdBtn()
