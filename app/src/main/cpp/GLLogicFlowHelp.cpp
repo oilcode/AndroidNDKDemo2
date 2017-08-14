@@ -24,7 +24,10 @@ bool GLLogicFlowHelpCreate()
     GLCameraUI::CreateCameraUI();
     SoAudioCreate();
     SoAudioPreloadResource("audio/mono.wav");
+    SoAudioPreloadResource("audio/button1.wav");
+    SoAudioPreloadResource("audio/button2.wav");
     g_nAudioId = SoAudioPlay("audio/mono.wav", true, true);
+    //g_nAudioId = SoAudioPlay("audio/button2.wav", true, true);
 
     //g_pModelCube = SoNew GLModelCube;
 

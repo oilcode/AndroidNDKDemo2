@@ -49,6 +49,11 @@ SoAudioOpenslManager::~SoAudioOpenslManager()
 //--------------------------------------------------------------------------------------------------
 bool SoAudioOpenslManager::InitAudioOpenslManager()
 {
+    if (m_kPlayerArray.InitArray(sizeof(SoAudioOpenslPlayer*), 32, 20) == false)
+    {
+        return false;
+    }
+
 	SLresult result = SL_RESULT_SUCCESS;
 	do
 	{
@@ -97,12 +102,6 @@ bool SoAudioOpenslManager::InitAudioOpenslManager()
 		return false;
 	}
 
-    if (PreparePlayerArray() == false)
-    {
-        ClearAudioOpenslManager();
-        return false;
-    }
-
 	return true;
 }
 //--------------------------------------------------------------------------------------------------
@@ -121,38 +120,7 @@ void SoAudioOpenslManager::ClearAudioOpenslManager()
 	}
 }
 //--------------------------------------------------------------------------------------------------
-bool SoAudioOpenslManager::PreparePlayerArray()
-{
-    if (m_kPlayerArray.InitArray(sizeof(SoAudioOpenslPlayer*), 32, 10) == false)
-    {
-        return false;
-    }
-
-    SoAudioOpenslPlayer* pPlayer = NULL;
-    const int nCount = 6;
-    for (int i = 0; i < nCount; ++i)
-    {
-        pPlayer = SoNew SoAudioOpenslPlayer;
-        if (pPlayer == NULL)
-        {
-            continue;
-        }
-
-        if (pPlayer->CreateOpenslObject() == false)
-        {
-            SoDelete pPlayer;
-            pPlayer = NULL;
-            continue;
-        }
-
-        const int nAudioId = m_kPlayerArray.FillAt(-1, &pPlayer);
-        pPlayer->SetAudioID(nAudioId);
-    }
-
-    return true;
-}
-//--------------------------------------------------------------------------------------------------
-SoAudioOpenslPlayer* SoAudioOpenslManager::FindEmptyPlayer()
+SoAudioOpenslPlayer* SoAudioOpenslManager::FindEmptyPlayer(SLuint32 ChannelCount, SLuint32 Frequency, SLuint32 BitsPerSample)
 {
     const int nCount = m_kPlayerArray.GetCapacity();
     SoAudioOpenslPlayer* pPlayer = NULL;
@@ -161,7 +129,10 @@ SoAudioOpenslPlayer* SoAudioOpenslManager::FindEmptyPlayer()
         pPlayer = GetAudioPlayer(i);
         if (pPlayer && pPlayer->IsUnused())
         {
-            return pPlayer;
+            if (pPlayer->IsSatisfied(ChannelCount, Frequency, BitsPerSample))
+            {
+                return pPlayer;
+            }
         }
     }
     return NULL;
@@ -188,18 +159,50 @@ int SoAudioOpenslManager::AudioPlay(const char* szResourceName, bool bLoop, bool
         return -1;
     }
 
-    SoAudioOpenslPlayer* pPlayer = FindEmptyPlayer();
+    const SLuint32 ChannelCount = pResource->GetAudioChannelCount();
+    const SLuint32 Frequency = pResource->GetAudioFrequency() * 1000;
+    const SLuint32 BitsPerSample = pResource->GetAudioBitsPerSample();
+
+    SoAudioOpenslPlayer* pPlayer = FindEmptyPlayer(ChannelCount, Frequency, BitsPerSample);
+    if (pPlayer)
+    {
+        if (pPlayer->AudioPlayerPlay(pResource))
+        {
+            pPlayer->SetLoop(bLoop);
+            return pPlayer->GetAudioID();
+        }
+        else
+        {
+            return -1;
+        }
+    }
+
+
+    pPlayer = SoNew SoAudioOpenslPlayer;
     if (pPlayer == NULL)
     {
         return -1;
     }
 
-    if (pPlayer->AudioPlayerPlay(pResource) == false)
+    if (pPlayer->CreateOpenslObject(ChannelCount, Frequency, BitsPerSample) == false)
     {
+        SoDelete pPlayer;
+        pPlayer = NULL;
         return -1;
     }
 
-    return pPlayer->GetAudioID();
+    const int nAudioId = m_kPlayerArray.FillAt(-1, &pPlayer);
+    pPlayer->SetAudioID(nAudioId);
+
+    if (pPlayer->AudioPlayerPlay(pResource))
+    {
+        pPlayer->SetLoop(bLoop);
+        return pPlayer->GetAudioID();
+    }
+    else
+    {
+        return -1;
+    }
 }
 //--------------------------------------------------------------------------------------------------
 void SoAudioOpenslManager::AudioStop(int nAudioId)

@@ -26,8 +26,7 @@ private:
 	~SoAudioOpenslManager();
 	bool InitAudioOpenslManager();
 	void ClearAudioOpenslManager();
-    bool PreparePlayerArray();
-    SoAudioOpenslPlayer* FindEmptyPlayer();
+    SoAudioOpenslPlayer* FindEmptyPlayer(SLuint32 ChannelCount, SLuint32 Frequency, SLuint32 BitsPerSample);
 
 private:
 	static SoAudioOpenslManager* ms_pInstance;

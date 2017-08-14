@@ -7,6 +7,7 @@
 #include "SoTinyString.h"
 #include "SoArray.h"
 #include "SoArrayUID.h"
+#include "SoAudio.h"
 //----------------------------------------------------------------
 #include "GGUIRect.h"
 #include "GGUIPoint.h"

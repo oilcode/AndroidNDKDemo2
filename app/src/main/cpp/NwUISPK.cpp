@@ -311,6 +311,7 @@ void NwUISPK::OnBtnCmd(int nCmdIndex)
     RefreshCmdBtn();
     RefreshTouchBtn();
     CheckPlayerOptionFinished();
+    SoAudioPlay("audio/button1.wav", false, false);
 }
 //--------------------------------------------------------------------
 void NwUISPK::OnBtnTouch(int nTouchIndex)
@@ -329,7 +330,7 @@ void NwUISPK::OnBtnTouch(int nTouchIndex)
     ++(m_kOwnCmdCount[oldCmd]);
     RefreshCmdBtn();
     RefreshTouchBtn();
-    SoAudioPlay("audio/mono.wav", true, true);
+    SoAudioPlay("audio/button2.wav", false, false);
 }
 //--------------------------------------------------------------------
 void NwUISPK::RefreshCmdBtn()

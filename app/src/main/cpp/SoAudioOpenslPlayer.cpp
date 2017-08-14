@@ -8,11 +8,17 @@ SoAudioOpenslPlayer::SoAudioOpenslPlayer()
 :m_pPlayerObject(NULL)
 ,m_pPlayerPlay(NULL)
 ,m_pPlayerBufferQueue(NULL)
-,m_pPlayerEffectSend(NULL)
 ,m_pPlayerVolume(NULL)
+//,m_pPlayerEffectSend(NULL)
+//,m_pPlayerSeek(NULL)
 ,m_pResource(NULL)
 ,m_nAudioId(-1)
 ,m_eState(AudioPlayerState_Stop)
+,m_ChannelCount(0)
+,m_Frequency(0)
+,m_BitsPerSample(0)
+,m_fVolume(1.0f)
+,m_bLoop(false)
 {
 
 }
@@ -22,7 +28,7 @@ SoAudioOpenslPlayer::~SoAudioOpenslPlayer()
     ReleaseOpenslObject();
 }
 //--------------------------------------------------------------------------------------------------
-bool SoAudioOpenslPlayer::CreateOpenslObject()
+bool SoAudioOpenslPlayer::CreateOpenslObject(SLuint32 ChannelCount, SLuint32 Frequency, SLuint32 BitsPerSample)
 {
     SLEngineItf pSLEngine = SoAudioOpenslManager::Get()->GetSLEngine();
     SLObjectItf pSLOutputMix = SoAudioOpenslManager::Get()->GetSLOutputMix();
@@ -31,10 +37,7 @@ bool SoAudioOpenslPlayer::CreateOpenslObject()
     do
     {
         const SLuint32 BackBufferCount = 3;
-        const SLuint32 ChannelCount = 1;
-        const SLuint32 Frequency = SL_SAMPLINGRATE_44_1;
-        const SLuint32 BitsPerSample = SL_PCMSAMPLEFORMAT_FIXED_16;
-        const SLuint32 ContainerSize = SL_PCMSAMPLEFORMAT_FIXED_16;
+        const SLuint32 ContainerSize = BitsPerSample;
         const SLuint32 ChannelMask = (ChannelCount == 1) ? SL_SPEAKER_FRONT_CENTER : (SL_SPEAKER_FRONT_LEFT | SL_SPEAKER_FRONT_RIGHT);
 
         SLDataLocator_AndroidSimpleBufferQueue loc_bufq = { SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE, BackBufferCount };
@@ -43,9 +46,9 @@ bool SoAudioOpenslPlayer::CreateOpenslObject()
         SLDataLocator_OutputMix loc_outmix = { SL_DATALOCATOR_OUTPUTMIX, pSLOutputMix };
         SLDataSink audioSnk = { &loc_outmix, NULL };
 
-        const SLuint32 InterfaceCount = 3;
-        const SLInterfaceID ids[3] = { SL_IID_BUFFERQUEUE, SL_IID_EFFECTSEND, SL_IID_VOLUME };
-        const SLboolean req[3] = { SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE };
+        const SLuint32 InterfaceCount = 2;
+        const SLInterfaceID ids[2] = { SL_IID_BUFFERQUEUE, SL_IID_VOLUME };
+        const SLboolean req[2] = { SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE };
         result = (*pSLEngine)->CreateAudioPlayer(pSLEngine, &m_pPlayerObject, &audioSrc, &audioSnk, InterfaceCount, ids, req);
         if (result != SL_RESULT_SUCCESS)
         {
@@ -75,14 +78,6 @@ bool SoAudioOpenslPlayer::CreateOpenslObject()
             break;
         }
 
-        // get the effect send interface
-        result = (*m_pPlayerObject)->GetInterface(m_pPlayerObject, SL_IID_EFFECTSEND, &m_pPlayerEffectSend);
-        if (result != SL_RESULT_SUCCESS)
-        {
-            SoMessageBox("", "SoAudioOpenslManager : get m_pPlayerEffectSend fail");
-            break;
-        }
-
         // get the volume interface
         result = (*m_pPlayerObject)->GetInterface(m_pPlayerObject, SL_IID_VOLUME, &m_pPlayerVolume);
         if (result != SL_RESULT_SUCCESS)
@@ -106,6 +101,10 @@ bool SoAudioOpenslPlayer::CreateOpenslObject()
         ReleaseOpenslObject();
         return false;
     }
+
+    m_ChannelCount = ChannelCount;
+    m_Frequency = Frequency;
+    m_BitsPerSample = BitsPerSample;
     return true;
 }
 //--------------------------------------------------------------------------------------------------
@@ -117,22 +116,32 @@ void SoAudioOpenslPlayer::ReleaseOpenslObject()
         m_pPlayerObject = NULL;
         m_pPlayerPlay = NULL;
         m_pPlayerBufferQueue = NULL;
-        m_pPlayerEffectSend = NULL;
         m_pPlayerVolume = NULL;
+        //m_pPlayerEffectSend = NULL;
+        //m_pPlayerSeek = NULL;
     }
 }
 //--------------------------------------------------------------------------------------------------
 void SoAudioOpenslPlayer::CallBack_FillBuffer(SLAndroidSimpleBufferQueueItf bq, void* context)
 {
     SoAudioOpenslPlayer* pPlayer = (SoAudioOpenslPlayer*)context;
-    SoAudioResource* pResource = pPlayer->m_pResource;
-    if (pResource)
+    if (pPlayer->m_bLoop)
     {
-        SLresult result = (*bq)->Enqueue(bq, pResource->GetAudioData(), pResource->GetAudioDataSize());
-        if (result == SL_RESULT_BUFFER_INSUFFICIENT)
+        SoAudioResource* pResource = pPlayer->m_pResource;
+        if (pResource)
         {
-            //buff不足
+            (*bq)->Enqueue(bq, pResource->GetAudioData(), pResource->GetAudioDataSize());
+            //if (result == SL_RESULT_BUFFER_INSUFFICIENT) //buff不足
         }
+    }
+    else
+    {
+        if (pPlayer->m_pResource)
+        {
+            pPlayer->m_pResource->AudioRemoveRef();
+            pPlayer->m_pResource = NULL;
+        }
+        pPlayer->m_eState = AudioPlayerState_Stop;
     }
 }
 //--------------------------------------------------------------------------------------------------
@@ -140,24 +149,6 @@ bool SoAudioOpenslPlayer::AudioPlayerPlay(SoAudioResource *pResource)
 {
     if (pResource == NULL)
     {
-        return false;
-    }
-    const SLuint32 Frequency = pResource->GetAudioFrequency() * 1000;
-    if (Frequency != SL_SAMPLINGRATE_44_1)
-    {
-        SoMessageBox("Error", "SoAudioOpenslPlayer::AudioPlayerPlay : Frequency != SL_SAMPLINGRATE_44_1");
-        return false;
-    }
-    const SLuint32 BitsPerSample = pResource->GetAudioBitsPerSample();
-    if (BitsPerSample != SL_PCMSAMPLEFORMAT_FIXED_16)
-    {
-        SoMessageBox("Error", "SoAudioOpenslPlayer::AudioPlayerPlay : BitsPerSample != SL_PCMSAMPLEFORMAT_FIXED_16");
-        return false;
-    }
-    const SLuint32 ChannelCount = pResource->GetAudioChannelCount();
-    if (ChannelCount != 1 && ChannelCount != 2)
-    {
-        SoMessageBox("Error", "SoAudioOpenslPlayer::AudioPlayerPlay : ChannelCount != 1 && ChannelCount != 2");
         return false;
     }
 
@@ -230,5 +221,23 @@ void SoAudioOpenslPlayer::AudioPlayerResume()
     }
 
     m_eState = AudioPlayerState_Play;
+}
+//--------------------------------------------------------------------------------------------------
+void SoAudioOpenslPlayer::SetVolume(float fVolume)
+{
+    SLmillibel MinVolume = SL_MILLIBEL_MIN;
+    SLmillibel MaxVolume = SL_MILLIBEL_MIN;
+    (*m_pPlayerVolume)->GetMaxVolumeLevel(m_pPlayerVolume, &MaxVolume);
+    SLmillibel newVolume = MinVolume + (SLmillibel)(((float)(MaxVolume - MinVolume)) * fVolume);
+    (*m_pPlayerVolume)->SetVolumeLevel(m_pPlayerVolume, newVolume);
+    m_fVolume = fVolume;
+}
+//--------------------------------------------------------------------------------------------------
+void SoAudioOpenslPlayer::SetLoop(bool bLoop)
+{
+    m_bLoop = bLoop;
+
+    //SLboolean _Loop = bLoop ? SL_BOOLEAN_TRUE : SL_BOOLEAN_FALSE;
+    //(*m_pPlayerSeek)->SetLoop(m_pPlayerSeek, _Loop, 0, SL_TIME_UNKNOWN);
 }
 //--------------------------------------------------------------------------------------------------
