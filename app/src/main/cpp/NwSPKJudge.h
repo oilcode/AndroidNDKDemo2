@@ -17,8 +17,8 @@ public:
 private:
     void JudgeTouch(int nTouchIndex, NwSPKCmdType theLeftCmd, NwSPKCmdType theRightCmd);
     void AttackXuanYun(const NwSPKHeroData* pWinnerHero, NwSPKCmdType theCmd, NwSPKResultSingle* pWinnerResultSingle, NwSPKResultSingle* pOtherResultSingle);
-    void SameCmd(NwSPKResultSingle* pLeftSingle, NwSPKResultSingle* pRightSingle);
-    void DrawCmd(NwSPKResultSingle* pLeftSingle, NwSPKResultSingle* pRightSingle);
+    void SameCmd(NwSPKResultSingle* pLeftSingle, NwSPKResultSingle* pRightSingle, NwSPKCmdType theCmd);
+    void DrawCmd(NwSPKResultSingle* pLeftSingle, NwSPKResultSingle* pRightSingle, NwSPKCmdType theLeftCmd, NwSPKCmdType theRightCmd);
     void WinnerAttack(NwSPKCmdType theWinnerCmd, NwSPKCmdType theOtherCmd, const NwSPKHeroData* pWinnerHero, const NwSPKHeroData* pOtherHero, NwSPKResultSingle* pWinnerSingle, NwSPKResultSingle* pOtherSingle);
     int CalculateNormalDamage(const NwSPKHeroData* pWinnerHero);
     int CalculateXuanFengDamage(const NwSPKHeroData* pWinnerHero);

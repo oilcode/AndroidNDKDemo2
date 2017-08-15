@@ -39,6 +39,8 @@ protected:
     void ReleaseOpenslObject();
     void SetAudioID(int nId);
     bool IsSatisfied(SLuint32 ChannelCount, SLuint32 Frequency, SLuint32 BitsPerSample) const;
+    //线程安全，函数内部会加锁。
+    void DoSafeStop();
     static void CallBack_FillBuffer(SLAndroidSimpleBufferQueueItf bq, void* context);
 
 private:
@@ -51,6 +53,8 @@ private:
     //但是有些设备不支持该组件，只能使用“播放结束就重新灌一次数据”的方式实现循环播放。
     //SLSeekItf m_pPlayerSeek;
     SoAudioResource* m_pResource;
+    //互斥锁
+    pthread_mutex_t m_Lock;
     int m_nAudioId;
     AudioPlayerState m_eState;
     SLuint32 m_ChannelCount;

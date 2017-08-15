@@ -117,7 +117,7 @@ void NwSPKJudge::JudgeTouch(int nTouchIndex, NwSPKCmdType theLeftCmd, NwSPKCmdTy
         //指令相同
         kLeftResultSingle.theResult = NwSPKTouchResult_Draw;
         kRightResultSingle.theResult = NwSPKTouchResult_Draw;
-        SameCmd(&kLeftResultSingle, &kRightResultSingle);
+        SameCmd(&kLeftResultSingle, &kRightResultSingle, theLeftCmd);
         return;
     }
 
@@ -126,7 +126,7 @@ void NwSPKJudge::JudgeTouch(int nTouchIndex, NwSPKCmdType theLeftCmd, NwSPKCmdTy
     {
         kLeftResultSingle.theResult = NwSPKTouchResult_Draw;
         kRightResultSingle.theResult = NwSPKTouchResult_Draw;
-        DrawCmd(&kLeftResultSingle, &kRightResultSingle);
+        DrawCmd(&kLeftResultSingle, &kRightResultSingle, theLeftCmd, theRightCmd);
         return;
     }
     
@@ -152,6 +152,7 @@ void NwSPKJudge::JudgeTouch(int nTouchIndex, NwSPKCmdType theLeftCmd, NwSPKCmdTy
 //--------------------------------------------------------------------------------------------------
 void NwSPKJudge::AttackXuanYun(const NwSPKHeroData* pWinnerHero, NwSPKCmdType theCmd, NwSPKResultSingle* pWinnerResultSingle, NwSPKResultSingle* pOtherResultSingle)
 {
+    //攻击眩晕者，双方都不产生MP
     switch (theCmd)
     {
         case NwSPKCmd_Up:
@@ -159,20 +160,18 @@ void NwSPKJudge::AttackXuanYun(const NwSPKHeroData* pWinnerHero, NwSPKCmdType th
         case NwSPKCmd_Down:
         case NwSPKCmd_FanSha:
         {
-            pWinnerResultSingle->nDeltaMP += CalculateMP();
             pOtherResultSingle->nDeltaHP -= CalculateNormalDamage(pWinnerHero);
         }
         break;
         case NwSPKCmd_XuanFeng:
         {
-            pWinnerResultSingle->nDeltaMP += CalculateMP();
             pOtherResultSingle->nDeltaHP -= CalculateXuanFengDamage(pWinnerHero);
         }
         break;
         case NwSPKCmd_ZhaoJia:
         case NwSPKCmd_ShanBi:
         {
-            pWinnerResultSingle->nDeltaMP += CalculateMP();
+            //do nothing
         }
         break;
         default:
@@ -184,18 +183,30 @@ void NwSPKJudge::AttackXuanYun(const NwSPKHeroData* pWinnerHero, NwSPKCmdType th
     }
 }
 //--------------------------------------------------------------------------------------------------
-void NwSPKJudge::SameCmd(NwSPKResultSingle* pLeftSingle, NwSPKResultSingle* pRightSingle)
+void NwSPKJudge::SameCmd(NwSPKResultSingle* pLeftSingle, NwSPKResultSingle* pRightSingle, NwSPKCmdType theCmd)
 {
-    pLeftSingle->nDeltaMP += CalculateMP();
-    pRightSingle->nDeltaMP += CalculateMP();
+    if (theCmd != NwSPKCmd_XuanFeng)
+    {
+        pLeftSingle->nDeltaMP += CalculateMP();
+        pRightSingle->nDeltaMP += CalculateMP();
+    }
     pLeftSingle->nDeltaSamePoint += 1;
     pRightSingle->nDeltaSamePoint += 1;
 }
 //--------------------------------------------------------------------------------------------------
-void NwSPKJudge::DrawCmd(NwSPKResultSingle* pLeftSingle, NwSPKResultSingle* pRightSingle)
+void NwSPKJudge::DrawCmd(NwSPKResultSingle* pLeftSingle, NwSPKResultSingle* pRightSingle, NwSPKCmdType theLeftCmd, NwSPKCmdType theRightCmd)
 {
-    pLeftSingle->nDeltaMP += CalculateMP();
-    pRightSingle->nDeltaMP += CalculateMP();
+    //有两种情况会执行到这里：
+    //1，一方是闪避，另一方是招架
+    //2，一方是闪避，另一方是旋风斩
+    if (theLeftCmd != NwSPKCmd_XuanFeng)
+    {
+        pLeftSingle->nDeltaMP += CalculateMP();
+    }
+    if (theRightCmd != NwSPKCmd_XuanFeng)
+    {
+        pRightSingle->nDeltaMP += CalculateMP();
+    }
 }
 //--------------------------------------------------------------------------------------------------
 void NwSPKJudge::WinnerAttack(NwSPKCmdType theWinnerCmd, NwSPKCmdType theOtherCmd, const NwSPKHeroData* pWinnerHero, const NwSPKHeroData* pOtherHero, NwSPKResultSingle* pWinnerSingle, NwSPKResultSingle* pOtherSingle)
@@ -205,7 +216,7 @@ void NwSPKJudge::WinnerAttack(NwSPKCmdType theWinnerCmd, NwSPKCmdType theOtherCm
         case NwSPKCmd_ShanBi:
         {
             pOtherSingle->AddBuff(NwSPKBuff_XuanYun, NwSPK_XuanYunTouchCount);
-            //
+            //闪避成功，只给成功者加MP
             pWinnerSingle->nDeltaMP += CalculateMP();
         }
         break;
@@ -217,8 +228,8 @@ void NwSPKJudge::WinnerAttack(NwSPKCmdType theWinnerCmd, NwSPKCmdType theOtherCm
                 nDamage = ReduceDamageByZhaoJia(pOtherHero, nDamage);
             }
             pOtherSingle->nDeltaHP -= nDamage;
-            //
-            pWinnerSingle->nDeltaMP += CalculateMP();
+            //旋风斩施放成功，施放者不加MP，被击者增加MP
+            //pWinnerSingle->nDeltaMP += CalculateMP();
             pOtherSingle->nDeltaMP += CalculateMP();
         }
         break;

@@ -20,12 +20,13 @@ SoAudioOpenslPlayer::SoAudioOpenslPlayer()
 ,m_fVolume(1.0f)
 ,m_bLoop(false)
 {
-
+    pthread_mutex_init(&m_Lock, NULL);
 }
 //--------------------------------------------------------------------------------------------------
 SoAudioOpenslPlayer::~SoAudioOpenslPlayer()
 {
     ReleaseOpenslObject();
+    pthread_mutex_destroy(&m_Lock);
 }
 //--------------------------------------------------------------------------------------------------
 bool SoAudioOpenslPlayer::CreateOpenslObject(SLuint32 ChannelCount, SLuint32 Frequency, SLuint32 BitsPerSample)
@@ -52,21 +53,21 @@ bool SoAudioOpenslPlayer::CreateOpenslObject(SLuint32 ChannelCount, SLuint32 Fre
         result = (*pSLEngine)->CreateAudioPlayer(pSLEngine, &m_pPlayerObject, &audioSrc, &audioSnk, InterfaceCount, ids, req);
         if (result != SL_RESULT_SUCCESS)
         {
-            SoMessageBox("", "SoAudioOpenslManager : CreateAudioPlayer fail");
+            SoMessageBox("", "SoAudioOpenslPlayer : CreateAudioPlayer fail");
             break;
         }
 
         result = (*m_pPlayerObject)->Realize(m_pPlayerObject, SL_BOOLEAN_FALSE);
         if (result != SL_RESULT_SUCCESS)
         {
-            SoMessageBox("", "SoAudioOpenslManager : (*m_pPlayerObject)->Realize fail");
+            SoMessageBox("", "SoAudioOpenslPlayer : (*m_pPlayerObject)->Realize fail");
             break;
         }
 
         result = (*m_pPlayerObject)->GetInterface(m_pPlayerObject, SL_IID_PLAY, &m_pPlayerPlay);
         if (result != SL_RESULT_SUCCESS)
         {
-            SoMessageBox("", "SoAudioOpenslManager : get m_pPlayerPlay fail");
+            SoMessageBox("", "SoAudioOpenslPlayer : get m_pPlayerPlay fail");
             break;
         }
 
@@ -74,7 +75,7 @@ bool SoAudioOpenslPlayer::CreateOpenslObject(SLuint32 ChannelCount, SLuint32 Fre
         result = (*m_pPlayerObject)->GetInterface(m_pPlayerObject, SL_IID_BUFFERQUEUE, &m_pPlayerBufferQueue);
         if (result != SL_RESULT_SUCCESS)
         {
-            SoMessageBox("", "SoAudioOpenslManager : get m_pPlayerBufferQueue fail");
+            SoMessageBox("", "SoAudioOpenslPlayer : get m_pPlayerBufferQueue fail");
             break;
         }
 
@@ -82,7 +83,7 @@ bool SoAudioOpenslPlayer::CreateOpenslObject(SLuint32 ChannelCount, SLuint32 Fre
         result = (*m_pPlayerObject)->GetInterface(m_pPlayerObject, SL_IID_VOLUME, &m_pPlayerVolume);
         if (result != SL_RESULT_SUCCESS)
         {
-            SoMessageBox("", "SoAudioOpenslManager : get m_pPlayerVolume fail");
+            SoMessageBox("", "SoAudioOpenslPlayer : get m_pPlayerVolume fail");
             break;
         }
 
@@ -90,7 +91,7 @@ bool SoAudioOpenslPlayer::CreateOpenslObject(SLuint32 ChannelCount, SLuint32 Fre
         result = (*m_pPlayerBufferQueue)->RegisterCallback(m_pPlayerBufferQueue, SoAudioOpenslPlayer::CallBack_FillBuffer, this);
         if (result != SL_RESULT_SUCCESS)
         {
-            SoMessageBox("", "SoAudioOpenslManager : RegisterCallback fail");
+            SoMessageBox("", "SoAudioOpenslPlayer : RegisterCallback fail");
             break;
         }
 
@@ -122,26 +123,40 @@ void SoAudioOpenslPlayer::ReleaseOpenslObject()
     }
 }
 //--------------------------------------------------------------------------------------------------
+void SoAudioOpenslPlayer::DoSafeStop()
+{
+    //加锁
+    pthread_mutex_lock(&m_Lock);
+
+    if (m_eState != AudioPlayerState_Stop)
+    {
+        if (m_pResource)
+        {
+            m_pResource->AudioRemoveRef();
+            m_pResource = NULL;
+        }
+        m_eState = AudioPlayerState_Stop;
+    }
+
+    //解锁
+    pthread_mutex_unlock(&m_Lock);
+}
+//--------------------------------------------------------------------------------------------------
 void SoAudioOpenslPlayer::CallBack_FillBuffer(SLAndroidSimpleBufferQueueItf bq, void* context)
 {
+    //这个回调函数所在的线程是音频线程，
+    //而 SoAudioOpenslPlayer 对象资源所在的线程是OpenGL渲染线程，
+    //这里要使用线程安全的函数。
     SoAudioOpenslPlayer* pPlayer = (SoAudioOpenslPlayer*)context;
     if (pPlayer->m_bLoop)
     {
         SoAudioResource* pResource = pPlayer->m_pResource;
-        if (pResource)
-        {
-            (*bq)->Enqueue(bq, pResource->GetAudioData(), pResource->GetAudioDataSize());
-            //if (result == SL_RESULT_BUFFER_INSUFFICIENT) //buff不足
-        }
+        (*bq)->Enqueue(bq, pResource->GetAudioData(), pResource->GetAudioDataSize());
+        //if (result == SL_RESULT_BUFFER_INSUFFICIENT) //buff不足
     }
     else
     {
-        if (pPlayer->m_pResource)
-        {
-            pPlayer->m_pResource->AudioRemoveRef();
-            pPlayer->m_pResource = NULL;
-        }
-        pPlayer->m_eState = AudioPlayerState_Stop;
+        pPlayer->DoSafeStop();
     }
 }
 //--------------------------------------------------------------------------------------------------
@@ -149,6 +164,12 @@ bool SoAudioOpenslPlayer::AudioPlayerPlay(SoAudioResource *pResource)
 {
     if (pResource == NULL)
     {
+        return false;
+    }
+
+    if (m_eState != AudioPlayerState_Stop)
+    {
+        SoMessageBox("", "SoAudioOpenslPlayer::AudioPlayerPlay : m_eState != AudioPlayerState_Stop");
         return false;
     }
 
@@ -183,14 +204,7 @@ void SoAudioOpenslPlayer::AudioPlayerStop()
 {
     (*m_pPlayerPlay)->SetPlayState(m_pPlayerPlay, SL_PLAYSTATE_STOPPED);
     (*m_pPlayerBufferQueue)->Clear(m_pPlayerBufferQueue);
-
-    if (m_pResource)
-    {
-        m_pResource->AudioRemoveRef();
-        m_pResource = NULL;
-    }
-
-    m_eState = AudioPlayerState_Stop;
+    DoSafeStop();
 }
 //--------------------------------------------------------------------------------------------------
 void SoAudioOpenslPlayer::AudioPlayerPause()
@@ -210,14 +224,14 @@ void SoAudioOpenslPlayer::AudioPlayerResume()
     SLresult result = (*m_pPlayerBufferQueue)->Enqueue(m_pPlayerBufferQueue, m_pResource->GetAudioData(), m_pResource->GetAudioDataSize());
     if (result != SL_RESULT_SUCCESS)
     {
-        SoMessageBox("", "SoAudioOpenslPlayer::AudioPlayerPlay : m_pPlayerBufferQueue->Enqueue fail");
+        SoMessageBox("", "SoAudioOpenslPlayer::AudioPlayerResume : m_pPlayerBufferQueue->Enqueue fail");
     }
 
     // set the player's state to playing
     result = (*m_pPlayerPlay)->SetPlayState(m_pPlayerPlay, SL_PLAYSTATE_PLAYING);
     if (result != SL_RESULT_SUCCESS)
     {
-        SoMessageBox("", "SoAudioOpenslPlayer::AudioPlayerPlay : (*m_pPlayerPlay)->SetPlayState fail");
+        SoMessageBox("", "SoAudioOpenslPlayer::AudioPlayerResume : (*m_pPlayerPlay)->SetPlayState fail");
     }
 
     m_eState = AudioPlayerState_Play;
