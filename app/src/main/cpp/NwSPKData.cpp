@@ -35,6 +35,9 @@ void NwSPKData::ResetSPKData()
     m_kRightHeroData.nCurHP = 1000;
     m_kRightHeroData.nMaxMP = 100;
     m_kRightHeroData.nCurMP = 0;
+    //
+    m_kLeftHeroData.kCmdCountList[NwSPKCmd_DongCha] = 1;
+    m_kLeftHeroData.kCmdCountList[NwSPKCmd_FanSha] = 1;
 }
 //--------------------------------------------------------------------------------------------------
 NwSPKHeroData* NwSPKData::GetLeftHeroData()
@@ -90,7 +93,7 @@ void NwSPKData::PrepareCmdListForNewRound()
     m_kRightHeroData.kCmdCountList[NwSPKCmd_ZhaoJia] = g_nCmdCount_Normal;
 }
 //--------------------------------------------------------------------------------------------------
-void NwSPKData::SetLeftSelectedCmd(NwSPKCmdType cmd0, NwSPKCmdType cmd1, NwSPKCmdType cmd2)
+void NwSPKData::SetLeftSelectedCmd(NwSPKCmdType cmd0, NwSPKCmdType cmd1, NwSPKCmdType cmd2, bool bDongCha)
 {
     m_kLeftSelectedCmd.kCmdList[0] = cmd0;
     m_kLeftSelectedCmd.kCmdList[1] = cmd1;
@@ -105,6 +108,11 @@ void NwSPKData::SetLeftSelectedCmd(NwSPKCmdType cmd0, NwSPKCmdType cmd1, NwSPKCm
         m_kLeftHeroData.kCmdCountList[cmd0] -= 1;
         m_kLeftHeroData.kCmdCountList[cmd1] -= 1;
         m_kLeftHeroData.kCmdCountList[cmd2] -= 1;
+    }
+    //
+    if (bDongCha)
+    {
+        m_kLeftHeroData.kCmdCountList[NwSPKCmd_DongCha] -= 1;
     }
 }
 //--------------------------------------------------------------------------------------------------

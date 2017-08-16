@@ -16,6 +16,8 @@ public:
     void SetRightSelectedCmd(NwSPKTouchType theTouchIndex, NwSPKCmdType theCmd);
     //获取左方武将选择的指令
     NwSPKCmdType GetSelectedCmd(NwSPKTouchType theTouchIndex);
+    //获取左方武将是否使用了洞察
+    bool GetSelectedDongCha();
     //获取武将图片的矩形范围
     const GGUIRect& GetHeroRect(NwSPKSideType theSide);
     //做交锋的提示动画
@@ -66,6 +68,8 @@ private:
     NwSPKCmdType m_kSelectedCmdList[NwSPKTouch_Max];
     //在玩家选择指令期间，是否处于眩晕中
     bool m_bXuanYun;
+    //是否正在显示对方已经选择的指令
+    bool m_bDongCha;
     //是否正在显示战斗结果
     bool m_bShowPKResult;
 };

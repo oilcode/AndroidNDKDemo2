@@ -185,7 +185,11 @@ void NwSPKJudge::AttackXuanYun(const NwSPKHeroData* pWinnerHero, NwSPKCmdType th
 //--------------------------------------------------------------------------------------------------
 void NwSPKJudge::SameCmd(NwSPKResultSingle* pLeftSingle, NwSPKResultSingle* pRightSingle, NwSPKCmdType theCmd)
 {
-    if (theCmd != NwSPKCmd_XuanFeng)
+    if (theCmd == NwSPKCmd_XuanFeng || theCmd == NwSPKCmd_FanSha)
+    {
+        //旋风斩，反杀不增加MP
+    }
+    else
     {
         pLeftSingle->nDeltaMP += CalculateMP();
         pRightSingle->nDeltaMP += CalculateMP();
@@ -228,9 +232,22 @@ void NwSPKJudge::WinnerAttack(NwSPKCmdType theWinnerCmd, NwSPKCmdType theOtherCm
                 nDamage = ReduceDamageByZhaoJia(pOtherHero, nDamage);
             }
             pOtherSingle->nDeltaHP -= nDamage;
-            //旋风斩施放成功，施放者不加MP，被击者增加MP
+            //旋风斩施放成功，双方都不增加MP
             //pWinnerSingle->nDeltaMP += CalculateMP();
-            pOtherSingle->nDeltaMP += CalculateMP();
+            //pOtherSingle->nDeltaMP += CalculateMP();
+        }
+        break;
+        case NwSPKCmd_FanSha:
+        {
+            int nDamage = CalculateNormalDamage(pWinnerHero);
+            if (theOtherCmd == NwSPKCmd_ZhaoJia)
+            {
+                nDamage = ReduceDamageByZhaoJia(pOtherHero, nDamage);
+            }
+            pOtherSingle->nDeltaHP -= nDamage;
+            //反杀施放成功，双方都不增加MP
+            //pWinnerSingle->nDeltaMP += CalculateMP();
+            //pOtherSingle->nDeltaMP += CalculateMP();
         }
         break;
         default:
@@ -350,6 +367,7 @@ NwSPKTouchResult NwSPKJudge::CmdCompare(NwSPKCmdType theCmd, NwSPKCmdType theOth
                 case NwSPKCmd_XuanFeng:
                     return NwSPKTouchResult_Draw;
                 case NwSPKCmd_Down:
+                case NwSPKCmd_FanSha:
                     return NwSPKTouchResult_Lose;
                 default:
                     return NwSPKTouchResult_Win;
@@ -362,6 +380,19 @@ NwSPKTouchResult NwSPKJudge::CmdCompare(NwSPKCmdType theCmd, NwSPKCmdType theOth
             {
                 case NwSPKCmd_XuanFeng:
                 case NwSPKCmd_ShanBi:
+                    return NwSPKTouchResult_Draw;
+                default:
+                    return NwSPKTouchResult_Win;
+            }
+        }
+        break;
+        case NwSPKCmd_FanSha:
+        {
+            switch (theOther)
+            {
+                case NwSPKCmd_XuanFeng:
+                    return NwSPKTouchResult_Lose;
+                case NwSPKCmd_FanSha:
                     return NwSPKTouchResult_Draw;
                 default:
                     return NwSPKTouchResult_Win;

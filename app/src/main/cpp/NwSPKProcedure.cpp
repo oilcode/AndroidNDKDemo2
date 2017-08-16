@@ -45,6 +45,8 @@ void NwSPKProcedure::UpdateSPKProcedure(float fDeltaTime)
             pSPKData->OnRoundStart();
             //初始化本回合的武将信息
             pSPKData->PrepareCmdListForNewRound();
+            //为AI生成战斗指令
+            pSPKData->GenerateCmdForAI();
             //根据武将信息，刷新界面
             const NwSPKHeroData* pLeftHeroData = pSPKData->GetLeftHeroData();
             const NwSPKHeroData* pRightHeroData = pSPKData->GetRightHeroData();
@@ -66,9 +68,8 @@ void NwSPKProcedure::UpdateSPKProcedure(float fDeltaTime)
             NwSPKCmdType cmd0 = pUISPK->GetSelectedCmd(NwSPKTouch_0);
             NwSPKCmdType cmd1 = pUISPK->GetSelectedCmd(NwSPKTouch_1);
             NwSPKCmdType cmd2 = pUISPK->GetSelectedCmd(NwSPKTouch_2);
-            pSPKData->SetLeftSelectedCmd(cmd0, cmd1, cmd2);
-            //为AI生成战斗指令
-            pSPKData->GenerateCmdForAI();
+            bool bDongCha = pUISPK->GetSelectedDongCha();
+            pSPKData->SetLeftSelectedCmd(cmd0, cmd1, cmd2, bDongCha);
             nNextStep = SPKProcedureStep_PreRound;
             break;
         }

@@ -21,7 +21,7 @@ public:
     void PrepareCmdListForNewRound();
 
     //设置选择了哪三个战斗指令
-    void SetLeftSelectedCmd(NwSPKCmdType cmd0, NwSPKCmdType cmd1, NwSPKCmdType cmd2);
+    void SetLeftSelectedCmd(NwSPKCmdType cmd0, NwSPKCmdType cmd1, NwSPKCmdType cmd2, bool bDongCha);
     //为AI生成战斗指令
     void GenerateCmdForAI();
 

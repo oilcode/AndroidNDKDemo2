@@ -2,6 +2,7 @@
 #include "NwUISPK.h"
 #include "NwSceneSPK.h"
 #include "NwSPKProcedure.h"
+#include "NwSPKData.h"
 #include "SoAudio.h"
 //----------------------------------------------------------------
 const char* g_CmdBtnTexture[NwSPKCmd_Max] = {0};
@@ -61,6 +62,7 @@ NwUISPK::NwUISPK()
     }
     m_pImgSPKResult = NULL;
     m_bXuanYun = false;
+    m_bDongCha = false;
     m_bShowPKResult = false;
 }
 //----------------------------------------------------------------
@@ -97,6 +99,7 @@ void NwUISPK::PrepareForStart()
     m_pImgSPKResult->SetVisible(false);
     m_bShowPKResult = false;
     m_bXuanYun = false;
+    m_bDongCha = false;
 }
 //----------------------------------------------------------------
 void NwUISPK::StartSelectCmd()
@@ -110,6 +113,7 @@ void NwUISPK::StartSelectCmd()
         //处于眩晕状态，不能选择第一个指令，填成默认值
         m_kSelectedCmdList[0] = NwSPKCmd_ZhaoJia;
     }
+    m_bDongCha = false;
     SetAllButtonEnableFlag(true);
     RefreshTouchBtn();
     RefreshCmdBtn();
@@ -170,6 +174,11 @@ NwSPKCmdType NwUISPK::GetSelectedCmd(NwSPKTouchType theTouchIndex)
     return m_kSelectedCmdList[theTouchIndex];
 }
 //----------------------------------------------------------------
+bool NwUISPK::GetSelectedDongCha()
+{
+    return m_bDongCha;
+}
+//----------------------------------------------------------------
 const GGUIRect& NwUISPK::GetHeroRect(NwSPKSideType theSide)
 {
     return m_pHeroList[theSide]->GetRectInAbsCoord();
@@ -188,7 +197,7 @@ void NwUISPK::PlayTouchBtnEffect(NwSPKTouchType theTouchIndex)
     pActionLine->AddAction(pActionMove);
 
     pActionMove = (GGUIActionMove*)GGUIActionFactory::Get()->CreateUIAction(GGUIAction_Move);
-    pActionMove->InitActionMove(-30.0f, 00.0f, 0.5f);
+    pActionMove->InitActionMove(-30.0f, 00.0f, 0.4f);
     pActionLine->AddAction(pActionMove);
 
     //===========================
@@ -203,7 +212,7 @@ void NwUISPK::PlayTouchBtnEffect(NwSPKTouchType theTouchIndex)
     pActionLine->AddAction(pActionMove);
 
     pActionMove = (GGUIActionMove*)GGUIActionFactory::Get()->CreateUIAction(GGUIAction_Move);
-    pActionMove->InitActionMove(30.0f, 00.0f, 0.5f);
+    pActionMove->InitActionMove(30.0f, 00.0f, 0.4f);
     pActionLine->AddAction(pActionMove);
 }
 //----------------------------------------------------------------
@@ -216,7 +225,7 @@ void NwUISPK::PlayHeroEffect(NwSPKSideType theSide, float fDeltaScale)
     theActionGroup->AddActionLine(pActionLine);
 
     GGUIActionScale* pActionScale = (GGUIActionScale*)GGUIActionFactory::Get()->CreateUIAction(GGUIAction_Scale);
-    pActionScale->InitActionScale(fDeltaScale, fDeltaScale, 0.35f);
+    pActionScale->InitActionScale(fDeltaScale, fDeltaScale, 0.4f);
     pActionLine->AddAction(pActionScale);
 
     pActionScale = (GGUIActionScale*)GGUIActionFactory::Get()->CreateUIAction(GGUIAction_Scale);
@@ -297,6 +306,24 @@ void NwUISPK::OnBtnCmd(int nCmdIndex)
             m_kSelectedCmdList[i] = NwSPKCmd_XuanFeng;
         }
     }
+    else if (nCmdIndex == NwSPKCmd_FanSha)
+    {
+        for (int i = 0; i < NwSPKTouch_Max; ++i)
+        {
+            m_kSelectedCmdList[i] = NwSPKCmd_FanSha;
+        }
+    }
+    else if (nCmdIndex == NwSPKCmd_DongCha)
+    {
+        //把对方选择的指令显示在界面上
+        const NwSPKSelectedCmd* pSelectedCmd = NwSceneSPK::Get()->GetSPKData()->GetRightSelectedCmd();
+        for (int i = 0; i < NwSPKTouch_Max; ++i)
+        {
+            NwSPKCmdType theCmd = pSelectedCmd->kCmdList[i];
+            m_pBtnTouchList[NwSPKSide_Right][i]->SetText(g_CmdName[theCmd]);
+        }
+        m_bDongCha = true;
+    }
     else
     {
         //寻找空的指令槽
@@ -351,8 +378,9 @@ void NwUISPK::RefreshCmdBtn()
 
     if (m_bXuanYun)
     {
-        //眩晕中不能施放旋风斩，不能施放反杀。
+        //眩晕中不能施放旋风斩，不能施放洞察，不能施放反杀。
         m_pBtnCmdList[NwSPKCmd_XuanFeng]->SetButtonState(GGUIButtonState_Disable);
+        m_pBtnCmdList[NwSPKCmd_DongCha]->SetButtonState(GGUIButtonState_Disable);
         m_pBtnCmdList[NwSPKCmd_FanSha]->SetButtonState(GGUIButtonState_Disable);
     }
 }
@@ -387,7 +415,10 @@ void NwUISPK::RefreshTouchBtn()
             }
         }
         //
-        m_pBtnTouchList[NwSPKSide_Right][i]->SetText("");
+        if (m_bDongCha == false)
+        {
+            m_pBtnTouchList[NwSPKSide_Right][i]->SetText("");
+        }
     }
 }
 //--------------------------------------------------------------------
