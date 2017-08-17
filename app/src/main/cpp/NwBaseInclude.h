@@ -34,6 +34,8 @@
 #include "GGUIActionMove.h"
 #include "GGUIActionScale.h"
 #include "GGUIActionEvent.h"
+#include "GGUIActionWait.h"
+#include "GGUIActionAudio.h"
 //----------------------------------------------------------------
 #endif //_NwBaseInclude_h_
 //----------------------------------------------------------------

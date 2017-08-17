@@ -81,19 +81,25 @@ void NwSPKProcedure::UpdateSPKProcedure(float fDeltaTime)
             {
                 pUISPK->SetRightSelectedCmd((NwSPKTouchType)i, pRightSelectedCmd->kCmdList[i]);
             }
+            //SoAudioPlay("audio/round_begin.wav", 1.0f, false, false);
+            m_fCountDownForCurrentStep = 1.0f;
             nNextStep = SPKProcedureStep_PreTouch;
             break;
         }
         case SPKProcedureStep_PreTouch:
         {
-            //做交锋的提示动画
-            pUISPK->PlayTouchBtnEffect((NwSPKTouchType)pSPKData->GetTouchIndex());
-            //判断本次交锋的输赢
-            NwSPKJudge* pSPKJudge = NwSceneSPK::Get()->GetSPKJudge();
-            pSPKJudge->StartJudgeTouch(pSPKData->GetTouchIndex(), pSPKData->GetLeftHeroData(), pSPKData->GetRightHeroData(),
-                                        pSPKData->GetLeftCmd_CurrentTouch(), pSPKData->GetRightCmd_CurrentTouch());
-            m_fCountDownForCurrentStep = 1.0f;
-            nNextStep = SPKProcedureStep_Touch;
+            m_fCountDownForCurrentStep -= fDeltaTime;
+            if (m_fCountDownForCurrentStep < 0.0f)
+            {
+                //做交锋的提示动画
+                pUISPK->PlayTouchBtnEffect((NwSPKTouchType)pSPKData->GetTouchIndex());
+                //判断本次交锋的输赢
+                NwSPKJudge* pSPKJudge = NwSceneSPK::Get()->GetSPKJudge();
+                pSPKJudge->StartJudgeTouch(pSPKData->GetTouchIndex(), pSPKData->GetLeftHeroData(), pSPKData->GetRightHeroData(),
+                                           pSPKData->GetLeftCmd_CurrentTouch(), pSPKData->GetRightCmd_CurrentTouch());
+                m_fCountDownForCurrentStep = 1.0f;
+                nNextStep = SPKProcedureStep_Touch;
+            }
             break;
         }
         case SPKProcedureStep_Touch:
@@ -229,6 +235,7 @@ void NwSPKProcedure::ProcessStepTouch()
     else if (theLeftResult == NwSPKTouchResult_Draw)
     {
         //没有伤害跳字
+        SoAudioPlay("audio/draw.wav", 1.0f, false, false);
     }
 
     if (bPlayDamageNum)

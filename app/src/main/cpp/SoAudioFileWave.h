@@ -77,7 +77,7 @@ public:
 	
 private:
 	bool ReadHeader();
-	bool ReadChunk();
+	bool ReadChunk(const char* szFile);
 
 private:
     SoFile* m_pFile;

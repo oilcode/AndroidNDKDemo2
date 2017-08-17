@@ -13,6 +13,8 @@ enum GGUIActionType
     GGUIAction_Move,
     GGUIAction_Scale,
     GGUIAction_Event,
+    GGUIAction_Wait,
+    GGUIAction_Audio,
     GGUIAction_Max,
 };
 //--------------------------------------------------------------------------------------------------

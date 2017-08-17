@@ -5,6 +5,8 @@
 #include "GGUIActionMove.h"
 #include "GGUIActionScale.h"
 #include "GGUIActionEvent.h"
+#include "GGUIActionWait.h"
+#include "GGUIActionAudio.h"
 //--------------------------------------------------------------------------------------------------
 #define UnusedIndex_TryToFindUnused -1
 #define UnusedIndex_CreateNewOne -2
@@ -132,6 +134,14 @@ GGUIActionBase* GGUIActionFactory::CreateUIAction(GGUIActionType eType)
         case GGUIAction_Event:
         {
             pAction = new GGUIActionEvent;
+        } break;
+        case GGUIAction_Wait:
+        {
+            pAction = new GGUIActionWait;
+        } break;
+        case GGUIAction_Audio:
+        {
+            pAction = new GGUIActionAudio;
         } break;
         default:
         {

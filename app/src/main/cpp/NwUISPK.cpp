@@ -196,6 +196,10 @@ void NwUISPK::PlayTouchBtnEffect(NwSPKTouchType theTouchIndex)
     pActionMove->InitActionMove(30.0f, 00.0f, 0.2f);
     pActionLine->AddAction(pActionMove);
 
+    GGUIActionAudio* pActionAudio = (GGUIActionAudio*)GGUIActionFactory::Get()->CreateUIAction(GGUIAction_Audio);
+    pActionAudio->InitActionAudio("audio/touch.wav", 1.0f, 0.0f);
+    pActionLine->AddAction(pActionAudio);
+
     pActionMove = (GGUIActionMove*)GGUIActionFactory::Get()->CreateUIAction(GGUIAction_Move);
     pActionMove->InitActionMove(-30.0f, 00.0f, 0.4f);
     pActionLine->AddAction(pActionMove);
@@ -223,6 +227,13 @@ void NwUISPK::PlayHeroEffect(NwSPKSideType theSide, float fDeltaScale)
 
     GGUIActionLine* pActionLine = (GGUIActionLine*)GGUIActionFactory::Get()->CreateUIAction(GGUIAction_Line);;
     theActionGroup->AddActionLine(pActionLine);
+
+    if (theSide == NwSPKSide_Left)
+    {
+        GGUIActionAudio* pActionAudio = (GGUIActionAudio*)GGUIActionFactory::Get()->CreateUIAction(GGUIAction_Audio);
+        pActionAudio->InitActionAudio("audio/attack.wav", 1.0f, 0.0f);
+        pActionLine->AddAction(pActionAudio);
+    }
 
     GGUIActionScale* pActionScale = (GGUIActionScale*)GGUIActionFactory::Get()->CreateUIAction(GGUIAction_Scale);
     pActionScale->InitActionScale(fDeltaScale, fDeltaScale, 0.4f);
@@ -295,6 +306,11 @@ void NwUISPK::ProcessUIEvent(int nEventType, void* pParam)
             }
         }
     }
+    //else if (nEventType == GGUIEvent_ScrollBar_PosChanged)
+    //{
+        //const GGUIEventParam_ScrollBar_PosChanged* pScrollParam = (GGUIEventParam_ScrollBar_PosChanged*)pParam;
+        //SoAudioVolume(0, pScrollParam->fNewValue);
+    //}
 }
 //--------------------------------------------------------------------
 void NwUISPK::OnBtnCmd(int nCmdIndex)
@@ -338,7 +354,7 @@ void NwUISPK::OnBtnCmd(int nCmdIndex)
     RefreshCmdBtn();
     RefreshTouchBtn();
     CheckPlayerOptionFinished();
-    SoAudioPlay("audio/button1.wav", false, false);
+    SoAudioPlay("audio/button1.wav", 0.2f, false, false);
 }
 //--------------------------------------------------------------------
 void NwUISPK::OnBtnTouch(int nTouchIndex)
@@ -357,7 +373,7 @@ void NwUISPK::OnBtnTouch(int nTouchIndex)
     ++(m_kOwnCmdCount[oldCmd]);
     RefreshCmdBtn();
     RefreshTouchBtn();
-    SoAudioPlay("audio/button2.wav", false, false);
+    SoAudioPlay("audio/button2.wav", 1.0f, false, false);
 }
 //--------------------------------------------------------------------
 void NwUISPK::RefreshCmdBtn()
@@ -772,6 +788,22 @@ void NwUISPK::CreateWindows()
     AddChild(pImage);
     m_pImgSPKResult = pImage;
 
+
+
+    /*
+    kFullRect.eHorzAttachType = GGUIWindowHorzAttach_Left;
+    kFullRect.eVertAttachType = GGUIWindowVertAttach_Center;
+    kFullRect.fScaleX = 10.0f / fStandardWidth;
+    kFullRect.fScaleY = 450.0f / fStandardWidth;
+    kFullRect.fScaleW = 300.0f / fStandardWidth;
+    kFullRect.fScaleH = 100.0f / fStandardWidth;
+    GGUIWindowScrollBar* pScrollBar = (GGUIWindowScrollBar*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_ScrollBar);
+    pScrollBar->SetFullRect(kFullRect);
+    pScrollBar->SetDragEnable(true);
+    AddChild(pScrollBar);
+    pScrollBar->SetRange(0.0f, 1.0f, 0.05f);
+    pScrollBar->SetValue(0.5f);
+    */
 }
 //----------------------------------------------------------------
 

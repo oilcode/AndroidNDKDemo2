@@ -3,6 +3,7 @@
 #include "SoAudioOpenslManager.h"
 #include "SoAudioResource.h"
 #include "SoMessageBox.h"
+#include <math.h>
 //--------------------------------------------------------------------------------------------------
 SoAudioOpenslPlayer::SoAudioOpenslPlayer()
 :m_pPlayerObject(NULL)
@@ -53,21 +54,27 @@ bool SoAudioOpenslPlayer::CreateOpenslObject(SLuint32 ChannelCount, SLuint32 Fre
         result = (*pSLEngine)->CreateAudioPlayer(pSLEngine, &m_pPlayerObject, &audioSrc, &audioSnk, InterfaceCount, ids, req);
         if (result != SL_RESULT_SUCCESS)
         {
+#ifdef SoMessageBoxEnable
             SoMessageBox("", "SoAudioOpenslPlayer : CreateAudioPlayer fail");
+#endif
             break;
         }
 
         result = (*m_pPlayerObject)->Realize(m_pPlayerObject, SL_BOOLEAN_FALSE);
         if (result != SL_RESULT_SUCCESS)
         {
+#ifdef SoMessageBoxEnable
             SoMessageBox("", "SoAudioOpenslPlayer : (*m_pPlayerObject)->Realize fail");
+#endif
             break;
         }
 
         result = (*m_pPlayerObject)->GetInterface(m_pPlayerObject, SL_IID_PLAY, &m_pPlayerPlay);
         if (result != SL_RESULT_SUCCESS)
         {
+#ifdef SoMessageBoxEnable
             SoMessageBox("", "SoAudioOpenslPlayer : get m_pPlayerPlay fail");
+#endif
             break;
         }
 
@@ -75,7 +82,9 @@ bool SoAudioOpenslPlayer::CreateOpenslObject(SLuint32 ChannelCount, SLuint32 Fre
         result = (*m_pPlayerObject)->GetInterface(m_pPlayerObject, SL_IID_BUFFERQUEUE, &m_pPlayerBufferQueue);
         if (result != SL_RESULT_SUCCESS)
         {
+#ifdef SoMessageBoxEnable
             SoMessageBox("", "SoAudioOpenslPlayer : get m_pPlayerBufferQueue fail");
+#endif
             break;
         }
 
@@ -83,7 +92,9 @@ bool SoAudioOpenslPlayer::CreateOpenslObject(SLuint32 ChannelCount, SLuint32 Fre
         result = (*m_pPlayerObject)->GetInterface(m_pPlayerObject, SL_IID_VOLUME, &m_pPlayerVolume);
         if (result != SL_RESULT_SUCCESS)
         {
+#ifdef SoMessageBoxEnable
             SoMessageBox("", "SoAudioOpenslPlayer : get m_pPlayerVolume fail");
+#endif
             break;
         }
 
@@ -91,7 +102,9 @@ bool SoAudioOpenslPlayer::CreateOpenslObject(SLuint32 ChannelCount, SLuint32 Fre
         result = (*m_pPlayerBufferQueue)->RegisterCallback(m_pPlayerBufferQueue, SoAudioOpenslPlayer::CallBack_FillBuffer, this);
         if (result != SL_RESULT_SUCCESS)
         {
+#ifdef SoMessageBoxEnable
             SoMessageBox("", "SoAudioOpenslPlayer : RegisterCallback fail");
+#endif
             break;
         }
 
@@ -169,14 +182,18 @@ bool SoAudioOpenslPlayer::AudioPlayerPlay(SoAudioResource *pResource)
 
     if (m_eState != AudioPlayerState_Stop)
     {
+#ifdef SoMessageBoxEnable
         SoMessageBox("", "SoAudioOpenslPlayer::AudioPlayerPlay : m_eState != AudioPlayerState_Stop");
+#endif
         return false;
     }
 
     SLresult result = (*m_pPlayerBufferQueue)->Enqueue(m_pPlayerBufferQueue, pResource->GetAudioData(), pResource->GetAudioDataSize());
     if (result != SL_RESULT_SUCCESS)
     {
+#ifdef SoMessageBoxEnable
         SoMessageBox("", "SoAudioOpenslPlayer::AudioPlayerPlay : m_pPlayerBufferQueue->Enqueue fail");
+#endif
         return false;
     }
 
@@ -184,7 +201,9 @@ bool SoAudioOpenslPlayer::AudioPlayerPlay(SoAudioResource *pResource)
     result = (*m_pPlayerPlay)->SetPlayState(m_pPlayerPlay, SL_PLAYSTATE_PLAYING);
     if (result != SL_RESULT_SUCCESS)
     {
+#ifdef SoMessageBoxEnable
         SoMessageBox("", "SoAudioOpenslPlayer::AudioPlayerPlay : (*m_pPlayerPlay)->SetPlayState fail");
+#endif
         return false;
     }
 
@@ -224,14 +243,18 @@ void SoAudioOpenslPlayer::AudioPlayerResume()
     SLresult result = (*m_pPlayerBufferQueue)->Enqueue(m_pPlayerBufferQueue, m_pResource->GetAudioData(), m_pResource->GetAudioDataSize());
     if (result != SL_RESULT_SUCCESS)
     {
+#ifdef SoMessageBoxEnable
         SoMessageBox("", "SoAudioOpenslPlayer::AudioPlayerResume : m_pPlayerBufferQueue->Enqueue fail");
+#endif
     }
 
     // set the player's state to playing
     result = (*m_pPlayerPlay)->SetPlayState(m_pPlayerPlay, SL_PLAYSTATE_PLAYING);
     if (result != SL_RESULT_SUCCESS)
     {
+#ifdef SoMessageBoxEnable
         SoMessageBox("", "SoAudioOpenslPlayer::AudioPlayerResume : (*m_pPlayerPlay)->SetPlayState fail");
+#endif
     }
 
     m_eState = AudioPlayerState_Play;
@@ -239,11 +262,24 @@ void SoAudioOpenslPlayer::AudioPlayerResume()
 //--------------------------------------------------------------------------------------------------
 void SoAudioOpenslPlayer::SetVolume(float fVolume)
 {
-    SLmillibel MinVolume = SL_MILLIBEL_MIN;
-    SLmillibel MaxVolume = SL_MILLIBEL_MIN;
-    (*m_pPlayerVolume)->GetMaxVolumeLevel(m_pPlayerVolume, &MaxVolume);
-    SLmillibel newVolume = MinVolume + (SLmillibel)(((float)(MaxVolume - MinVolume)) * fVolume);
-    (*m_pPlayerVolume)->SetVolumeLevel(m_pPlayerVolume, newVolume);
+    //SLmillibel MinVolume = SL_MILLIBEL_MIN;
+    //SLmillibel MaxVolume = SL_MILLIBEL_MIN;
+    //(*m_pPlayerVolume)->GetMaxVolumeLevel(m_pPlayerVolume, &MaxVolume);
+    //float _Volume = 1.0f - sqrt(1.0f - fVolume*fVolume);
+    //SLmillibel newVolume = MinVolume + (SLmillibel)(((float)(MaxVolume - MinVolume)) * fVolume);
+
+    static double dfT = log2(10.0);
+
+    //fVolume的值不能是0
+    if (fVolume < 0.001f)
+    {
+        fVolume = 0.001f;
+    }
+
+    double dBVolume = 20.0 * log2(fVolume) / dfT;
+    SLmillibel volume = (SLmillibel)(dBVolume * 100.0); //1dB = 100mB
+    (*m_pPlayerVolume)->SetVolumeLevel(m_pPlayerVolume, volume);
+
     m_fVolume = fVolume;
 }
 //--------------------------------------------------------------------------------------------------

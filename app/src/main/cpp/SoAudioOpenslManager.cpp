@@ -60,21 +60,27 @@ bool SoAudioOpenslManager::InitAudioOpenslManager()
 		result = slCreateEngine(&m_pSLObject, 0, NULL, 0, NULL, NULL);
 		if (result != SL_RESULT_SUCCESS)
 		{
+#ifdef SoMessageBoxEnable
 			SoMessageBox("", "SoAudioOpenslManager : slCreateEngine fail");
+#endif
 			break;
 		}
 
 		result = (*m_pSLObject)->Realize(m_pSLObject, SL_BOOLEAN_FALSE);
 		if (result != SL_RESULT_SUCCESS)
 		{
+#ifdef SoMessageBoxEnable
 			SoMessageBox("", "SoAudioOpenslManager : (*m_pSLObject)->Realize fail");
+#endif
 			break;
 		}
 
 		result = (*m_pSLObject)->GetInterface(m_pSLObject, SL_IID_ENGINE, &m_pSLEngine);
 		if (result != SL_RESULT_SUCCESS)
 		{
+#ifdef SoMessageBoxEnable
 			SoMessageBox("", "SoAudioOpenslManager : (*m_pSLObject)->GetInterface fail");
+#endif
 			break;
 		}
 
@@ -83,14 +89,18 @@ bool SoAudioOpenslManager::InitAudioOpenslManager()
 		result = (*m_pSLEngine)->CreateOutputMix(m_pSLEngine, &m_pOutputMixObject, 1, ids, req);
 		if (result != SL_RESULT_SUCCESS)
 		{
+#ifdef SoMessageBoxEnable
 			SoMessageBox("", "SoAudioOpenslManager : CreateOutputMix fail");
+#endif
 			break;
 		}
 
 		result = (*m_pOutputMixObject)->Realize(m_pOutputMixObject, SL_BOOLEAN_FALSE);
 		if (result != SL_RESULT_SUCCESS)
 		{
+#ifdef SoMessageBoxEnable
 			SoMessageBox("", "SoAudioOpenslManager : (*m_pOutputMixObject)->Realize fail");
+#endif
 			break;
 		}
 
@@ -151,7 +161,7 @@ SoAudioOpenslPlayer* SoAudioOpenslManager::GetAudioPlayer(int nAudioId)
     }
 }
 //--------------------------------------------------------------------------------------------------
-int SoAudioOpenslManager::AudioPlay(const char* szResourceName, bool bLoop, bool bEndEvent)
+int SoAudioOpenslManager::AudioPlay(const char* szResourceName, float fVolume, bool bLoop, bool bEndEvent)
 {
     SoAudioResource* pResource = SoAudioResourceMgr::Get()->CreateAudioResource(SoTinyString(szResourceName));
     if (pResource == NULL)
@@ -164,38 +174,28 @@ int SoAudioOpenslManager::AudioPlay(const char* szResourceName, bool bLoop, bool
     const SLuint32 BitsPerSample = pResource->GetAudioBitsPerSample();
 
     SoAudioOpenslPlayer* pPlayer = FindEmptyPlayer(ChannelCount, Frequency, BitsPerSample);
-    if (pPlayer)
+    if (pPlayer == NULL)
     {
-        if (pPlayer->AudioPlayerPlay(pResource))
-        {
-            pPlayer->SetLoop(bLoop);
-            return pPlayer->GetAudioID();
-        }
-        else
+        pPlayer = SoNew SoAudioOpenslPlayer;
+        if (pPlayer == NULL)
         {
             return -1;
         }
+
+        if (pPlayer->CreateOpenslObject(ChannelCount, Frequency, BitsPerSample) == false)
+        {
+            SoDelete pPlayer;
+            pPlayer = NULL;
+            return -1;
+        }
+
+        const int nAudioId = m_kPlayerArray.FillAt(-1, &pPlayer);
+        pPlayer->SetAudioID(nAudioId);
     }
-
-
-    pPlayer = SoNew SoAudioOpenslPlayer;
-    if (pPlayer == NULL)
-    {
-        return -1;
-    }
-
-    if (pPlayer->CreateOpenslObject(ChannelCount, Frequency, BitsPerSample) == false)
-    {
-        SoDelete pPlayer;
-        pPlayer = NULL;
-        return -1;
-    }
-
-    const int nAudioId = m_kPlayerArray.FillAt(-1, &pPlayer);
-    pPlayer->SetAudioID(nAudioId);
 
     if (pPlayer->AudioPlayerPlay(pResource))
     {
+        pPlayer->SetVolume(fVolume);
         pPlayer->SetLoop(bLoop);
         return pPlayer->GetAudioID();
     }
@@ -236,5 +236,16 @@ void SoAudioOpenslManager::AudioResume(int nAudioId)
     }
 
     pPlayer->AudioPlayerResume();
+}
+//--------------------------------------------------------------------------------------------------
+void SoAudioOpenslManager::SetAudioVolume(int nAudioId, float fVolume)
+{
+    SoAudioOpenslPlayer* pPlayer = GetAudioPlayer(nAudioId);
+    if (pPlayer == NULL)
+    {
+        return;
+    }
+
+    pPlayer->SetVolume(fVolume);
 }
 //--------------------------------------------------------------------------------------------------

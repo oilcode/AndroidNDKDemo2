@@ -23,10 +23,15 @@ bool GLLogicFlowHelpCreate()
     GLCamera::CreateCamera();
     GLCameraUI::CreateCameraUI();
     SoAudioCreate();
-    SoAudioPreloadResource("audio/mono.wav");
+    SoAudioPreloadResource("audio/bg.wav");
     SoAudioPreloadResource("audio/button1.wav");
     SoAudioPreloadResource("audio/button2.wav");
-    g_nAudioId = SoAudioPlay("audio/mono.wav", true, true);
+    SoAudioPreloadResource("audio/round_begin.wav");
+    SoAudioPreloadResource("audio/touch.wav");
+    SoAudioPreloadResource("audio/attack.wav");
+    SoAudioPreloadResource("audio/draw.wav");
+    //
+    g_nAudioId = SoAudioPlay("audio/bg.wav", 0.1f, true, true);
     //g_nAudioId = SoAudioPlay("audio/button2.wav", true, true);
 
     //g_pModelCube = SoNew GLModelCube;
@@ -100,7 +105,7 @@ void GLLogicFlowHelpResume()
 {
     SoIDEOutputLogInfo("GLLogicFlowHelpResume : begin");
     //开始播放背景音乐
-    g_nAudioId = SoAudioPlay("audio/mono.wav", true, true);
+    g_nAudioId = SoAudioPlay("audio/bg.wav", 0.1f, true, true);
     SoIDEOutputLogInfo("GLLogicFlowHelpResume : end");
 }
 //--------------------------------------------------------------------------------------------------

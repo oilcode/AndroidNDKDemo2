@@ -5,6 +5,8 @@
 //----------------------------------------------------------------
 #include "SoAudioFileWave.h"
 #include "SoFileHelp.h"
+#include "SoStringHelp.h"
+#include "SoMessageBox.h"
 //----------------------------------------------------------------
 #define SoAudioFileWave_Format_PCM 1
 #define SoAudioFileWave_Format_Extensible 0xFFFE
@@ -25,22 +27,33 @@ bool SoAudioFileWave::OpenFileWave(const char* szFile)
 {
 	if (szFile == 0 || szFile[0] == 0)
 	{
+#ifdef SoMessageBoxEnable
+		SoMessageBox("Error", "SoAudioFileWave::OpenFileWave : szFile == 0 || szFile[0] == 0");
+#endif
 		return false;
 	}
 
 	m_pFile = SoFileHelp::CreateFile(szFile, "rb");
 	if (m_pFile == 0)
 	{
+#ifdef SoMessageBoxEnable
+        const char* strText = SoStrFmt("SoAudioFileWave::OpenFileWave : CreateFile fail [%s]", szFile);
+        SoMessageBox("Error", strText);
+#endif
 		return false;
 	}
 
 	if (ReadHeader() == false)
 	{
+#ifdef SoMessageBoxEnable
+        const char* strText = SoStrFmt("SoAudioFileWave::OpenFileWave : ReadHeader() fail [%s]", szFile);
+        SoMessageBox("Error", strText);
+#endif
 		CloseFileWave();
 		return false;
 	}
 
-	if (ReadChunk() == false)
+	if (ReadChunk(szFile) == false)
 	{
 		CloseFileWave();
 		return false;
@@ -48,6 +61,18 @@ bool SoAudioFileWave::OpenFileWave(const char* szFile)
 
 	//¹Ø±ÕÎÄ¼þ¡£
     SoFileHelp::DeleteFile(m_pFile);
+
+	if (m_stChunkDataAudioData.uiSize == 0
+        || m_stChunkDataFormat.kFormatPCM.uiSampleRate == 0
+        || m_stChunkDataFormat.kFormatPCM.wChannelCount == 0
+        || m_stChunkDataFormat.kFormatPCM.wBitsPerSample == 0)
+    {
+#ifdef SoMessageBoxEnable
+        const char* strText = SoStrFmt("SoAudioFileWave::OpenFileWave : data format is invalid is ZERO [%s]", szFile);
+        SoMessageBox("Error", strText);
+#endif
+        return false;
+    }
 
 	return true;
 }
@@ -129,7 +154,7 @@ bool SoAudioFileWave::ReadHeader()
 	}
 }
 //----------------------------------------------------------------
-bool SoAudioFileWave::ReadChunk()
+bool SoAudioFileWave::ReadChunk(const char* szFile)
 {
 	bool br = true;
 	stChunkHeader kHeader;
@@ -147,6 +172,10 @@ bool SoAudioFileWave::ReadChunk()
 				if (m_stChunkDataFormat.kFormatPCM.wFormatTag != SoAudioFileWave_Format_PCM
 					&& m_stChunkDataFormat.kFormatPCM.wFormatTag != SoAudioFileWave_Format_Extensible)
 				{
+#ifdef SoMessageBoxEnable
+                    const char* strText = SoStrFmt("SoAudioFileWave::ReadChunk : DataFormat is invalid [%s][%d]", szFile, m_stChunkDataFormat.kFormatPCM.wFormatTag);
+                    SoMessageBox("Error", strText);
+#endif
 					br = false;
 					break;
 				}
@@ -170,6 +199,10 @@ bool SoAudioFileWave::ReadChunk()
 			}
 			else
 			{
+#ifdef SoMessageBoxEnable
+                const char* strText = SoStrFmt("SoAudioFileWave::ReadChunk : create data buffer fail [%s][%u]", szFile, kHeader.uiChunkSize);
+                SoMessageBox("Error", strText);
+#endif
 				br = false;
 				break;
 			}

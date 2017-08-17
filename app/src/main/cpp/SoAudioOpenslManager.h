@@ -16,10 +16,13 @@ public:
 	SLObjectItf GetSLOutputMix();
     SoAudioOpenslPlayer* GetAudioPlayer(int nAudioId);
 
-	int AudioPlay(const char* szResourceName, bool bLoop, bool bEndEvent);
+	int AudioPlay(const char* szResourceName, float fVolume, bool bLoop, bool bEndEvent);
 	void AudioStop(int nAudioId);
     void AudioPause(int nAudioId);
     void AudioResume(int nAudioId);
+
+	//--fVolume 音量，取值范围[0.0, 1.0]
+	void SetAudioVolume(int nAudioId, float fVolume);
 
 private:
 	SoAudioOpenslManager();

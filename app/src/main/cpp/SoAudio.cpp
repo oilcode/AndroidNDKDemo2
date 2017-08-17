@@ -22,13 +22,13 @@ void SoAudioRelease()
     SoAudioResourceMgr::ReleaseAudioResourceMgr();
 }
 //--------------------------------------------------------------------------------------------------
-int SoAudioPlay(const char* szResourceName, bool bLoop, bool bEndEvent)
+int SoAudioPlay(const char* szResourceName, float fVolume, bool bLoop, bool bEndEvent)
 {
     int nAudioId = -1;
     SoAudioOpenslManager* pManager = SoAudioOpenslManager::Get();
     if (pManager)
     {
-        nAudioId = pManager->AudioPlay(szResourceName, bLoop, bEndEvent);
+        nAudioId = pManager->AudioPlay(szResourceName, fVolume, bLoop, bEndEvent);
     }
 	return nAudioId;
 }
@@ -57,6 +57,15 @@ void SoAudioResume(int nAudioId)
     if (pManager)
     {
         pManager->AudioResume(nAudioId);
+    }
+}
+//--------------------------------------------------------------------------------------------------
+void SoAudioVolume(int nAudioId, float fVolume)
+{
+    SoAudioOpenslManager* pManager = SoAudioOpenslManager::Get();
+    if (pManager)
+    {
+        pManager->SetAudioVolume(nAudioId, fVolume);
     }
 }
 //--------------------------------------------------------------------------------------------------

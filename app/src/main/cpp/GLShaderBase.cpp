@@ -49,6 +49,8 @@ GLuint GLShaderBase::CreateProgram(const char* szVertexSource, const char* szFra
     glLinkProgram(uiProgramHandle);
 
     //不管链接是否成功，都尝试打印出编译回馈信息。
+    //这里总是出现无法解析的字符串，所以不再输出调试信息。
+    /*
     GLint nLinkInfoLen = 0;
     glGetProgramiv(uiProgramHandle, GL_INFO_LOG_LENGTH, &nLinkInfoLen);
     if (nLinkInfoLen > 0)
@@ -59,10 +61,14 @@ GLuint GLShaderBase::CreateProgram(const char* szVertexSource, const char* szFra
             buff[nLinkInfoLen] = 0;
             glGetProgramInfoLog(uiProgramHandle, nLinkInfoLen, NULL, buff);
             SoIDEOutputLogError("%s", buff);
+#ifdef SoMessageBoxEnable
+            SoMessageBox("shader error", buff);
+#endif
             free(buff);
             buff = 0;
         }
     }
+     */
 
     //删除不需要的数据。
     glDetachShader(uiProgramHandle, uiVertexHandle);
@@ -104,7 +110,9 @@ GLuint GLShaderBase::CompileShader(GLenum eShaderType, const char* szSource)
             buff[nCompileInfoLen] = 0;
             glGetShaderInfoLog(uiShaderHandle, nCompileInfoLen, NULL, buff);
             SoIDEOutputLogError("%s", buff);
+#ifdef SoMessageBoxEnable
             SoMessageBox("shader error", buff);
+#endif
             free(buff);
             buff = 0;
         }

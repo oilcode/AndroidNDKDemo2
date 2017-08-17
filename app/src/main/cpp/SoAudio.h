@@ -9,13 +9,17 @@ bool SoAudioCreate();
 void SoAudioRelease();
 //开始播放一个资源。
 //--szResourceName 资源名
+//--fVolume 音量，取值范围[0.0, 1.0]
 //--bLoop 是否循环播放
 //--bEndEvent 是否侦听播放结束的事件，只有在非循环播放的情况下有效。
 //返回值为AudioID。
-int  SoAudioPlay(const char* szResourceName, bool bLoop, bool bEndEvent);
+int  SoAudioPlay(const char* szResourceName, float fVolume, bool bLoop, bool bEndEvent);
 void SoAudioStop(int nAudioId);
 void SoAudioPause(int nAudioId);
 void SoAudioResume(int nAudioId);
+//设置音量
+//--fVolume 音量，取值范围[0.0, 1.0]
+void SoAudioVolume(int nAudioId, float fVolume);
 //预先加载一个资源，这是为了保证播放的时候不会有延迟。
 bool SoAudioPreloadResource(const char* szResourceName);
 //移除一个资源。

@@ -23,6 +23,7 @@ public:
     void AudioPlayerPause();
     void AudioPlayerResume();
 
+    //--fVolume 音量，取值范围[0.0, 1.0]
     void SetVolume(float fVolume);
     float GetVolume() const;
     void SetLoop(bool bLoop);
