@@ -265,17 +265,14 @@ void SoAudioOpenslPlayer::SetVolume(float fVolume)
     //SLmillibel MinVolume = SL_MILLIBEL_MIN;
     //SLmillibel MaxVolume = SL_MILLIBEL_MIN;
     //(*m_pPlayerVolume)->GetMaxVolumeLevel(m_pPlayerVolume, &MaxVolume);
-    //float _Volume = 1.0f - sqrt(1.0f - fVolume*fVolume);
-    //SLmillibel newVolume = MinVolume + (SLmillibel)(((float)(MaxVolume - MinVolume)) * fVolume);
 
-    static double dfT = log2(10.0);
-
-    //fVolume的值不能是0
+    //fVolume的值不能是0，否则执行log2操作会得到无效值
     if (fVolume < 0.001f)
     {
         fVolume = 0.001f;
     }
 
+    const double dfT = 3.3219280948873622; //log2(10.0);
     double dBVolume = 20.0 * log2(fVolume) / dfT;
     SLmillibel volume = (SLmillibel)(dBVolume * 100.0); //1dB = 100mB
     (*m_pPlayerVolume)->SetVolumeLevel(m_pPlayerVolume, volume);

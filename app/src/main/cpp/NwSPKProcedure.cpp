@@ -82,7 +82,7 @@ void NwSPKProcedure::UpdateSPKProcedure(float fDeltaTime)
                 pUISPK->SetRightSelectedCmd((NwSPKTouchType)i, pRightSelectedCmd->kCmdList[i]);
             }
             //SoAudioPlay("audio/round_begin.wav", 1.0f, false, false);
-            m_fCountDownForCurrentStep = 1.0f;
+            m_fCountDownForCurrentStep = 0.5f;
             nNextStep = SPKProcedureStep_PreTouch;
             break;
         }
