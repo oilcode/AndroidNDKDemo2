@@ -1,43 +1,27 @@
 //----------------------------------------------------------------
-#ifndef _GGUIRenderManager_h_
-#define _GGUIRenderManager_h_
+#ifndef _GGUIGLRenderManager_h_
+#define _GGUIGLRenderManager_h_
 //----------------------------------------------------------------
 #include "GLBaseInclude.h"
+#include "GGUIRenderDefine.h"
 //----------------------------------------------------------------
 class GLShaderBase;
 //----------------------------------------------------------------
-struct stUIRenderUnit
-{
-	float fRectLeft;
-	float fRectRight;
-	float fRectTop;
-	float fRectBottom;
-	float fTexCoordLeft;
-	float fTexCoordRight;
-	float fTexCoordTop;
-	float fTexCoordBottom;
-	float fColorR;
-	float fColorG;
-	float fColorB;
-	float fColorA;
-    GLuint uiTexResourceId;
-};
-//----------------------------------------------------------------
-class GGUIRenderManager
+class GGUIRenderManagerGL
 {
 public:
-	static bool CreateUIRenderManager();
-	static void ReleaseUIRenderManager();
-	static GGUIRenderManager* Get();
+	static bool CreateUIRenderManagerGL();
+	static void ReleaseUIRenderManagerGL();
+	static GGUIRenderManagerGL* Get();
 
 	void AddRnederUnit(const stUIRenderUnit* pUIRenderUnit);
 	void RenderUIRenderManager();
 
 private:
-	GGUIRenderManager();
-	~GGUIRenderManager();
-	bool InitUIRenderManager();
-	void ClearUIRenderManager();
+	GGUIRenderManagerGL();
+	~GGUIRenderManagerGL();
+	bool InitUIRenderManagerGL();
+	void ClearUIRenderManagerGL();
 	//
 	bool CreateVertexList();
 	void ReleaseVertexList();
@@ -55,7 +39,7 @@ private:
 	};
 
 private:
-	static GGUIRenderManager* ms_pInstance;
+	static GGUIRenderManagerGL* ms_pInstance;
 	stVertexType* m_pVertexList;
     unsigned short* m_pIndexList;
     GLuint* m_pSRVList;
@@ -75,10 +59,10 @@ private:
     float m_fScreenHeight;
 };
 //----------------------------------------------------------------
-inline GGUIRenderManager* GGUIRenderManager::Get()
+inline GGUIRenderManagerGL* GGUIRenderManagerGL::Get()
 {
 	return ms_pInstance;
 }
 //----------------------------------------------------------------
-#endif //_GGUIRenderManager_h_
+#endif //_GGUIGLRenderManager_h_
 //----------------------------------------------------------------

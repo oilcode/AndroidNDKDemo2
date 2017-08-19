@@ -24,12 +24,8 @@ bool GGUIFunc_GetImagesetIndexRectIndex(const char* szTexture, int* pImagesetInd
 	{
 		return false;
 	}
-	GGUIImagesetBase* pImagesetBase = GGUIImagesetManager::Get()->GetImagesetByID(nImagesetIndex);
+	GGUIImageset* pImagesetBase = GGUIImagesetManager::Get()->GetImagesetByID(nImagesetIndex);
 	if (pImagesetBase == NULL)
-	{
-		return false;
-	}
-	if (pImagesetBase->GetImagesetType() != GGUIImagesetType_Normal)
 	{
 		return false;
 	}

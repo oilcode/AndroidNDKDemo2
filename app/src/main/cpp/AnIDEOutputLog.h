@@ -4,8 +4,8 @@
 //--------------------------------------------------------------------------------------------------
 #include <android/log.h>
 //--------------------------------------------------------------------------------------------------
-#define AnIDEOutputLogInfo(...)  __android_log_print(ANDROID_LOG_INFO, "", __VA_ARGS__)
-#define AnIDEOutputLogError(...)  __android_log_print(ANDROID_LOG_ERROR, "", __VA_ARGS__)
+#define AnIDEOutputLog(strLog)  __android_log_write(ANDROID_LOG_INFO, "oil", strLog)
+#define AnIDEOutputLogf(...)    __android_log_print(ANDROID_LOG_INFO, "oil", __VA_ARGS__)
 //--------------------------------------------------------------------------------------------------
 #endif //_AnIDEOutputLog_h_
 //--------------------------------------------------------------------------------------------------

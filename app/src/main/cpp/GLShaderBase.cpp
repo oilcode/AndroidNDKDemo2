@@ -60,7 +60,7 @@ GLuint GLShaderBase::CreateProgram(const char* szVertexSource, const char* szFra
         {
             buff[nLinkInfoLen] = 0;
             glGetProgramInfoLog(uiProgramHandle, nLinkInfoLen, NULL, buff);
-            SoIDEOutputLogError("%s", buff);
+            SoIDEOutputLogf("%s", buff);
 #ifdef SoMessageBoxEnable
             SoMessageBox("shader error", buff);
 #endif
@@ -109,7 +109,7 @@ GLuint GLShaderBase::CompileShader(GLenum eShaderType, const char* szSource)
         {
             buff[nCompileInfoLen] = 0;
             glGetShaderInfoLog(uiShaderHandle, nCompileInfoLen, NULL, buff);
-            SoIDEOutputLogError("%s", buff);
+            SoIDEOutputLog(buff);
 #ifdef SoMessageBoxEnable
             SoMessageBox("shader error", buff);
 #endif

@@ -9,7 +9,7 @@
 #if (SoTargetPlatform == SoPlatform_Windows)
 
 #include <Windows.h>
-#define SoMessageBox(szTitle, szMessage)  MessageBoxA(NULL, szTitle, szMessage, MB_OK)
+#define SoMessageBox(szTitle, szMessage)  ::MessageBoxA(NULL, szTitle, szMessage, MB_OK)
 
 #elif (SoTargetPlatform == SoPlatform_Android)
 

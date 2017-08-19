@@ -176,8 +176,10 @@ void NwSPKJudge::AttackXuanYun(const NwSPKHeroData* pWinnerHero, NwSPKCmdType th
         break;
         default:
         {
+#ifdef SoMessageBoxEnable
             const char* szDesc = SoStrFmt("NwSPKJudge::AttackXuanYun : Unknown CmdType[%d]", theCmd);
             SoMessageBox("", szDesc);
+#endif
         }
         break;
     }
@@ -401,8 +403,10 @@ NwSPKTouchResult NwSPKJudge::CmdCompare(NwSPKCmdType theCmd, NwSPKCmdType theOth
         break;
         default:
         {
+#ifdef SoMessageBoxEnable
             const char* szDesc = SoStrFmt("NwSPKJudge::CmdCompare : Unknown CmdType[%d]", theCmd);
             SoMessageBox("", szDesc);
+#endif
             return NwSPKTouchResult_Draw;
         }
         break;

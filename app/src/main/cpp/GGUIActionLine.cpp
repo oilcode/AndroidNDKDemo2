@@ -17,7 +17,9 @@ void GGUIActionLine::AddAction(GGUIActionBase* pAction)
 {
     if (m_pDestWindow == NULL)
     {
+#ifdef SoMessageBoxEnable
         SoMessageBox("GGUIActionLine::AddAction Error", "m_pDestWindow == NULL! GGUIActionLine should be added to Group, then add Action");
+#endif
         return;
     }
 

@@ -1,5 +1,5 @@
 //----------------------------------------------------------------
-#include "GGUIRenderManager.h"
+#include "GGUIRenderManagerGL.h"
 #include "GLFuncHelp.h"
 #include "GLShaderManager.h"
 #include "GGUIUserDefine.h"
@@ -11,28 +11,28 @@
 //DX11规定的上限是 D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT=128 。
 #define MaxSRVCountPerDrawCall 8
 //----------------------------------------------------------------
-GGUIRenderManager* GGUIRenderManager::ms_pInstance = NULL;
+GGUIRenderManagerGL* GGUIRenderManagerGL::ms_pInstance = NULL;
 //----------------------------------------------------------------
-bool GGUIRenderManager::CreateUIRenderManager()
+bool GGUIRenderManagerGL::CreateUIRenderManagerGL()
 {
 	bool br = true;
 	if (ms_pInstance == NULL)
 	{
-		ms_pInstance = new GGUIRenderManager;
-		if (ms_pInstance && ms_pInstance->InitUIRenderManager())
+		ms_pInstance = new GGUIRenderManagerGL;
+		if (ms_pInstance && ms_pInstance->InitUIRenderManagerGL())
 		{
             br = true;
 		}
 		else
 		{
-			ReleaseUIRenderManager();
+            ReleaseUIRenderManagerGL();
 			br = false;
 		}
 	}
 	return br;
 }
 //----------------------------------------------------------------
-void GGUIRenderManager::ReleaseUIRenderManager()
+void GGUIRenderManagerGL::ReleaseUIRenderManagerGL()
 {
 	if (ms_pInstance)
 	{
@@ -41,7 +41,7 @@ void GGUIRenderManager::ReleaseUIRenderManager()
 	}
 }
 //----------------------------------------------------------------
-GGUIRenderManager::GGUIRenderManager()
+GGUIRenderManagerGL::GGUIRenderManagerGL()
 :m_pVertexList(NULL)
 ,m_pIndexList(NULL)
 ,m_pSRVList(NULL)
@@ -57,12 +57,12 @@ GGUIRenderManager::GGUIRenderManager()
 
 }
 //----------------------------------------------------------------
-GGUIRenderManager::~GGUIRenderManager()
+GGUIRenderManagerGL::~GGUIRenderManagerGL()
 {
-	ClearUIRenderManager();
+    ClearUIRenderManagerGL();
 }
 //----------------------------------------------------------------
-bool GGUIRenderManager::InitUIRenderManager()
+bool GGUIRenderManagerGL::InitUIRenderManagerGL()
 {
 	if (CreateVertexList() == false)
 	{
@@ -88,7 +88,7 @@ bool GGUIRenderManager::InitUIRenderManager()
 	return true;
 }
 //----------------------------------------------------------------
-void GGUIRenderManager::ClearUIRenderManager()
+void GGUIRenderManagerGL::ClearUIRenderManagerGL()
 {
 	ReleaseVertexList();
 	ReleaseIndexList();
@@ -96,18 +96,21 @@ void GGUIRenderManager::ClearUIRenderManager()
 	m_pShader = NULL;
 }
 //----------------------------------------------------------------
-void GGUIRenderManager::AddRnederUnit(const stUIRenderUnit* pUIRenderUnit)
+void GGUIRenderManagerGL::AddRnederUnit(const stUIRenderUnit* pUIRenderUnit)
 {
 	if (m_nCurWindowCount >= m_nMaxWindowCount)
 	{
-		SoIDEOutputLogError("GGUIRenderManager::AddRnederUnit : m_pVertexList is full!");
-        SoMessageBox("", "GGUIRenderManager::AddRnederUnit : m_pVertexList is full!");
+		SoIDEOutputLog("GGUIRenderManagerGL::AddRnederUnit : m_pVertexList is full!");
+#ifdef SoMessageBoxEnable
+        SoMessageBox("", "GGUIRenderManagerGL::AddRnederUnit : m_pVertexList is full!");
+#endif
 		return;
 	}
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	//计算贴图序号
 	float fTextureIndex = -1.0f;
-	if (m_nLastTextureIndex >= 0 && m_pSRVList[m_nLastTextureIndex] == pUIRenderUnit->uiTexResourceId)
+    const GLuint uiTexResourceId = (GLuint)pUIRenderUnit->uiTexResource;
+	if (m_nLastTextureIndex >= 0 && m_pSRVList[m_nLastTextureIndex] == uiTexResourceId)
 	{
 		fTextureIndex = (float)m_nLastTextureIndex;
 	}
@@ -115,7 +118,7 @@ void GGUIRenderManager::AddRnederUnit(const stUIRenderUnit* pUIRenderUnit)
 	{
 		for (int i = 0; i < m_nCurSRVCount; ++i)
 		{
-			if (m_pSRVList[i] == pUIRenderUnit->uiTexResourceId)
+			if (m_pSRVList[i] == uiTexResourceId)
 			{
 				fTextureIndex = (float)i;
 				m_nLastTextureIndex = i;
@@ -127,15 +130,17 @@ void GGUIRenderManager::AddRnederUnit(const stUIRenderUnit* pUIRenderUnit)
 	{
 		if (m_nCurSRVCount < m_nMaxSRVCount)
 		{
-			m_pSRVList[m_nCurSRVCount] = pUIRenderUnit->uiTexResourceId;
+			m_pSRVList[m_nCurSRVCount] = uiTexResourceId;
 			fTextureIndex = (float)m_nCurSRVCount;
 			m_nLastTextureIndex = m_nCurSRVCount;
 			++m_nCurSRVCount;
 		}
 		else
 		{
-			SoIDEOutputLogError("GGUIRenderManager::AddRnederUnit : m_pSRVList is full!");
-            SoMessageBox("", "GGUIRenderManager::AddRnederUnit : m_pSRVList is full!");
+			SoIDEOutputLog("GGUIRenderManagerGL::AddRnederUnit : m_pSRVList is full!");
+#ifdef SoMessageBoxEnable
+            SoMessageBox("", "GGUIRenderManagerGL::AddRnederUnit : m_pSRVList is full!");
+#endif
 			return;
 		}
 	}
@@ -197,7 +202,7 @@ void GGUIRenderManager::AddRnederUnit(const stUIRenderUnit* pUIRenderUnit)
 	m_fCurrentRenderOrder += GGUI_RenderOrder_Step;
 }
 //----------------------------------------------------------------
-void GGUIRenderManager::RenderUIRenderManager()
+void GGUIRenderManagerGL::RenderUIRenderManager()
 {
 	if (m_nCurWindowCount == 0)
 	{
@@ -228,7 +233,7 @@ void GGUIRenderManager::RenderUIRenderManager()
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
 //----------------------------------------------------------------
-bool GGUIRenderManager::CreateVertexList()
+bool GGUIRenderManagerGL::CreateVertexList()
 {
 	const int nVertexCount = MaxWindowCountPerDrawCall * 4;
 	m_pVertexList = SoNew stVertexType[nVertexCount];
@@ -242,7 +247,7 @@ bool GGUIRenderManager::CreateVertexList()
 	return true;
 }
 //----------------------------------------------------------------
-void GGUIRenderManager::ReleaseVertexList()
+void GGUIRenderManagerGL::ReleaseVertexList()
 {
 	if (m_pVertexList)
 	{
@@ -253,7 +258,7 @@ void GGUIRenderManager::ReleaseVertexList()
 	m_nCurWindowCount = 0;
 }
 //----------------------------------------------------------------
-bool GGUIRenderManager::CreateIndexList()
+bool GGUIRenderManagerGL::CreateIndexList()
 {
 	const int nIndexCount = MaxWindowCountPerDrawCall * 6;
 	unsigned short* pIndex = SoNew unsigned short[nIndexCount];
@@ -277,7 +282,7 @@ bool GGUIRenderManager::CreateIndexList()
 	return true;
 }
 //----------------------------------------------------------------
-void GGUIRenderManager::ReleaseIndexList()
+void GGUIRenderManagerGL::ReleaseIndexList()
 {
 	if (m_pIndexList)
 	{
@@ -286,7 +291,7 @@ void GGUIRenderManager::ReleaseIndexList()
 	}
 }
 //----------------------------------------------------------------
-bool GGUIRenderManager::CreateSRVList()
+bool GGUIRenderManagerGL::CreateSRVList()
 {
 	const int nMaxSRVCount = GLShaderGGUI_MaxTexSamplerCount;
 	m_pSRVList = SoNew GLuint[nMaxSRVCount];
@@ -301,7 +306,7 @@ bool GGUIRenderManager::CreateSRVList()
 	return true;
 }
 //----------------------------------------------------------------
-void GGUIRenderManager::ReleaseSRVList()
+void GGUIRenderManagerGL::ReleaseSRVList()
 {
 	if (m_pSRVList)
 	{

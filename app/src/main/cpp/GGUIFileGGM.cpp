@@ -88,7 +88,7 @@ bool GGUIFileGGM::GetNextImageRect(SoTinyString& kName, stImageRect& kRect)
 	return true;
 }
 //----------------------------------------------------------------
-bool GGUIFileGGM::GetNextImageFontRect(SoTinyString& kName, stImageFontRect& kRect)
+bool GGUIFileGGM::GetNextImageFontRect(SoTinyString& kName, stImageRect& kRect)
 {
 	char* szLine = ReadNextFileLine();
 	if (szLine == 0)

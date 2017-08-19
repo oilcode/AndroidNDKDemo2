@@ -16,7 +16,7 @@ int g_nAudioId = -1;
 //--------------------------------------------------------------------------------------------------
 bool GLLogicFlowHelpCreate()
 {
-    SoIDEOutputLogInfo("GLLogicFlowHelpCreate : begin");
+    SoIDEOutputLog("GLLogicFlowHelpCreate : begin");
     GLManager::CreateGLManager();
     GLTextureManager::CreateTextureManager();
     GLShaderManager::CreateShaderManager();
@@ -43,7 +43,7 @@ bool GLLogicFlowHelpCreate()
     if (pFileInternal)
     {
         const char* buff = (char*)pFileInternal->GetFileData();
-        SoIDEOutputLogInfo("%s", buff);
+        SoIDEOutputLogf("%s", buff);
         SoFileHelp::DeleteFile(pFileInternal);
     }
 
@@ -55,23 +55,23 @@ bool GLLogicFlowHelpCreate()
     }
     */
 
-    SoIDEOutputLogInfo("GLLogicFlowHelpCreate : end");
+    SoIDEOutputLog("GLLogicFlowHelpCreate : end");
     return true;
 }
 //--------------------------------------------------------------------------------------------------
 bool GLLogicFlowHelpReCreateGLResource()
 {
-    SoIDEOutputLogInfo("GLLogicFlowHelpReCreateGLResource : begin");
+    SoIDEOutputLog("GLLogicFlowHelpReCreateGLResource : begin");
     GLManager::CreateGLManager();
     GLTextureManager::CreateTextureManager();
     GLShaderManager::CreateShaderManager();
-    SoIDEOutputLogInfo("GLLogicFlowHelpReCreateGLResource : end");
+    SoIDEOutputLog("GLLogicFlowHelpReCreateGLResource : end");
     return true;
 }
 //--------------------------------------------------------------------------------------------------
 void GLLogicFlowHelpRelease()
 {
-    SoIDEOutputLogInfo("GLLogicFlowHelpRelease : begin");
+    SoIDEOutputLog("GLLogicFlowHelpRelease : begin");
     //if (g_pModelCube)
     //{
     //    SoDelete g_pModelCube;
@@ -90,23 +90,23 @@ void GLLogicFlowHelpRelease()
     GLShaderManager::ReleaseShaderManager();
     GLTextureManager::ReleaseTextureManager();
     GLManager::ReleaseGLManager();
-    SoIDEOutputLogInfo("GLLogicFlowHelpRelease : end");
+    SoIDEOutputLog("GLLogicFlowHelpRelease : end");
 }
 //--------------------------------------------------------------------------------------------------
 void GLLogicFlowHelpPause()
 {
-    SoIDEOutputLogInfo("GLLogicFlowHelpPause : begin");
+    SoIDEOutputLog("GLLogicFlowHelpPause : begin");
     //停止播放任何音频
     SoAudioStop(g_nAudioId);
-    SoIDEOutputLogInfo("GLLogicFlowHelpPause : end");
+    SoIDEOutputLog("GLLogicFlowHelpPause : end");
 }
 //--------------------------------------------------------------------------------------------------
 void GLLogicFlowHelpResume()
 {
-    SoIDEOutputLogInfo("GLLogicFlowHelpResume : begin");
+    SoIDEOutputLog("GLLogicFlowHelpResume : begin");
     //开始播放背景音乐
     g_nAudioId = SoAudioPlay("audio/bg.wav", 0.1f, true, true);
-    SoIDEOutputLogInfo("GLLogicFlowHelpResume : end");
+    SoIDEOutputLog("GLLogicFlowHelpResume : end");
 }
 //--------------------------------------------------------------------------------------------------
 void GLLogicFlowHelpUpdate(float fDeltaTime)

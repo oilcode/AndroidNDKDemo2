@@ -19,7 +19,9 @@ void GGUIActionAudio::InitActionAudio(const char* szAudioName, float fAudioVolum
 {
 	if (szAudioName == NULL || szAudioName[0] == 0)
 	{
+#ifdef SoMessageBoxEnable
 		SoMessageBox("Error", "GGUIActionAudio::InitActionAudio : szAudioName == NULL || szAudioName[0] == 0");
+#endif
 		return;
 	}
 

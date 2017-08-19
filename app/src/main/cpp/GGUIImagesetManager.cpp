@@ -42,7 +42,7 @@ GGUIImagesetManager::~GGUIImagesetManager()
 //----------------------------------------------------------------
 bool GGUIImagesetManager::InitUIImagesetManager()
 {
-	if (m_kImagesetArray.InitArray(sizeof(GGUIImagesetBase*), 50, 20) == false)
+	if (m_kImagesetArray.InitArray(sizeof(GGUIImageset*), 50, 20) == false)
 	{
 		return false;
 	}
@@ -52,7 +52,7 @@ bool GGUIImagesetManager::InitUIImagesetManager()
 void GGUIImagesetManager::ClearUIImagesetManager()
 {
 	const int nCount = m_kImagesetArray.GetCapacity();
-	GGUIImagesetBase* pImageset = 0;
+	GGUIImageset* pImageset = 0;
 	for (int i = 0; i < nCount; ++i)
 	{
 		pImageset = GetImagesetByID(i);
@@ -86,25 +86,30 @@ GGUIImageset* GGUIImagesetManager::CreateImageset(const stImagesetParam* pParam)
 	return pImageset;
 }
 //----------------------------------------------------------------
-GGUIImagesetFont* GGUIImagesetManager::CreateImagesetFont(const stImagesetFontParam* pParam)
+GGUIImageset* GGUIImagesetManager::GetImagesetByID(int nImagesetID)
 {
-	int nImagesetID = GetImagesetIDByName(pParam->kName);
-	if (nImagesetID != -1)
+	void* pElement = m_kImagesetArray.GetAt(nImagesetID);
+	if (pElement)
 	{
-		GGUILogErrorf("GGUIImagesetManager::CreateImagesetFont : kName[%s] is already exist!", pParam->kName.GetValue());
-		return (GGUIImagesetFont*)GetImagesetByID(nImagesetID);
+		return (*((GGUIImageset**)pElement));
 	}
-
-	GGUIImagesetFont* pImageset = SoNew GGUIImagesetFont;
-	if (pImageset == 0)
+	else
 	{
 		return NULL;
 	}
-
-	pImageset->InitImagesetFont(pParam);
-	nImagesetID = m_kImagesetArray.FillAt(-1, &pImageset);
-	m_kName2IndexMap.insert(std::make_pair(pParam->kName, nImagesetID));
-	return pImageset;
+}
+//----------------------------------------------------------------
+GGUIImageset* GGUIImagesetManager::GetImagesetByName(const SoTinyString& kName)
+{
+	int nIndex = GetImagesetIDByName(kName);
+	if (nIndex != -1)
+	{
+		return GetImagesetByID(nIndex);
+	}
+	else
+	{
+		return NULL;
+	}
 }
 //----------------------------------------------------------------
 int GGUIImagesetManager::GetImagesetIDByName(const SoTinyString &kName)
@@ -117,32 +122,6 @@ int GGUIImagesetManager::GetImagesetIDByName(const SoTinyString &kName)
 	else
 	{
 		return -1;
-	}
-}
-//----------------------------------------------------------------
-GGUIImagesetBase* GGUIImagesetManager::GetImagesetByID(int nImagesetID)
-{
-	void* pElement = m_kImagesetArray.GetAt(nImagesetID);
-	if (pElement)
-	{
-		return (*((GGUIImagesetBase**)pElement));
-	}
-	else
-	{
-		return 0;
-	}
-}
-//----------------------------------------------------------------
-GGUIImagesetBase* GGUIImagesetManager::GetImagesetByName(const SoTinyString& kName)
-{
-	int nIndex = GetImagesetIDByName(kName);
-	if (nIndex != -1)
-	{
-		return GetImagesetByID(nIndex);
-	}
-	else
-	{
-		return 0;
 	}
 }
 //----------------------------------------------------------------

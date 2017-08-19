@@ -112,8 +112,6 @@ add_library( GGUI
              src/main/cpp/GGUIFileGGM.cpp
              src/main/cpp/GGUIFuncHelp.cpp
              src/main/cpp/GGUIImageset.cpp
-             src/main/cpp/GGUIImagesetBase.cpp
-             src/main/cpp/GGUIImagesetFont.cpp
              src/main/cpp/GGUIImagesetIO.cpp
              src/main/cpp/GGUIImagesetManager.cpp
              src/main/cpp/GGUIInputMsg.cpp
@@ -124,7 +122,7 @@ add_library( GGUI
              src/main/cpp/GGUIPoint.cpp
              src/main/cpp/GGUIRect.cpp
              src/main/cpp/GGUIRenderHelp.cpp
-             src/main/cpp/GGUIRenderManager.cpp
+             src/main/cpp/GGUIRenderManagerGL.cpp
              src/main/cpp/GGUIUserDefine.cpp
              src/main/cpp/GGUIWindowBase.cpp
              src/main/cpp/GGUIWindowButton.cpp

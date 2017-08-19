@@ -8,9 +8,13 @@ class SoFileHelp
 {
 public:
     static SoFile* CreateFile(const char* szFileName, const char* szOpMode);
+
+#if (SoTargetPlatform == SoPlatform_Android)
     static SoFile* CreateFileAsset(const char* szFileName);
     static SoFile* CreateFileInternal(const char* szFileName, const char* szOpMode);
     static SoFile* CreateFileExternal(const char* szFileName, const char* szOpMode);
+#endif
+
     static void DeleteFile(SoFile*& pFile);
 };
 //-----------------------------------------------------------------------

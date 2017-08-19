@@ -2,7 +2,7 @@
 #include "GGUIImagesetIO.h"
 #include "GGUIFileGGM.h"
 #include "GGUIImagesetManager.h"
-#include "GLTextureManager.h"
+#include "GGUIRenderHelp.h"
 //----------------------------------------------------------------
 bool GGUIImagesetIO::Read(const char* szImagesetName, GGUIImagesetType eType)
 {
@@ -11,10 +11,6 @@ bool GGUIImagesetIO::Read(const char* szImagesetName, GGUIImagesetType eType)
 		return false;
 	}
 	if (GGUIImagesetManager::Get() == 0)
-	{
-		return false;
-	}
-	if (GLTextureManager::Get() == 0)
 	{
 		return false;
 	}
@@ -38,50 +34,29 @@ bool GGUIImagesetIO::Read(const char* szImagesetName, GGUIImagesetType eType)
 	}
 
     const char* szFullImageName = SoStrFmt("uitexture/%s", strTextureName.c_str());
-	GLTexture* pTexture = GLTextureManager::Get()->CreateUITextureFromFile(szFullImageName);
+	void* pTexture = GGUIRenderHelp_CreateUITextureFromFile(szFullImageName);
 	if (pTexture == 0)
 	{
 		return false;
 	}
 
-	GGUIImageset* pImageset = NULL;
-	GGUIImagesetFont* pImagesetFont = NULL;
-
 	const int nDotIndex = SoStrRChr(strTextureName.c_str(), '.');
     const char* szShortName = SoSubStr(strTextureName.c_str(), 0, nDotIndex-1);
-
-	if (eType == GGUIImagesetType_Normal)
-	{
-		stImagesetParam kParam;
-		kParam.kName = szShortName;
-		kParam.nInitRectCount = nRectCount;
-		kParam.pTexture = pTexture;
-
-		pImageset = GGUIImagesetManager::Get()->CreateImageset(&kParam);
-		if (pImageset == NULL)
-		{
-			return false;
-		}
-	}
-	else
-	{
-		stImagesetFontParam kParam;
-		kParam.kName = szShortName;
-		kParam.nInitRectCount = nRectCount;
-		kParam.pTexture = pTexture;
-        kParam.fFontSize = kFile.GetFontSize();
-        kParam.fFontHeight = kFile.GetFontHeight();
-
-		pImagesetFont = GGUIImagesetManager::Get()->CreateImagesetFont(&kParam);
-		if (pImagesetFont == NULL)
-		{
-			return false;
-		}
-	}
+    stImagesetParam kParam;
+    kParam.kName = szShortName;
+    kParam.nInitRectCount = nRectCount;
+    kParam.pTexture = pTexture;
+    kParam.fFontSize = kFile.GetFontSize();
+    kParam.fFontHeight = kFile.GetFontHeight();
+    GGUIImageset* pImageset = GGUIImagesetManager::Get()->CreateImageset(&kParam);
+    if (pImageset == NULL)
+    {
+        return false;
+    }
 
 	SoTinyString kRectName;
 	stImageRect kRectData;
-	stImageFontRect kFontRect;
+	stImageRect kFontRect;
 	for (int i = 0; i < nRectCount; ++i)
 	{
 		if (eType == GGUIImagesetType_Normal)
@@ -99,7 +74,7 @@ bool GGUIImagesetIO::Read(const char* szImagesetName, GGUIImagesetType eType)
 		{
 			if (kFile.GetNextImageFontRect(kRectName, kFontRect))
 			{
-				pImagesetFont->AddRect(kRectName.GetValue(), kFontRect);
+				pImageset->AddFontRect(kRectName.GetValue(), kFontRect);
 			}
 			else
 			{

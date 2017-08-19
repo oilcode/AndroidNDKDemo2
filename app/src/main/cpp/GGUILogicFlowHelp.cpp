@@ -1,6 +1,6 @@
 //----------------------------------------------------------------
 #include "GGUILogicFlowHelp.h"
-#include "GGUIRenderManager.h"
+#include "GGUIRenderHelp.h"
 #include "GGUIImagesetManager.h"
 #include "GGUIWindowFactory.h"
 #include "GGUIPanelManager.h"
@@ -14,7 +14,7 @@ bool GGUILogicFlowHelp_Create()
     GLFunc_GetResolution(&fWidth, &fHeight);
     GGUIFunc_OnResolutionChanged(fWidth, fHeight);
     //
-	if (GGUIRenderManager::CreateUIRenderManager() == false)
+	if (GGUIRenderHelp_Create() == false)
 	{
 		return false;
 	}
@@ -43,7 +43,7 @@ void GGUILogicFlowHelp_Release()
 	GGUIPanelManager::ReleaseUIPanelManager();
 	GGUIWindowFactory::ReleaseUIWindowFactory();
 	GGUIImagesetManager::ReleaseUIImagesetManager();
-	GGUIRenderManager::ReleaseUIRenderManager();
+	GGUIRenderHelp_Release();
 }
 //----------------------------------------------------------------
 void GGUILogicFlowHelp_Update(float fDeltaTime)
@@ -65,7 +65,7 @@ void GGUILogicFlowHelp_Update(float fDeltaTime)
     kUnit.fColorB = 0.0f;
     kUnit.fColorA = 0.0f;
     kUnit.uiTexResourceId = 1;
-    GGUIRenderManager::Get()->AddRnederUnit(&kUnit);
+    GGUIRenderManagerGL::Get()->AddRnederUnit(&kUnit);
     */
 }
 //----------------------------------------------------------------
@@ -77,7 +77,7 @@ void GGUILogicFlowHelp_PreRender()
 void GGUILogicFlowHelp_Render()
 {
 	GGUIPanelManager::Get()->RenderUIPanelManager();
-	GGUIRenderManager::Get()->RenderUIRenderManager();
+	GGUIRenderHelp_Render();
 }
 //----------------------------------------------------------------
 void GGUILogicFlowHelp_DispatchInputMsg(GGUIInputMsg* kInputMsg)

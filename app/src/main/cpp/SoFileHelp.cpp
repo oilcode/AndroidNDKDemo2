@@ -1,8 +1,11 @@
 //-----------------------------------------------------------------------
 #include "SoFileHelp.h"
+//-----------------------------------------------------------------------
+#if (SoTargetPlatform == SoPlatform_Android)
 #include "AnFileAsset.h"
 #include "AnFileInternal.h"
 #include "AnFileExternal.h"
+#endif
 //-----------------------------------------------------------------------
 SoFile* SoFileHelp::CreateFile(const char* szFileName, const char* szOpMode)
 {
@@ -32,6 +35,7 @@ SoFile* SoFileHelp::CreateFile(const char* szFileName, const char* szOpMode)
 	return pFile;
 }
 //-----------------------------------------------------------------------
+#if (SoTargetPlatform == SoPlatform_Android)
 SoFile* SoFileHelp::CreateFileAsset(const char* szFileName)
 {
     if (szFileName == 0 || szFileName[0] == 0)
@@ -50,7 +54,9 @@ SoFile* SoFileHelp::CreateFileAsset(const char* szFileName)
     }
     return pFile;
 }
+#endif
 //-----------------------------------------------------------------------
+#if (SoTargetPlatform == SoPlatform_Android)
 SoFile* SoFileHelp::CreateFileInternal(const char* szFileName, const char* szOpMode)
 {
     if (szFileName == 0 || szFileName[0] == 0)
@@ -73,7 +79,9 @@ SoFile* SoFileHelp::CreateFileInternal(const char* szFileName, const char* szOpM
     }
     return pFile;
 }
+#endif
 //-----------------------------------------------------------------------
+#if (SoTargetPlatform == SoPlatform_Android)
 SoFile* SoFileHelp::CreateFileExternal(const char* szFileName, const char* szOpMode)
 {
     if (szFileName == 0 || szFileName[0] == 0)
@@ -96,6 +104,7 @@ SoFile* SoFileHelp::CreateFileExternal(const char* szFileName, const char* szOpM
     }
     return pFile;
 }
+#endif
 //-----------------------------------------------------------------------
 void SoFileHelp::DeleteFile(SoFile*& pFile)
 {

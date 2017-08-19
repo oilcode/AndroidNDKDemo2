@@ -13,7 +13,7 @@
 #include "GGUIPoint.h"
 #include "GGUIColor.h"
 #include "GGUIFuncHelp.h"
-#include "GGUIRenderManager.h"
+#include "GGUIRenderManagerGL.h"
 #include "GGUIImagesetManager.h"
 #include "GGUIImageset.h"
 #include "GGUIInputMsg.h"

@@ -4,7 +4,7 @@
 /*
 void GGUILogHelp::Print(const char* szDesc)
 {
-    SoIDEOutputLogInfo("%s", szDesc);
+    SoIDEOutputLogf("%s", szDesc);
     SoMessageBox("GGUI", szDesc);
 }
 //-----------------------------------------------------------------------------
@@ -14,7 +14,7 @@ void GGUILogHelp::Printf(const char* szFormat, ...)
 	va_start(klist, szFormat);
     const char* szDesc = SoStrFmtByVaList(szFormat, &klist);
 	va_end(klist);
-	SoIDEOutputLogInfo("%s", szDesc);
+	SoIDEOutputLogf("%s", szDesc);
 	SoMessageBox("GGUI", szDesc);
 }
 */

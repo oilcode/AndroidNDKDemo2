@@ -1,7 +1,64 @@
 //----------------------------------------------------------------
 #include "GGUIRenderHelp.h"
-#include "GGUIRenderManager.h"
 #include "GGUIImagesetManager.h"
+//----------------------------------------------------------------
+#if (SoTargetPlatform == SoPlatform_Windows)
+
+#elif (SoTargetPlatform == SoPlatform_Android)
+#include "GGUIRenderManagerGL.h"
+#include "GLTextureManager.h"
+#endif
+//----------------------------------------------------------------
+bool GGUIRenderHelp_Create()
+{
+#if (SoTargetPlatform == SoPlatform_Windows)
+
+#elif (SoTargetPlatform == SoPlatform_Android)
+    if (GGUIRenderManagerGL::CreateUIRenderManagerGL() == false)
+    {
+        return false;
+    }
+#endif
+    return true;
+}
+//----------------------------------------------------------------
+void GGUIRenderHelp_Release()
+{
+#if (SoTargetPlatform == SoPlatform_Windows)
+
+#elif (SoTargetPlatform == SoPlatform_Android)
+    GGUIRenderManagerGL::ReleaseUIRenderManagerGL();
+#endif
+}
+//----------------------------------------------------------------
+void GGUIRenderHelp_Render()
+{
+#if (SoTargetPlatform == SoPlatform_Windows)
+
+#elif (SoTargetPlatform == SoPlatform_Android)
+    GGUIRenderManagerGL::Get()->RenderUIRenderManager();
+#endif
+}
+//----------------------------------------------------------------
+void GGUIRenderHelp_AddRnederUnit(const stUIRenderUnit* pUIRenderUnit)
+{
+#if (SoTargetPlatform == SoPlatform_Windows)
+
+#elif (SoTargetPlatform == SoPlatform_Android)
+    GGUIRenderManagerGL::Get()->AddRnederUnit(pUIRenderUnit);
+#endif
+}
+//----------------------------------------------------------------
+void* GGUIRenderHelp_CreateUITextureFromFile(const char* szFullTexName)
+{
+    void* pTexture = NULL;
+#if (SoTargetPlatform == SoPlatform_Windows)
+
+#elif (SoTargetPlatform == SoPlatform_Android)
+    pTexture = GLTextureManager::Get()->CreateUITextureFromFile(szFullTexName);
+#endif
+    return pTexture;
+}
 //----------------------------------------------------------------
 stUIRenderUnit g_kUnit;
 //----------------------------------------------------------------
@@ -15,7 +72,7 @@ void GGUIRenderHelp_SimpleImage(int nImagesetId, int nImageRectId, const GGUIRec
 	{
 		return;
 	}
-	const GGUIImageset* pImageset = (GGUIImageset*)GGUIImagesetManager::Get()->GetImagesetByID(nImagesetId);
+	const GGUIImageset* pImageset = GGUIImagesetManager::Get()->GetImagesetByID(nImagesetId);
 	if (pImageset == NULL)
 	{
 		return;
@@ -53,12 +110,12 @@ void GGUIRenderHelp_SimpleImage(int nImagesetId, int nImageRectId, const GGUIRec
         g_kUnit.fTexCoordBottom = imageRect->bottom;
     }
 
-	g_kUnit.uiTexResourceId = pImageset->GetTexResourceID();
 	g_kUnit.fColorR = kColor.r;
 	g_kUnit.fColorG = kColor.g;
 	g_kUnit.fColorB = kColor.b;
 	g_kUnit.fColorA = kColor.a;
-	GGUIRenderManager::Get()->AddRnederUnit(&g_kUnit);
+    g_kUnit.uiTexResource = pImageset->GetTexResource();
+    GGUIRenderHelp_AddRnederUnit(&g_kUnit);
 }
 //----------------------------------------------------------------
 void GGUIRenderHelp_SimpleText(const char* szText, const GGUIRect& kAbsRect, GGUITextAlignX eAlignX, GGUITextAlignY eAlignY, const SoTinyString& kFontName, const GGUIColor& kColor)
@@ -67,12 +124,7 @@ void GGUIRenderHelp_SimpleText(const char* szText, const GGUIRect& kAbsRect, GGU
 	{
 		return;
 	}
-	GGUIRenderManager* pRenderManager = GGUIRenderManager::Get();
-	if (pRenderManager == 0)
-	{
-		return;
-	}
-	const GGUIImagesetFont* pImageset = (GGUIImagesetFont*)GGUIImagesetManager::Get()->GetImagesetByName(kFontName);
+	const GGUIImageset* pImageset = GGUIImagesetManager::Get()->GetImagesetByName(kFontName);
 	if (pImageset == 0)
 	{
 		return;
@@ -140,7 +192,7 @@ void GGUIRenderHelp_SimpleText(const char* szText, const GGUIRect& kAbsRect, GGU
     		break;
     	}
 
-        const stImageFontRect* imageRect = pImageset->GetRect(szSingleWord);
+        const stImageRect* imageRect = pImageset->GetFontRect(szSingleWord);
         if (imageRect)
         {
             g_kUnit.fRectLeft = fCurRectLeft + imageRect->offsetX;
@@ -151,12 +203,12 @@ void GGUIRenderHelp_SimpleText(const char* szText, const GGUIRect& kAbsRect, GGU
             g_kUnit.fTexCoordRight = imageRect->right;
             g_kUnit.fTexCoordTop = imageRect->top;
             g_kUnit.fTexCoordBottom = imageRect->bottom;
-            g_kUnit.uiTexResourceId = pImageset->GetTexResourceID();
             g_kUnit.fColorR = kColor.r;
             g_kUnit.fColorG = kColor.g;
             g_kUnit.fColorB = kColor.b;
             g_kUnit.fColorA = kColor.a;
-            pRenderManager->AddRnederUnit(&g_kUnit);
+            g_kUnit.uiTexResource = pImageset->GetTexResource();
+            GGUIRenderHelp_AddRnederUnit(&g_kUnit);
             //
             fCurRectLeft += imageRect->advanceX;
         }

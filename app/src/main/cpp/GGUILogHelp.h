@@ -18,10 +18,16 @@ public:
 #define GGUILogf GGUILogHelp::Printf
 */
 //------------------------------------------------------------
-#define GGUILogInfo(_Desc_)  { SoIDEOutputLogInfo("%s", _Desc_); }
-#define GGUILogInfof(...)    { const char* _Desc_ = SoStrFmt(__VA_ARGS__); SoIDEOutputLogInfo("%s", _Desc_); }
-#define GGUILogError(_Desc_) { SoIDEOutputLogError("%s", _Desc_); SoMessageBox("GGUI", _Desc_); }
-#define GGUILogErrorf(...)   { const char* _Desc_ = SoStrFmt(__VA_ARGS__); SoIDEOutputLogError("%s", _Desc_); SoMessageBox("GGUI", _Desc_); }
+#define GGUILogInfo   SoIDEOutputLog
+#define GGUILogInfof  SoIDEOutputLogf
+
+#ifdef SoMessageBoxEnable
+#define GGUILogError(_Desc_)  { SoIDEOutputLog(_Desc_); SoMessageBox("GGUI", _Desc_); }
+#define GGUILogErrorf(...)    { const char* _Desc_ = SoStrFmt(__VA_ARGS__); SoIDEOutputLog(_Desc_); SoMessageBox("GGUI", _Desc_); }
+#else
+#define GGUILogError   SoIDEOutputLog
+#define GGUILogErrorf  SoIDEOutputLogf
+#endif
 //------------------------------------------------------------
 #endif //_GGUILogHelp_h_
 //------------------------------------------------------------

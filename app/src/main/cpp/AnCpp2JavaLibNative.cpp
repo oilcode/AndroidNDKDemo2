@@ -9,7 +9,7 @@
 extern "C"
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved)
 {
-    AnIDEOutputLogInfo("JNI_OnLoad");
+    AnIDEOutputLog("JNI_OnLoad");
     AnJava2CppStaticFunction::InitJava2CppStaticFunction(vm);
     return AnJava2CppStaticFunction::GetMyJNIVersion();
 }
@@ -17,7 +17,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved)
 extern "C"
 JNIEXPORT void JNICALL JNI_OnUnload(JavaVM* vm, void* reserved)
 {
-    AnIDEOutputLogInfo("JNI_OnUnload");
+    AnIDEOutputLog("JNI_OnUnload");
 }
 //--------------------------------------------------------------------------------------------------
 extern "C"

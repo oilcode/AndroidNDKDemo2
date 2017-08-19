@@ -13,7 +13,7 @@ public:
 	bool ReadGgmFile(const char *szFileName);
 	bool GetTextureName(std::string& strTextureName);
 	bool GetNextImageRect(SoTinyString& kName, stImageRect& kRect);
-	bool GetNextImageFontRect(SoTinyString& kName, stImageFontRect& kRect);
+	bool GetNextImageFontRect(SoTinyString& kName, stImageRect& kRect);
 	int GetImageRectCount();
 
     float GetFontSize();

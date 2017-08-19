@@ -100,8 +100,12 @@ struct stImageRect
 	float bottom;
 	float width;
 	float height;
+	float offsetX;
+	float offsetY;
+	float advanceX;
 
 	stImageRect() : left(0.0f), right(0.0f), top(0.0f), bottom(0.0f), width(0.0f), height(0.0f)
+			, offsetX(0.0f), offsetY(0.0f), advanceX(0.0f)
 	{
 
 	}
