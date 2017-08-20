@@ -1,9 +1,14 @@
 //------------------------------------------------------------
 #include "SoImagePNG.h"
 #include <stdlib.h>
-#include "../thirdparty/02_png/png.h"
 #include "SoImageDefine.h"
 #include "SoFileHelp.h"
+//------------------------------------------------------------
+#if (SoTargetPlatform == SoPlatform_Windows)
+#include "../third_party/png/png.h"
+#elif (SoTargetPlatform == SoPlatform_Android)
+#include "../thirdparty/02_png/png.h"
+#endif
 //------------------------------------------------------------
 struct tImageSource
 {
@@ -29,7 +34,7 @@ void pngReadCallback(png_structp png_ptr, png_bytep data, png_size_t length)
 //------------------------------------------------------------
 bool SoImagePNG::LoadFromFile(const char* pszFileName, SoImageFileInfo* pImageInfo)
 {
-    SoFile* pFile = SoFileHelp::CreateFileAsset(pszFileName);
+    SoFile* pFile = SoFileHelp::CreateFile(pszFileName, "rb");
     if (pFile->IsValid() == false)
     {
         return false;

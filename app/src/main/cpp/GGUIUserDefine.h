@@ -40,13 +40,22 @@
 //----------------------------------------------------------------
 extern SoTinyString g_GGUI_ButtonText_Font;
 extern GGUIColor g_GGUI_ButtonText_Color;
+//----------------------------------------------------------------
 extern const char* g_GGUI_ProcessBar_ImageBG;
 extern const char* g_GGUI_ProcessBar_ImageBar;
 extern GGUIColor g_GGUI_ProcessBar_FlashColor;
 #define GGUI_ProcessBar_FalshTime 0.2f
 //----------------------------------------------------------------
+extern const char* g_GGUI_ScrollBar_LeftBG;
+extern const char* g_GGUI_ScrollBar_RightBG;
+extern const char* g_GGUI_ScrollBar_CenterBG;
+//----------------------------------------------------------------
 #define GGUI_ComponentText_TextChunkAddCount 4
 #define GGUI_ComponentText_NewChunkCountPrePause 2
+//----------------------------------------------------------------
+#if (SoTargetPlatform == SoPlatform_Windows)
+#define GGUI_DefaultFont "ËÎÌו"
+#endif
 //----------------------------------------------------------------
 #endif //_GGUIUserDefine_h_
 //----------------------------------------------------------------

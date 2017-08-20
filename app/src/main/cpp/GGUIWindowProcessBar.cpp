@@ -21,7 +21,8 @@ GGUIWindowProcessBar::~GGUIWindowProcessBar()
 	m_pBarImage = 0;
 }
 //----------------------------------------------------------------
-void GGUIWindowProcessBar::ClearWindow() {
+void GGUIWindowProcessBar::ClearWindow()
+{
     GGUIWindowContainer::ClearWindow();
     //m_pBarBG not change
     //m_pBarImage not change

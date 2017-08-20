@@ -68,7 +68,6 @@ add_library( # Sets the name of the library.
 			 src/main/cpp/SoAudioFileWave.cpp
 			 src/main/cpp/SoAudioOpenslManager.cpp
 			 src/main/cpp/SoAudioOpenslPlayer.cpp
-			 src/main/cpp/SoAudioProcessEndEvent.cpp
 			 src/main/cpp/SoAudioResource.cpp
 			 src/main/cpp/SoAudioResourceMgr.cpp
             )
@@ -108,13 +107,11 @@ add_library( GGUI
              src/main/cpp/GGUIAnimation.cpp
              src/main/cpp/GGUIBaseInclude.cpp
              src/main/cpp/GGUIColor.cpp
-             src/main/cpp/GGUIEvent.cpp
              src/main/cpp/GGUIFileGGM.cpp
              src/main/cpp/GGUIFuncHelp.cpp
              src/main/cpp/GGUIImageset.cpp
              src/main/cpp/GGUIImagesetIO.cpp
              src/main/cpp/GGUIImagesetManager.cpp
-             src/main/cpp/GGUIInputMsg.cpp
              src/main/cpp/GGUIInputState.cpp
              src/main/cpp/GGUILogHelp.cpp
              src/main/cpp/GGUILogicFlowHelp.cpp

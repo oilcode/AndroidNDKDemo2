@@ -91,7 +91,7 @@ void GGUIWindowScrollBar::InitScrollBar()
 	kFullRect.fDeltaH = 0.0f;
 	pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
 	pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetImage("mm1:hud_30");
+    pUIButton->SetImage(g_GGUI_ScrollBar_LeftBG);
 	pUIButton->SetDragEnable(false);
 	AddChild(pUIButton);
 	m_pBtnLeft = pUIButton;
@@ -106,7 +106,7 @@ void GGUIWindowScrollBar::InitScrollBar()
 	kFullRect.fDeltaH = 0.0f;
 	pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
 	pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetImage("mm1:hud_30");
+    pUIButton->SetImage(g_GGUI_ScrollBar_RightBG);
 	pUIButton->SetDragEnable(false);
 	AddChild(pUIButton);
 	m_pBtnRight = pUIButton;
@@ -121,7 +121,7 @@ void GGUIWindowScrollBar::InitScrollBar()
 	kFullRect.fDeltaH = 0.0f;
 	pUIButton = (GGUIWindowButton*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_Button);
 	pUIButton->SetFullRect(kFullRect);
-    pUIButton->SetImage("mm1:hud_30");
+    pUIButton->SetImage(g_GGUI_ScrollBar_CenterBG);
 	pUIButton->SetDragEnable(true);
 	AddChild(pUIButton);
 	m_pBtnCenter = pUIButton;
@@ -202,6 +202,7 @@ void GGUIWindowScrollBar::SetRange(float fMin, float fMax, float fStep)
 	{
 		//除数不能是0
 		fPosLength = 1.0f;
+		//滚动条各个子窗口的位置大小不合理，滑块无法滑动
 		GGUILogError("GGUIWindowScrollBar::SetRange : wrong pos");
 	}
 	m_fRangePosDeltaPerStep = fPosLength / (fMax - fMin) * fStep;

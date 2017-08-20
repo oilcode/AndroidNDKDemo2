@@ -261,7 +261,7 @@ bool NwUISPK::InputWindow(GGUIInputMsg* pInputMsg)
 
     if (m_bShowPKResult)
     {
-        if (pInputMsg->theType == GGUIInputMsg_TouchUp)
+        if (pInputMsg->theType == GGUIInputMsg_Up)
         {
             pInputMsg->bSwallowed = true;
             m_bShowPKResult = false;

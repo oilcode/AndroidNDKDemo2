@@ -289,19 +289,17 @@ bool GGUIWindowBase::InputDragLogic(GGUIInputMsg* pInputMsg)
 	if (m_nID != GGUIInputState::m_nWindoeID_CursorDrag)
 	{
 		//判断鼠标是否开始拖拽窗口。
-		if (m_bCursorIsInside
 #if (SoTargetPlatform == SoPlatform_Windows)
-			&& m_nID == GGUIInputState::m_nWindoeID_CursorInWindowRect
+		if (m_bCursorIsInside && m_nID == GGUIInputState::m_nWindoeID_CursorInWindowRect)
 #elif (SoTargetPlatform == SoPlatform_Android)
-            //移动设备没有光标，窗口没有hover状态。
+		if (m_bCursorIsInside) //移动设备没有光标，窗口没有hover状态。
 #endif
-				)
 		{
 			//鼠标一直位于本窗口矩形范围内。
 #if (SoTargetPlatform == SoPlatform_Windows)
-			if (pInputEvent->theEvent == InputEvent_Down && pInputEvent->theKey == InputKey_LMouse)
+			if (pInputMsg->theType == GGUIInputMsg_Down && pInputMsg->theKey == InputKey_LMouse)
 #elif (SoTargetPlatform == SoPlatform_Android)
-			if (pInputMsg->theType == GGUIInputMsg_TouchDown)
+			if (pInputMsg->theType == GGUIInputMsg_Down)
 #endif
 			{
 				//鼠标左键按下了，开始拖拽。
@@ -319,9 +317,9 @@ bool GGUIWindowBase::InputDragLogic(GGUIInputMsg* pInputMsg)
 		//鼠标正在拖拽本窗口。
 		//本窗口只响应鼠标移动和鼠标左键抬起两个事件。
 #if (SoTargetPlatform == SoPlatform_Windows)
-		if (pInputEvent->theEvent == InputEvent_MouseMove)
+		if (pInputMsg->theType == GGUIInputMsg_Move)
 #elif (SoTargetPlatform == SoPlatform_Android)
-        if (pInputMsg->theType == GGUIInputMsg_TouchMove)
+        if (pInputMsg->theType == GGUIInputMsg_Move)
 #endif
 		{
 			//窗口移动。
@@ -340,9 +338,9 @@ bool GGUIWindowBase::InputDragLogic(GGUIInputMsg* pInputMsg)
             pInputMsg->bSwallowed = true;
 		}
 #if (SoTargetPlatform == SoPlatform_Windows)
-		else if (pInputEvent->theEvent == InputEvent_Up && pInputEvent->theKey == InputKey_LMouse)
+		else if (pInputMsg->theType == GGUIInputMsg_Up && pInputMsg->theKey == InputKey_LMouse)
 #elif (SoTargetPlatform == SoPlatform_Android)
-        else if (pInputMsg->theType == GGUIInputMsg_TouchUp)
+        else if (pInputMsg->theType == GGUIInputMsg_Up)
 #endif
 		{
 			//停止拖拽。

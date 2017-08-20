@@ -218,3 +218,66 @@ void GGUIRenderHelp_SimpleText(const char* szText, const GGUIRect& kAbsRect, GGU
     }
 }
 //----------------------------------------------------------------
+#if (SoTargetPlatform == SoPlatform_Windows)
+void GGUIRenderHelp_ComponetText(const GGUIComponentText* pCompText)
+{
+	const int nCount = pCompText->GetTextChunkCount();
+	if (nCount == 0)
+	{
+		return;
+	}
+
+	SoTinyString kRectName;
+	wchar_t wRectName[2] = {0};
+	//
+	for (int i = 0; i < nCount; ++i)
+	{
+		const GGUITextChunk* pChunk = pCompText->GetTextChunk(i);
+		if (pChunk == 0)
+		{
+			continue;
+		}
+		const GGUIImageset* pImageset = GGUIImagesetManager::Get()->GetImagesetByID(pChunk->FontImagesetID);
+		if (pImageset == 0)
+		{
+			continue;
+		}
+		//
+		const float fTexWidth = pImageset->GetTextureWidth();
+		const float fTexHeight = pImageset->GetTextureHeight();
+		//
+		float fCurRectLeft = pChunk->kRect.x;
+		float fCurRectTop = pChunk->kRect.y;
+		const int nCharCount = pChunk->TextCount;
+		for (int j = 0; j < nCharCount; ++j)
+		{
+			wRectName[0] = pChunk->szText[j];
+			kRectName = (char*)wRectName;
+			const int nRectIndex = pImageset->GetRectID(kRectName);
+			if (nRectIndex == -1)
+			{
+				continue;
+			}
+			//
+			const GGUIRect& imageRect = pImageset->GetRect(nRectIndex);
+			g_kUnit.fRectLeft = fCurRectLeft;
+			g_kUnit.fRectTop = fCurRectTop;
+			g_kUnit.fRectWidth = imageRect.w * fTexWidth;
+			g_kUnit.fRectHeight = imageRect.h * fTexHeight;
+			g_kUnit.fTexCoordLeft = imageRect.x;
+			g_kUnit.fTexCoordTop = imageRect.y;
+			g_kUnit.fTexCoordWidth = imageRect.w;
+			g_kUnit.fTexCoordHeight = imageRect.h;
+			g_kUnit.pTexture = pImageset->GetTexture();
+			g_kUnit.fColorR = pChunk->kColor.r;
+			g_kUnit.fColorG = pChunk->kColor.g;
+			g_kUnit.fColorB = pChunk->kColor.b;
+			g_kUnit.fColorA = pChunk->kColor.a;
+			GGUIRenderManager::Get()->AddRnederUnit(&g_kUnit);
+			//
+			fCurRectLeft += g_kUnit.fRectWidth;
+		}
+	}
+}
+#endif
+//----------------------------------------------------------------

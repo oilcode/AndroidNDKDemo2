@@ -11,9 +11,9 @@ GGUIInputMsgType g_eAnInputMsgType2GGUI[AnInputMsg_Max];
 //--------------------------------------------------------------------------------------------------
 void AnInputMsgDispatch::InitInputMsgDispatch()
 {
-    g_eAnInputMsgType2GGUI[AnInputMsg_TouchDown] = GGUIInputMsg_TouchDown;
-    g_eAnInputMsgType2GGUI[AnInputMsg_TouchMove] = GGUIInputMsg_TouchMove;
-    g_eAnInputMsgType2GGUI[AnInputMsg_TouchUp] = GGUIInputMsg_TouchUp;
+    g_eAnInputMsgType2GGUI[AnInputMsg_TouchDown] = GGUIInputMsg_Down;
+    g_eAnInputMsgType2GGUI[AnInputMsg_TouchMove] = GGUIInputMsg_Move;
+    g_eAnInputMsgType2GGUI[AnInputMsg_TouchUp] = GGUIInputMsg_Up;
 }
 //--------------------------------------------------------------------------------------------------
 void AnInputMsgDispatch::ClearInputMsgDispatch()
@@ -42,8 +42,6 @@ void AnInputMsgDispatch::DispatchInputMsg(AnInputMsgType theType, float fPosX, f
     kGGUIMsg.theType = g_eAnInputMsgType2GGUI[kInfo.theType];
     kGGUIMsg.fPosX = kInfo.fPosX;
     kGGUIMsg.fPosY = kInfo.fPosY;
-    kGGUIMsg.fDeltaX = kInfo.fDeltaX;
-    kGGUIMsg.fDeltaY = kInfo.fDeltaY;
     kGGUIMsg.bSwallowed = false;
     GGUILogicFlowHelp_DispatchInputMsg(&kGGUIMsg);
     if (kGGUIMsg.bSwallowed)

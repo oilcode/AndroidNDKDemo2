@@ -14,5 +14,10 @@ void* GGUIRenderHelp_CreateUITextureFromFile(const char* szFullTexName);
 void GGUIRenderHelp_SimpleImage(int nImagesetId, int nImageRectId, const GGUIRect& kAbsRect, const GGUIColor& kColor, bool bSwapX, bool bSwapY);
 void GGUIRenderHelp_SimpleText(const char* szText, const GGUIRect& kAbsRect, GGUITextAlignX eAlignX, GGUITextAlignY eAlignY, const SoTinyString& kFontName, const GGUIColor& kColor);
 //----------------------------------------------------------------
+#if (SoTargetPlatform == SoPlatform_Windows)
+class GGUIComponentText;
+void GGUIRenderHelp_ComponetText(const GGUIComponentText* pCompText);
+#endif
+//----------------------------------------------------------------
 #endif //_GGUIRenderHelp_h_
 //----------------------------------------------------------------

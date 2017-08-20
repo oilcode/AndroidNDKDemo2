@@ -92,7 +92,7 @@ bool GGUIWindowButton::InputWindow(GGUIInputMsg* pInputMsg)
 	const GGUIButtonState curBtnState = m_eButtonState;
 	
 #if (SoTargetPlatform == SoPlatform_Windows)
-	if (pInputEvent->theEvent == InputEvent_MouseMove)
+	if (pInputMsg->theType == GGUIInputMsg_Move)
 	{
 		if (m_bCursorIsInside)
 		{
@@ -110,7 +110,7 @@ bool GGUIWindowButton::InputWindow(GGUIInputMsg* pInputMsg)
 		}
 	}
 #elif (SoTargetPlatform == SoPlatform_Android)
-	if (pInputMsg->theType == GGUIInputMsg_TouchMove)
+	if (pInputMsg->theType == GGUIInputMsg_Move)
 	{
 		if (m_bCursorIsInside == false)
 		{
@@ -124,7 +124,7 @@ bool GGUIWindowButton::InputWindow(GGUIInputMsg* pInputMsg)
 
 	
 #if (SoTargetPlatform == SoPlatform_Windows)
-	else if (pInputEvent->theEvent == InputEvent_Down && pInputEvent->theKey == InputKey_LMouse)
+	else if (pInputMsg->theType == GGUIInputMsg_Down && pInputMsg->theKey == InputKey_LMouse)
 	{
 		if (curBtnState == GGUIButtonState_Hover)
 		{
@@ -132,7 +132,7 @@ bool GGUIWindowButton::InputWindow(GGUIInputMsg* pInputMsg)
 		}
 	}
 #elif (SoTargetPlatform == SoPlatform_Android)
-    else if (pInputMsg->theType == GGUIInputMsg_TouchDown)
+    else if (pInputMsg->theType == GGUIInputMsg_Down)
 	{
 		if (m_bCursorIsInside)
 		{
@@ -142,7 +142,7 @@ bool GGUIWindowButton::InputWindow(GGUIInputMsg* pInputMsg)
 #endif
 
 #if (SoTargetPlatform == SoPlatform_Windows)
-	else if (pInputEvent->theEvent == InputEvent_Up && pInputEvent->theKey == InputKey_LMouse)
+	else if (pInputMsg->theType == GGUIInputMsg_Up && pInputMsg->theKey == InputKey_LMouse)
 	{
 		if (curBtnState == GGUIButtonState_Push)
 		{
@@ -151,7 +151,7 @@ bool GGUIWindowButton::InputWindow(GGUIInputMsg* pInputMsg)
 		}
 	}
 #elif (SoTargetPlatform == SoPlatform_Android)
-    else if (pInputMsg->theType == GGUIInputMsg_TouchUp)
+    else if (pInputMsg->theType == GGUIInputMsg_Up)
 	{
 		if (m_bCursorIsInside)
 		{
