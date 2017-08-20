@@ -3,7 +3,6 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIAnimation.h" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIBaseInclude.h" charset="GB2312" />
-    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIEvent.cpp" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIEvent.h" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIFileGGM.h" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIImageset.h" charset="GB2312" />
@@ -14,8 +13,12 @@
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIPanelManager.cpp" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIPanelManager.h" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIRenderHelp.cpp" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIRenderManagerDX.cpp" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIRenderManagerDX.h" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIRenderManagerGL.cpp" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIRenderManagerGL.h" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIRichTextStruct.cpp" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIRichTextStruct.h" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIUserDefine.cpp" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIUserDefine.h" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/app/src/main/cpp/GGUIWindowBase.cpp" charset="GB2312" />

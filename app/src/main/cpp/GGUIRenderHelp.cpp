@@ -1,9 +1,11 @@
 //----------------------------------------------------------------
 #include "GGUIRenderHelp.h"
 #include "GGUIImagesetManager.h"
+#include "GGUIRichTextStruct.h"
 //----------------------------------------------------------------
 #if (SoTargetPlatform == SoPlatform_Windows)
-
+#include "GGUIRenderManagerDX.h"
+#include "SoD3DTextureManager.h"
 #elif (SoTargetPlatform == SoPlatform_Android)
 #include "GGUIRenderManagerGL.h"
 #include "GLTextureManager.h"
@@ -12,7 +14,10 @@
 bool GGUIRenderHelp_Create()
 {
 #if (SoTargetPlatform == SoPlatform_Windows)
-
+	if (GGUIRenderManagerDX::CreateUIRenderManagerDX() == false)
+    {
+        return false;
+    }
 #elif (SoTargetPlatform == SoPlatform_Android)
     if (GGUIRenderManagerGL::CreateUIRenderManagerGL() == false)
     {
@@ -25,7 +30,7 @@ bool GGUIRenderHelp_Create()
 void GGUIRenderHelp_Release()
 {
 #if (SoTargetPlatform == SoPlatform_Windows)
-
+	GGUIRenderManagerDX::ReleaseUIRenderManagerDX();
 #elif (SoTargetPlatform == SoPlatform_Android)
     GGUIRenderManagerGL::ReleaseUIRenderManagerGL();
 #endif
@@ -34,7 +39,7 @@ void GGUIRenderHelp_Release()
 void GGUIRenderHelp_Render()
 {
 #if (SoTargetPlatform == SoPlatform_Windows)
-
+	GGUIRenderManagerDX::Get()->RenderUIRenderManager();
 #elif (SoTargetPlatform == SoPlatform_Android)
     GGUIRenderManagerGL::Get()->RenderUIRenderManager();
 #endif
@@ -43,7 +48,7 @@ void GGUIRenderHelp_Render()
 void GGUIRenderHelp_AddRnederUnit(const stUIRenderUnit* pUIRenderUnit)
 {
 #if (SoTargetPlatform == SoPlatform_Windows)
-
+	GGUIRenderManagerDX::Get()->AddRnederUnit(pUIRenderUnit);
 #elif (SoTargetPlatform == SoPlatform_Android)
     GGUIRenderManagerGL::Get()->AddRnederUnit(pUIRenderUnit);
 #endif
@@ -53,7 +58,7 @@ void* GGUIRenderHelp_CreateUITextureFromFile(const char* szFullTexName)
 {
     void* pTexture = NULL;
 #if (SoTargetPlatform == SoPlatform_Windows)
-
+	pTexture = SoD3DTextureManager::Get()->CreateUITextureFromFile(szFullTexName);
 #elif (SoTargetPlatform == SoPlatform_Android)
     pTexture = GLTextureManager::Get()->CreateUITextureFromFile(szFullTexName);
 #endif
@@ -130,67 +135,81 @@ void GGUIRenderHelp_SimpleText(const char* szText, const GGUIRect& kAbsRect, GGU
 		return;
 	}
 
-	const int nCharCount = SoStrLen(szText);
-	//
-	float fStringWidth = 0.0f;
-	float fStringHeight = 0.0f;
-	pImageset->CalculateStringGlyphSize(szText, nCharCount, &fStringWidth, &fStringHeight);
-	if (fStringWidth < 1.0f || fStringHeight < 1.0f)
-	{
-		//字符串宽度或者高度小于1个像素，不需要绘制。
-		return;
-	}
-	//
-	float fAbsStartPosX = 0.0f;
-	float fAbsStartPosY = 0.0f;
-	switch (eAlignX)
-	{
-	case GGUITextAlignX_Left:
-		{
-			fAbsStartPosX = kAbsRect.x;
-		} break;
-	case GGUITextAlignX_Center:
-		{
-			fAbsStartPosX = kAbsRect.x + (kAbsRect.w - fStringWidth) * 0.5f;
-		} break;
-	case GGUITextAlignX_Right:
-		{
-			fAbsStartPosX = kAbsRect.x + kAbsRect.w - fStringWidth;
-		} break;
-	default:
-		break;
-	}
-	switch (eAlignY)
-	{
-	case GGUITextAlignY_Top:
-		{
-			fAbsStartPosY = kAbsRect.y;
-		} break;
-	case GGUITextAlignY_Center:
-		{
-			fAbsStartPosY = kAbsRect.y + (kAbsRect.h - fStringHeight) * 0.5f;
-		} break;
-	case GGUITextAlignY_Bottom:
-		{
-			fAbsStartPosY = kAbsRect.y + kAbsRect.h - fStringHeight;
-		} break;
-	default:
-		break;
-	}
-	//
-	float fCurRectLeft = fAbsStartPosX;
-	float fCurRectTop = fAbsStartPosY;
+    GGUIRenderHelp_SimpleTextByImageset(szText, -1, kAbsRect, eAlignX, eAlignY, pImageset, kColor);
+}
+//----------------------------------------------------------------
+void GGUIRenderHelp_SimpleTextByImageset(const char* szText, const int nValidCount, const GGUIRect& kAbsRect, GGUITextAlignX eAlignX, GGUITextAlignY eAlignY, const GGUIImageset* pImageset, const GGUIColor& kColor)
+{
+    if (szText == 0 || szText[0] == 0)
+    {
+        return;
+    }
+    if (pImageset == 0)
+    {
+        return;
+    }
+
+    const int nCharCount = SoStrLen(szText);
+    //
+    float fStringWidth = 0.0f;
+    float fStringHeight = 0.0f;
+    pImageset->CalculateStringGlyphSize(szText, nCharCount, &fStringWidth, &fStringHeight);
+    if (fStringWidth < 1.0f || fStringHeight < 1.0f)
+    {
+        //字符串宽度或者高度小于1个像素，不需要绘制。
+        return;
+    }
+    //
+    float fAbsStartPosX = 0.0f;
+    float fAbsStartPosY = 0.0f;
+    switch (eAlignX)
+    {
+        case GGUITextAlignX_Left:
+        {
+            fAbsStartPosX = kAbsRect.x;
+        } break;
+        case GGUITextAlignX_Center:
+        {
+            fAbsStartPosX = kAbsRect.x + (kAbsRect.w - fStringWidth) * 0.5f;
+        } break;
+        case GGUITextAlignX_Right:
+        {
+            fAbsStartPosX = kAbsRect.x + kAbsRect.w - fStringWidth;
+        } break;
+        default:
+            break;
+    }
+    switch (eAlignY)
+    {
+        case GGUITextAlignY_Top:
+        {
+            fAbsStartPosY = kAbsRect.y;
+        } break;
+        case GGUITextAlignY_Center:
+        {
+            fAbsStartPosY = kAbsRect.y + (kAbsRect.h - fStringHeight) * 0.5f;
+        } break;
+        case GGUITextAlignY_Bottom:
+        {
+            fAbsStartPosY = kAbsRect.y + kAbsRect.h - fStringHeight;
+        } break;
+        default:
+            break;
+    }
+    //
+    float fCurRectLeft = fAbsStartPosX;
+    float fCurRectTop = fAbsStartPosY;
 
     int nAccIndex = 0;
     int nSingleWordCharCount = 0;
     const char* szSingleWord = "";
     while (true)
     {
-    	szSingleWord = SoGetOneCharacterFromUtf8String(szText, nCharCount, nAccIndex, &nSingleWordCharCount);
-    	if (nSingleWordCharCount == 0)
-    	{
-    		break;
-    	}
+        szSingleWord = SoGetOneCharacterFromUtf8String(szText, nCharCount, nAccIndex, &nSingleWordCharCount);
+        if (nSingleWordCharCount == 0)
+        {
+            break;
+        }
 
         const stImageRect* imageRect = pImageset->GetFontRect(szSingleWord);
         if (imageRect)
@@ -215,11 +234,15 @@ void GGUIRenderHelp_SimpleText(const char* szText, const GGUIRect& kAbsRect, GGU
         //
         nAccIndex += nSingleWordCharCount;
         nSingleWordCharCount = 0;
+        //
+        if (nValidCount > 0 && nAccIndex >= nValidCount)
+        {
+            break;
+        }
     }
 }
 //----------------------------------------------------------------
-#if (SoTargetPlatform == SoPlatform_Windows)
-void GGUIRenderHelp_ComponetText(const GGUIComponentText* pCompText)
+void GGUIRenderHelp_RichText(const GGUIRichTextStruct* pCompText, float fRectLeft, float fRectTop)
 {
 	const int nCount = pCompText->GetTextChunkCount();
 	if (nCount == 0)
@@ -227,9 +250,7 @@ void GGUIRenderHelp_ComponetText(const GGUIComponentText* pCompText)
 		return;
 	}
 
-	SoTinyString kRectName;
-	wchar_t wRectName[2] = {0};
-	//
+    GGUIRect kChunkRect;
 	for (int i = 0; i < nCount; ++i)
 	{
 		const GGUITextChunk* pChunk = pCompText->GetTextChunk(i);
@@ -242,42 +263,12 @@ void GGUIRenderHelp_ComponetText(const GGUIComponentText* pCompText)
 		{
 			continue;
 		}
-		//
-		const float fTexWidth = pImageset->GetTextureWidth();
-		const float fTexHeight = pImageset->GetTextureHeight();
-		//
-		float fCurRectLeft = pChunk->kRect.x;
-		float fCurRectTop = pChunk->kRect.y;
-		const int nCharCount = pChunk->TextCount;
-		for (int j = 0; j < nCharCount; ++j)
-		{
-			wRectName[0] = pChunk->szText[j];
-			kRectName = (char*)wRectName;
-			const int nRectIndex = pImageset->GetRectID(kRectName);
-			if (nRectIndex == -1)
-			{
-				continue;
-			}
-			//
-			const GGUIRect& imageRect = pImageset->GetRect(nRectIndex);
-			g_kUnit.fRectLeft = fCurRectLeft;
-			g_kUnit.fRectTop = fCurRectTop;
-			g_kUnit.fRectWidth = imageRect.w * fTexWidth;
-			g_kUnit.fRectHeight = imageRect.h * fTexHeight;
-			g_kUnit.fTexCoordLeft = imageRect.x;
-			g_kUnit.fTexCoordTop = imageRect.y;
-			g_kUnit.fTexCoordWidth = imageRect.w;
-			g_kUnit.fTexCoordHeight = imageRect.h;
-			g_kUnit.pTexture = pImageset->GetTexture();
-			g_kUnit.fColorR = pChunk->kColor.r;
-			g_kUnit.fColorG = pChunk->kColor.g;
-			g_kUnit.fColorB = pChunk->kColor.b;
-			g_kUnit.fColorA = pChunk->kColor.a;
-			GGUIRenderManager::Get()->AddRnederUnit(&g_kUnit);
-			//
-			fCurRectLeft += g_kUnit.fRectWidth;
-		}
+        //
+        kChunkRect.x = fRectLeft + pChunk->kRect.x;
+        kChunkRect.y = fRectTop + pChunk->kRect.y;
+        kChunkRect.w = pChunk->kRect.w;
+        kChunkRect.h = pChunk->kRect.h;
+        GGUIRenderHelp_SimpleTextByImageset(pChunk->kText, pChunk->TextCount, kChunkRect, GGUITextAlignX_Left, GGUITextAlignY_Top, pImageset, pChunk->kColor);
 	}
 }
-#endif
 //----------------------------------------------------------------

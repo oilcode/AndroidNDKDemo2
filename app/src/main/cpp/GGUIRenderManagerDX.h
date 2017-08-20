@@ -1,57 +1,60 @@
 //----------------------------------------------------------------
-#ifndef _GGUIGLRenderManager_h_
-#define _GGUIGLRenderManager_h_
+#ifndef _GGUIRenderManagerDX_h_
+#define _GGUIRenderManagerDX_h_
 //----------------------------------------------------------------
 #include "SoCodeBaseInclude.h"
 //----------------------------------------------------------------
-#if (SoTargetPlatform == SoPlatform_Android)
+#if (SoTargetPlatform == SoPlatform_Windows)
 //----------------------------------------------------------------
-#include "GLBaseInclude.h"
+#include "SoD3DInclude.h"
 #include "GGUIRenderDefine.h"
 //----------------------------------------------------------------
-class GLShaderBase;
+class SoD3DShaderBase;
 //----------------------------------------------------------------
-class GGUIRenderManagerGL
+class GGUIRenderManagerDX
 {
 public:
-	static bool CreateUIRenderManagerGL();
-	static void ReleaseUIRenderManagerGL();
-	static GGUIRenderManagerGL* Get();
+	static bool CreateUIRenderManagerDX();
+	static void ReleaseUIRenderManagerDX();
+	static GGUIRenderManagerDX* Get();
 
 	void AddRnederUnit(const stUIRenderUnit* pUIRenderUnit);
-	void RenderUIRenderManager();
+	void RenderUIRenderManagerDX();
 
 private:
-	GGUIRenderManagerGL();
-	~GGUIRenderManagerGL();
-	bool InitUIRenderManagerGL();
-	void ClearUIRenderManagerGL();
+	GGUIRenderManagerDX();
+	~GGUIRenderManagerDX();
+	bool InitUIRenderManagerDX();
+	void ClearUIRenderManagerDX();
 	//
 	bool CreateVertexList();
 	void ReleaseVertexList();
-	bool CreateIndexList();
-	void ReleaseIndexList();
+	bool CreateVertexBuffer();
+	void ReleaseVertexBuffer();
+	bool CreateIndexBuffer();
+	void ReleaseIndexBuffer();
 	bool CreateSRVList();
 	void ReleaseSRVList();
 
 private:
 	struct stVertexType
 	{
-		SoMathFloat3 kPosition;
-        SoMathFloat3 kTexCoordAndTexIndex;
-        SoMathFloat4 kColorRGBA;
+		XMFLOAT3 kPosition;
+		XMFLOAT3 kTexCoordAndTexIndex;
+		XMFLOAT4 kColorRGBA;
 	};
 
 private:
-	static GGUIRenderManagerGL* ms_pInstance;
+	static GGUIRenderManagerDX* ms_pInstance;
 	stVertexType* m_pVertexList;
-    unsigned short* m_pIndexList;
-    GLuint* m_pSRVList;
-	const GLShaderBase* m_pShader;
+	ID3D11Buffer* m_pVertexBuffer;
+	ID3D11Buffer* m_pIndexBuffer;
+	ID3D11ShaderResourceView** m_pSRVList;
+	SoD3DShaderBase* m_pShader;
 	//记录 m_pVertexList 中的元素个数
 	int m_nMaxWindowCount;
 	int m_nCurWindowCount;
-	//记录 m_pTexResourceList 中的元素个数
+	//记录 m_pSRVList 中的元素个数
 	int m_nMaxSRVCount;
 	int m_nCurSRVCount;
 	//最近一次执行AddRnederUnit时，贴图序号是多少。
@@ -60,15 +63,14 @@ private:
 	int m_nLastTextureIndex;
 	//绘制当前的 stUIRenderUnit 时，使用的ZValue的值是多少。
 	float m_fCurrentRenderOrder;
-    float m_fScreenHeight;
 };
 //----------------------------------------------------------------
-inline GGUIRenderManagerGL* GGUIRenderManagerGL::Get()
+inline GGUIRenderManagerDX* GGUIRenderManagerDX::Get()
 {
 	return ms_pInstance;
 }
 //----------------------------------------------------------------
-#endif //(SoTargetPlatform == SoPlatform_Android)
+#endif //(SoTargetPlatform == SoPlatform_Windows)
 //----------------------------------------------------------------
-#endif //_GGUIGLRenderManager_h_
+#endif //_GGUIRenderManagerDX_h_
 //----------------------------------------------------------------

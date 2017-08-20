@@ -28,6 +28,7 @@
 #include "GGUIWindowScrollBar.h"
 #include "GGUIWindowProcessBar.h"
 #include "GGUIWindowListBox.h"
+#include "GGUIWindowRichText.h"
 #include "GGUIActionFactory.h"
 #include "GGUIActionGroup.h"
 #include "GGUIActionLine.h"

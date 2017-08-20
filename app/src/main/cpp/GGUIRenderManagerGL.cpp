@@ -1,5 +1,8 @@
 //----------------------------------------------------------------
 #include "GGUIRenderManagerGL.h"
+//----------------------------------------------------------------
+#if (SoTargetPlatform == SoPlatform_Android)
+//----------------------------------------------------------------
 #include "GLFuncHelp.h"
 #include "GLShaderManager.h"
 #include "GGUIUserDefine.h"
@@ -317,4 +320,6 @@ void GGUIRenderManagerGL::ReleaseSRVList()
 	m_nCurSRVCount = 0;
 	m_nLastTextureIndex = -1;
 }
+//----------------------------------------------------------------
+#endif //(SoTargetPlatform == SoPlatform_Android)
 //----------------------------------------------------------------

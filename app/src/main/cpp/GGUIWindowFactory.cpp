@@ -10,6 +10,7 @@
 #include "GGUIWindowScrollBar.h"
 #include "GGUIWindowProcessBar.h"
 #include "GGUIWindowListBox.h"
+#include "GGUIWindowRichText.h"
 //----------------------------------------------------------------
 #define UnusedIndex_TryToFindUnused -1
 #define UnusedIndex_CreateNewOne -2
@@ -163,6 +164,10 @@ GGUIWindowBase* GGUIWindowFactory::CreateUIWindow(GGUIWindowType eType)
 		case GGUIWindow_ListBox:
 		{
 			pWindow = new GGUIWindowListBox;
+		} break;
+		case GGUIWindow_RichText:
+		{
+			pWindow = new GGUIWindowRichText;
 		} break;
 		default:
 		{

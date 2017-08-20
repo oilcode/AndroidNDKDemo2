@@ -120,6 +120,9 @@ add_library( GGUI
              src/main/cpp/GGUIRect.cpp
              src/main/cpp/GGUIRenderHelp.cpp
              src/main/cpp/GGUIRenderManagerGL.cpp
+             src/main/cpp/GGUIRenderManagerDX.cpp
+             src/main/cpp/GGUIRichTextParse.cpp
+             src/main/cpp/GGUIRichTextStruct.cpp
              src/main/cpp/GGUIUserDefine.cpp
              src/main/cpp/GGUIWindowBase.cpp
              src/main/cpp/GGUIWindowButton.cpp
@@ -130,6 +133,7 @@ add_library( GGUI
              src/main/cpp/GGUIWindowListBox.cpp
              src/main/cpp/GGUIWindowPanel.cpp
              src/main/cpp/GGUIWindowProcessBar.cpp
+             src/main/cpp/GGUIWindowRichText.cpp
              src/main/cpp/GGUIWindowScrollBar.cpp
              src/main/cpp/GGUIWindowText.cpp
            )

@@ -789,6 +789,19 @@ void NwUISPK::CreateWindows()
     m_pImgSPKResult = pImage;
 
 
+    /*
+    kFullRect.eHorzAttachType = GGUIWindowHorzAttach_Left;
+    kFullRect.eVertAttachType = GGUIWindowVertAttach_Center;
+    kFullRect.fScaleX = 10.0f / fStandardWidth;
+    kFullRect.fScaleY = 450.0f / fStandardWidth;
+    kFullRect.fScaleW = 300.0f / fStandardWidth;
+    kFullRect.fScaleH = 500.0f / fStandardWidth;
+    GGUIWindowRichText* pRichText = (GGUIWindowRichText*)GGUIWindowFactory::Get()->CreateUIWindow(GGUIWindow_RichText);
+    pRichText->SetFullRect(kFullRect);
+    pRichText->SetInputEnable(false);
+    AddChild(pRichText);
+    pRichText->SetRichText("<color = 0000ffff >上<br>中砍<color=ffffff77>旋风");
+    */
 
     /*
     kFullRect.eHorzAttachType = GGUIWindowHorzAttach_Left;

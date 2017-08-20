@@ -35,6 +35,7 @@ enum GGUIWindowType
 	GGUIWindow_ProcessBar,
 	GGUIWindow_ListBox,
 	GGUIWindow_ComboBox,
+	GGUIWindow_RichText,
 	GGUIWindow_Max,
 };
 //----------------------------------------------------------------
