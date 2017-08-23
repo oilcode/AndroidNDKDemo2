@@ -43,11 +43,7 @@ private:
 	soint32 FindFirstEmptyElement();
 
 private:
-#if (SoTargetPlatform == SoPlatform_Windows)
-    enum eStatusType : char
-#elif (SoTargetPlatform == SoPlatform_Android)
     enum eStatusType
-#endif
 	{
 		Status_Invalid = 0,
 		Status_Empty = 1, //ÔªËØÖµÎª¿Õ
