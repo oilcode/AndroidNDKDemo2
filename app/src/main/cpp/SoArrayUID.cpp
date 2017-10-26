@@ -186,6 +186,51 @@ void* SoArrayUID::GetAt(soint32 nUID) const
 //	}
 //}
 //----------------------------------------------------------------
+soint32 SoArrayUID::GetUID(const void* pElement, soint32 nValidSize) const
+{
+	if (pElement == 0)
+	{
+		return -1;
+	}
+	if (m_pElementBuff == 0)
+	{
+		return -1;
+	}
+	if (nValidSize > m_nElementSize)
+	{
+		return -1;
+	}
+	//
+	soint32 theUID = -1;
+	const char* destElement = (const char*)pElement;
+	char* tempElement = 0;
+	bool bFindElement = true;
+	for (soint32 i = 0; i < m_nCapacity; ++i)
+	{
+		if (m_pStatusBuff[i] != Status_Using)
+		{
+			continue;
+		}
+
+		tempElement = m_pElementBuff + i * m_nElementSize;
+		bFindElement = true;
+		for (soint32 k = 0; k < nValidSize; ++k)
+		{
+			if (tempElement[k] != destElement[k])
+			{
+				bFindElement = false;
+				break;
+			}
+		}
+		if (bFindElement == true)
+		{
+			theUID = i;
+			break;
+		}
+	}
+	return theUID;
+}
+//----------------------------------------------------------------
 soint32 SoArrayUID::FindFirstEmptyElement()
 {
 	if (m_pStatusBuff == 0)

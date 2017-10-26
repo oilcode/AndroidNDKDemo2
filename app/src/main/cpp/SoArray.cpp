@@ -168,10 +168,9 @@ soint32 SoArray::InsertAt(soint32 nIndex, const void* pElement)
 		return nIndex;
 	}
 	//
-	arrayuid theUID = -1;
-	for (soint32 i = nIndex + 1; i < m_nSize; ++i)
+	arrayuid theUID = m_pUIDBuff[m_nSize-1];
+	for (soint32 i = m_nSize-1; i > nIndex; --i)
 	{
-		theUID = m_pUIDBuff[i];
 		m_pUIDBuff[i] = m_pUIDBuff[i - 1];
 	}
 	m_pUIDBuff[nIndex] = theUID;
@@ -202,7 +201,7 @@ bool SoArray::RemoveAt(soint32 nIndex)
 bool SoArray::Remove(const void* pElement)
 {
 	bool br = false;
-	const soint32 nIndex = GetIndex(pElement);
+	const soint32 nIndex = GetIndex(pElement, m_nElementSize);
 	if (nIndex != -1)
 	{
 		br = RemoveAt(nIndex);
@@ -248,13 +247,17 @@ void* SoArray::GetAt(soint32 nIndex) const
 	}
 }
 //----------------------------------------------------------------
-soint32 SoArray::GetIndex(const void* pElement) const
+soint32 SoArray::GetIndex(const void* pElement, soint32 nValidSize) const
 {
 	if (pElement == 0)
 	{
 		return -1;
 	}
 	if (m_pElementBuff == 0)
+	{
+		return -1;
+	}
+	if (nValidSize > m_nElementSize)
 	{
 		return -1;
 	}
@@ -268,7 +271,7 @@ soint32 SoArray::GetIndex(const void* pElement) const
 		const soint32 theUID = m_pUIDBuff[i];
 		tempElement = m_pElementBuff + theUID * m_nElementSize;
 		bFindElement = true;
-		for (soint32 k = 0; k < m_nElementSize; ++k)
+		for (soint32 k = 0; k < nValidSize; ++k)
 		{
 			if (tempElement[k] != destElement[k])
 			{

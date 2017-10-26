@@ -43,7 +43,15 @@ public:
 	//获取容器的大小。
 	soint32 GetCapacity() const;
 	//获取某个元素的位置索引。
-	soint32 GetIndex(const void* pElement) const;
+	//--nValidSize 元素的有效size，也即，判断多少个字节就可以得出“元素相同”或者“元素不相同”的结论。
+	//             如果该元素是字符串，则nValidSize就是字符串的长度。
+	//如果元素是字符串，则填写字符串的长度就非常重要。例如：
+	//本数组的元素是字符串，每个元素的size是5。
+	//添加一个元素 "ab0cd" ，字符串实际值是 "ab" ，但是填充之后元素的内存的值是 "ab0cd" 。
+	//当查找一个元素 "ab0ff" 时，你认为查找的字符串是 "ab" ，肯定能找到，但是实际查找的元素是 "ab0ff" ，结果是找不到。
+	soint32 GetIndex(const void* pElement, soint32 nValidSize) const;
+    //获取元素的大小。
+    soint32 GetSizeofElement() const;
 
 private:
 	//在m_nDeltaAddRemove优化策略下，本函数主要用来寻找空洞。
@@ -86,6 +94,11 @@ inline soint32 SoArray::GetSize() const
 inline soint32 SoArray::GetCapacity() const
 {
 	return m_nCapacity;
+}
+//----------------------------------------------------------------
+inline soint32 SoArray::GetSizeofElement() const
+{
+	return m_nElementSize;
 }
 //----------------------------------------------------------------
 #endif //_SoArray_h_
